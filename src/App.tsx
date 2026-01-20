@@ -1,7 +1,89 @@
+import HexBackground from './components/HexBackground';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
-import Scene3D from './components/Scene3D';
+import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload } from 'react-icons/fa';
+import PhilippinesFlag from './components/PhilippinesFlag';
+
+const skills = [
+  {
+    name: 'Rust',
+    icon: '/Rust.png',
+    color: '#DEA584',
+    description: 'Twin of C++',
+  },
+  {
+    name: 'TypeScript',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    color: '#3178C6',
+    description: 'Superset of JavaScript',
+  },
+  {
+    name: 'Python',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+    color: '#3776AB',
+    description: 'General Purpose',
+  },
+  {
+    name: 'Node.js',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+    color: '#3C873A',
+    description: 'Server-side JavaScript',
+  },
+  {
+    name: 'Express',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
+    color: '#000000',
+    description: 'Node.js Framework',
+  },
+  {
+    name: 'PHP',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
+    color: '#777BB4',
+    description: 'Old but Gold',
+  },
+  {
+    name: 'Laravel',
+    icon: '/Laravel.svg',
+    color: '#FF2D20',
+    description: 'PHP Framework',
+  },
+  {
+    name: 'Docker',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+    color: '#2496ED',
+    description: 'Containerization',
+  },
+  {
+    name: 'GitHub',
+    icon: '/github-white-icon.svg',
+    color: '#181717',
+    description: 'Version Control',
+  },
+  {
+    name: 'MongoDB',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+    color: '#47A248',
+    description: 'NoSQL Database',
+  },
+  {
+    name: 'MySQL',
+    icon: '/mysql.svg',
+    color: '#4479A1',
+    description: 'Relational Database',
+  },
+  {
+    name: 'FTK Imager',
+    icon: '/ftk.png',
+    color: '#2E4053',
+    description: 'Data Forensics',
+  },
+  {
+    name: 'Volatility3',
+    icon: '/volatility.png',
+    color: '#4B4B4B',
+    description: 'Memory Forensics',
+  },
+];
 import { useHackerEffect } from './hooks/useHackerEffect';
 
 function App() {
@@ -10,7 +92,7 @@ function App() {
 
   return (
     <>
-      <Scene3D />
+      <HexBackground />
       <nav className="glass-panel" style={{ 
         position: 'fixed', 
         top: '20px', 
@@ -24,7 +106,7 @@ function App() {
       }}>
         <div className="container nav-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
           <div className="logo" style={{ fontWeight: '800', fontSize: '1.5rem', color: 'var(--text-primary)' }}>
-            Oliver<span style={{ color: 'var(--accent-color)' }}>.sec</span>
+            whoam<span style={{ color: 'var(--accent-color)' }}>i_</span>
           </div>
           <div className="nav-links" style={{ gap: '2rem', display: 'flex' }}>
             <a href="#about" style={{ fontWeight: '500' }}>About</a>
@@ -43,20 +125,29 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div style={{ 
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: '0.5rem', 
-              background: 'rgba(6, 182, 212, 0.1)', 
-              color: 'var(--accent-color)', 
-              padding: '0.5rem 1rem', 
-              borderRadius: '20px',
-              marginBottom: '1.5rem',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              border: '1px solid rgba(6, 182, 212, 0.2)'
-            }}>
-              <FaMapMarkerAlt /> BASED IN PHILIPPINES
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                background: 'rgba(6, 182, 212, 0.1)',
+                color: 'var(--accent-color)',
+                padding: '0.5rem 1rem',
+                borderRadius: '20px',
+                marginBottom: '1.5rem',
+                fontSize: '0.9rem',
+                fontWeight: '600',
+                border: '1px solid rgba(6, 182, 212, 0.2)',
+                justifyContent: 'space-between',
+                minWidth: '220px',
+              }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <FaMapMarkerAlt /> BASED IN PHILIPPINES
+              </span>
+              <span style={{ marginLeft: '0rem', display: 'flex', alignItems: 'center' }}>
+                <PhilippinesFlag className="flag-wave" style={{ width: 32, height: 16, display: 'block' }} />
+              </span>
             </div>
             
             <h1 style={{ fontSize: '3.5rem', lineHeight: '1.1', marginBottom: '1rem', fontWeight: '800', fontFamily: 'var(--font-mono)' }}>
@@ -65,7 +156,7 @@ function App() {
                 whileHover={{ rotate: 18, scale: 1.1 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
-                <img src="/svg1.svg" alt="Wave" style={{ height: '0.8em', marginLeft: '0px' }} />
+                <img src="/png1.png" alt="Wave" style={{ height: '0.8em', marginLeft: '0px' }} />
               </motion.div>
             </h1>
             
@@ -80,32 +171,22 @@ function App() {
             </div>
             
             <p style={{ fontSize: '1.1rem', marginBottom: '2.5rem', maxWidth: '500px', lineHeight: '1.8', color: '#cbd5e1' }}>
-              Building resilient systems that stand up to modern threats. 
-              Specialized in secure API development and digital forensics.
+              I specialized in backend development using Express and TypeScript.
             </p>
 
-            <div className="contact-info" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-              <a href="mailto:smitholiver106@gmail.com" className="contact-item" title="Email" style={{ fontSize: '1.5rem', color: 'var(--text-secondary)' }}>
+            <div className="contact-actions">
+              <a href="mailto:smitholiver106@gmail.com" className="contact-btn" title="Email" aria-label="Email">
                 <FaEnvelope />
               </a>
-              <a href="https://github.com/Sucrit" className="contact-item" title="GitHub" style={{ fontSize: '1.5rem', color: 'var(--text-secondary)' }}>
+              <a href="https://github.com/Sucrit" className="contact-btn" title="GitHub" aria-label="GitHub">
                 <FaGithub />
               </a>
-              <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" className="contact-item" title="LinkedIn" style={{ fontSize: '1.5rem', color: 'var(--text-secondary)' }}>
+              <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" className="contact-btn" title="LinkedIn" aria-label="LinkedIn">
                 <FaLinkedin />
               </a>
-              <a href="#projects" className="btn" style={{ 
-                marginLeft: '1rem', 
-                padding: '0.8rem 2rem', 
-                borderRadius: '8px', 
-                background: 'linear-gradient(45deg, var(--accent-color), #3b82f6)',
-                border: 'none',
-                color: '#fff',
-                fontWeight: '600',
-                cursor: 'pointer',
-                boxShadow: '0 4px 15px var(--accent-glow)'
-              }}>
-                View Missions
+              <a href="/resume.pdf" className="resume-btn" title="Download Resume" download aria-label="Download Resume">
+                <FaFileDownload />
+                <span>Download Resume</span>
               </a>
             </div>
           </motion.div>
@@ -123,9 +204,7 @@ function App() {
           <div className="about-grid">
             <div>
               <p>
-                I specialized in developing RESTful APIs using Node.js
-                (Express) and PHP (Laravel). I practice cybersecurity by implementing best practices to ensure
-                that the systems I build are resilient against threats.
+                I'm an undergrad student studying Information Technology at University of Pangasinan. I have a passion for backend development and cybersecurity, constantly seeking to enhance my skills in building secure and efficient systems.
               </p>
             </div>
           </div>
@@ -136,125 +215,37 @@ function App() {
         <div className="container">
           <h2>Technical Skills</h2>
           <div className="skills-grid">
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" />
+            {skills.map((skill) => (
+              <div className="skill-item" key={skill.name} tabIndex={0} style={{ 
+                  cursor: 'pointer', 
+                  transition: 'transform 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                onFocus={e => e.currentTarget.style.transform = 'scale(1.02)'}
+                onBlur={e => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <img 
+                  src={skill.icon} 
+                  alt={skill.name} 
+                  className="skill-logo-img" 
+                  style={{ 
+                    width: 40, 
+                    height: 40, 
+                    objectFit: 'contain', 
+                    filter: skill.name === 'Express' ? 'brightness(0) invert(1)' : undefined, 
+                    transform: skill.name === 'MySQL' ? 'scale(1.3)' : undefined, 
+                  }} 
+                />
+                <div className="skill-info">
+                  <h3 className="skill-name" style={{ margin: 0, fontSize: '0.95rem' }}>{skill.name}</h3>
+                  <p className="skill-description" style={{ margin: 0, fontSize: '0.75rem', lineHeight: '1.2' }}>{skill.description}</p>
+                </div>
               </div>
-              <div className="skill-info">
-                <h3 className="skill-name">Python</h3>
-                <p className="skill-description">Programming Language</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">Node.js</h3>
-                <p className="skill-description">Runtime Environment</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">PHP</h3>
-                <p className="skill-description">Scripting Language</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" alt="Rust" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">Rust</h3>
-                <p className="skill-description">Systems Programming</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express.js" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">Express.js</h3>
-                <p className="skill-description">Web Framework</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-plain.svg" alt="Laravel" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">Laravel</h3>
-                <p className="skill-description">PHP Framework</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">Docker</h3>
-                <p className="skill-description">Containerization</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">GitHub</h3>
-                <p className="skill-description">Version Control</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">MongoDB</h3>
-                <p className="skill-description">NoSQL Database</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">MySQL</h3>
-                <p className="skill-description">Relational Database</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="Web Security" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">Web Security</h3>
-                <p className="skill-description">Cybersecurity</p>
-              </div>
-            </div>
-
-            <div className="skill-item">
-              <div className="skill-icon-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Forensic_Science_Logo.svg" alt="Computer Forensics" />
-              </div>
-              <div className="skill-info">
-                <h3 className="skill-name">Forensics</h3>
-                <p className="skill-description">Digital Investigation</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -269,8 +260,7 @@ function App() {
               <div className="project-tech">JavaScript, PHP, MySQL</div>
               <p>
                 A cross-platform room booking and management system for
-                university campuses with real-time room scheduling and conflict
-                detection. Includes both web and mobile API endpoints.
+                university.
               </p>
               <div className="project-security">
                 <strong>Security Architecture:</strong>
@@ -300,9 +290,7 @@ function App() {
               <h3>EvacuDesk</h3>
               <div className="project-tech">Node.js, Express, MongoDB</div>
               <p>
-                An evacuation center management system designed for CDRRMO.
-                Provides real-time coordination and resource allocation during
-                critical situations.
+                An evacuation center management system designed for CDRRMO in Dagupan, Philippines.
               </p>
               <div className="project-security">
                 <strong>Security Architecture:</strong>
@@ -328,7 +316,7 @@ function App() {
               </div>
             </div>
 
-            <div className="project-card">
+            {/* <div className="project-card">
               <h3>Wi-Fi Trilaterator POC</h3>
               <div className="project-tech">Python</div>
               <p>
@@ -347,10 +335,6 @@ function App() {
                     <strong>Signal Processing:</strong> Uses the Log-Distance
                     Path Loss model to convert RSSI into estimated distance.
                   </li>
-                  <li>
-                    <strong>Visualization:</strong> Simple tkinter GUI for input
-                    mapping and Google Maps linking for result visualization.
-                  </li>
                 </ul>
               </div>
               <div className="project-links">
@@ -358,15 +342,14 @@ function App() {
                   View Code &rarr;
                 </a>
               </div>
-            </div>
+            </div> */}
 
             <div className="project-card">
               <h3>NetHunter (In Development)</h3>
               <div className="project-tech">Python, Flask, MongoDB</div>
               <p>
                 An OSINT platform that generates masked links to gather deep
-                intelligence on targets. Correlates network data (ASN, ISP) with
-                device fingerprints to build detailed digital fingerprints.
+                intelligence on targets.
               </p>
               <div className="project-security">
                 <strong>Technical Architecture:</strong>
@@ -418,8 +401,8 @@ function App() {
                   Close
                 </button>
                 <iframe
-                  title="FortiGuard Threat Map"
-                  src="https://fortiguard.fortinet.com/threat-map"
+                  title="Radware Live Threat Map"
+                  src="https://livethreatmap.radware.com/"
                   className="threat-map-iframe"
                   allowFullScreen
                 ></iframe>
@@ -440,7 +423,7 @@ function App() {
             )}
           </div>
           <p style={{ marginTop: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>
-            Source: <a href="https://fortiguard.fortinet.com/threat-map" target="_blank" rel="noopener noreferrer">FortiGuard Threat Map</a>
+            Source: <a href="https://livethreatmap.radware.com/" target="_blank" rel="noopener noreferrer">Radware Live Threat Map</a>
           </p>
         </div>
       </section>
