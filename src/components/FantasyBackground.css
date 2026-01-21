@@ -64,3 +64,24 @@
 .cityWindow {
   /* No transition to allow instant flickering */
 }
+
+/* Lighthouse Glow - Realistic atmospheric scintillation */
+@keyframes atmosphericDrift {
+  0% { opacity: 0.9; }
+  25% { opacity: 1.0; }
+  50% { opacity: 0.95; }
+  75% { opacity: 0.85; }
+  100% { opacity: 0.9; }
+}
+
+.lighthouseContainer {
+  /* Subtle, non-rhythmic fluctuation to mimic light through mist */
+  animation: atmosphericDrift 4s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+.lighthouseGlow {
+  /* Deprecated keyframe class */
+}
+
+

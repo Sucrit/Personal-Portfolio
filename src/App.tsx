@@ -184,7 +184,7 @@ function App() {
               borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.05)'
             }}>
-              I'm 21 yrs old, an undergrad IT student specialized in developing backend API's using Node.js environment, with a passion for cybersecurity.
+              I'm 22 yrs old, an undergrad IT student specialized in developing backend API's using Node.js environment, with a passion for cybersecurity.
             </p>
 
             <div className="contact-actions">

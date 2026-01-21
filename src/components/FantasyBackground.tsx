@@ -40,7 +40,10 @@ const FantasyBackground: React.FC = () => {
       // but "planted" into it.
       const buildings: { d: string }[] = [];
       // Windows with animation data
-      const windows: {x: number, y: number, w: number, h: number, delay: number, duration: number, animationType: 'none' | 'toggle' | 'flicker', isOn: boolean}[] = [];
+      const windows: {x: number, y: number, w: number, h: number, delay: number, duration: number, animationType: 'none' | 'toggle' | 'flicker', isOn: boolean, color?: string}[] = [];
+      
+      let lighthouseBuilt = false;
+      let lighthouseGlow: { cx: number, cy: number, rx: number, ry: number } | null = null;
       
       // Move slightly off-screen to ensure full coverage
       while (x <= 1930) {
@@ -62,7 +65,83 @@ const FantasyBackground: React.FC = () => {
         
         // CITY LOGIC: Independent of mountain shape
         // If we are in the city zone (left side), spawn buildings densely
-        if (hasCity && x < 850) {
+        if (hasCity) {
+           // Right-side Lighthouse Placement Logic
+           // Only 1 lighthouse, on the actual highest peak (calculated at x=1680)
+           // Right-side Lighthouse Placement Logic
+           // Only 1 lighthouse, on the actual highest peak (calculated at x=1680)
+           if (!lighthouseBuilt && x >= 1660) {
+                lighthouseBuilt = true;
+                
+                // Dimensions (scaled down ~30%)
+                const lhW = 18; 
+                const lhH = 70;
+                const lhY = y + 5;
+
+                // 1. Foundation / Base (Solid block)
+                let lhPath = `M${x},${lhY} V${lhY-10} H${x+lhW} V${lhY} Z`;
+
+                // 2. Tower Body (Tapered)
+                const towerBaseY = lhY - 10;
+                const towerTopY = lhY - lhH;
+                const insetBot = 2;
+                const insetTop = 5;
+                lhPath += ` M${x+insetBot},${towerBaseY} L${x+insetTop},${towerTopY} H${x+lhW-insetTop} L${x+lhW-insetBot},${towerBaseY} Z`;
+
+                // 3. Gallery (Balcony Platform)
+                const galleryY = towerTopY;
+                const galleryH = 3.5;
+                lhPath += ` M${x+insetTop-1.5},${galleryY} V${galleryY-galleryH} H${x+lhW-insetTop+1.5} V${galleryY} Z`;
+
+                // 4. Lantern Room
+                const lanternW = 8.5;
+                const lanternH = 9.5;
+                const lanternX = x + (lhW - lanternW) / 2;
+                const lanternY = galleryY - galleryH;
+                lhPath += ` M${lanternX},${lanternY} V${lanternY-lanternH} H${lanternX+lanternW} V${lanternY} Z`;
+
+                // 5. Cupola / Roof + Spire
+                const roofY = lanternY - lanternH;
+                lhPath += ` M${lanternX-0.7},${roofY} L${x+lhW/2},${roofY-7} L${lanternX+lanternW+0.7},${roofY} Z`;
+                lhPath += ` M${x+lhW/2},${roofY-7} V${roofY-10} H${x+lhW/2+0.7} V${roofY-7} Z`;
+
+                // Add to buildings array
+                buildings.push({ d: lhPath });
+
+                // --- LIGHTS / WINDOWS ---
+
+                // 1. Entrance Door (Warm glow at base)
+                const doorW = 4.2;
+                const doorH = 7;
+                windows.push({
+                   x: x + (lhW-doorW)/2, y: towerBaseY - doorH, w: doorW, h: doorH,
+                   animationType: 'none', isOn: true, delay: 0, duration: 0
+                });
+
+                // 2. Tower Windows (Ascending)
+                const winW = 2.8;
+                const winH = 3.5;
+                const winX = x + (lhW - winW) / 2;
+                const lhColor = "#ffaa00";
+                const positions = [17, 34, 51];
+                positions.forEach(offset => {
+                  windows.push({
+                    x: winX, y: towerBaseY - offset, w: winW, h: winH,
+                    animationType: 'none', isOn: true, delay: 0, duration: 0, color: lhColor
+                  });
+                });
+
+                // 3. Main Lantern Light (The big one)
+                windows.push({
+                   x: lanternX + 0.7, y: lanternY - lanternH + 0.7, w: lanternW - 1.4, h: lanternH - 1.4,
+                   animationType: 'none', isOn: true, delay: 0, duration: 0, color: "#fffeb0"
+                });
+                // Store glow info for this lighthouse
+                lighthouseGlow = { cx: x + lhW/2, cy: lanternY - lanternH/2, rx: 40, ry: 40 };
+           }
+
+           // Left-side City Logic
+           if (x < 850) {
            // Very high chance (95%) to place a building
            if (random() > 0.05) {
                const buildingW = 12 + random() * 18; 
@@ -168,18 +247,20 @@ const FantasyBackground: React.FC = () => {
                buildings.push({ d: buildingPath });
            }
         }
+      }
         
         // Add trees if this layer has them
         if (treeHeight > 0) {
-          const treeW = 12 + random() * 12; // Slightly wider variance
-          const treeH = treeHeight * (0.8 + random() * 0.5); // More height variance
+          const treeW = 15 + random() * 15; // Realistic: Wider, variable base
+          const treeH = treeHeight * (0.9 + random() * 0.6); // Taller, varied height
           const centerX = x + treeW / 2;
           
-          // Pine tree layers (3-6 layers depending on height)
-          const segments = Math.floor(3 + random() * 3);
+          // Realistic Detail: More segments (6-10 layers)
+          const segments = Math.floor(6 + random() * 5);
           
           // Left side (climbing up)
-          d += ` L${x},${y}`; // Start at base
+          d += ` L${x},${y}`; // Start at base left corner
+          
           for (let i = 0; i < segments; i++) {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
@@ -187,19 +268,28 @@ const FantasyBackground: React.FC = () => {
             const currentY = y - treeH * ratio;
             const nextY = y - treeH * nextRatio;
             
-            const currentHalfW = (treeW / 2) * (1 - ratio * 0.8); // Tapering
-            const nextHalfW = (treeW / 2) * (1 - nextRatio * 0.8);
+            // Width calculations with jitter for "rough" look
+            // Base width at this level (cone shape)
+            const currentBaseW = (treeW / 2) * (1 - ratio * 0.85);
+            // Tip width at next level
+            const nextBaseW = (treeW / 2) * (1 - nextRatio * 0.85);
+
+            // Jitter/Randomness for realistic silhouette
+            const jitter = (random() - 0.5) * (treeW * 0.15); 
             
-            // "Notch" or "Indent" point - make it curve slightly upward
-            const notchY = currentY - (currentY - nextY) * 0.15;
-            // Indent inwards towards center
-            const notchX = centerX - (currentHalfW * 0.6); 
+            // "Notch" is the indent between branches
+            const notchY = currentY - (currentY - nextY) * (0.15 + random() * 0.1);
+            const notchDepth = 0.6 + random() * 0.2; // How deep the indent goes
+            const notchX = centerX - (currentBaseW * notchDepth + jitter); 
+
+            // Next Tip (Branch End)
+            const nextTipX = centerX - (nextBaseW + jitter);
             
             d += ` L${notchX},${notchY}`;
-            d += ` L${centerX - nextHalfW},${nextY}`;
+            d += ` L${nextTipX},${nextY}`;
           }
           
-          // Top point
+          // Apex / Top Point
           d += ` L${centerX},${y - treeH}`;
 
           // Right side (climbing down)
@@ -207,16 +297,22 @@ const FantasyBackground: React.FC = () => {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
             
-            const bottomY = y - treeH * ratio;
-            const topY = y - treeH * nextRatio;
+            const currentY = y - treeH * ratio; // The "bottom" of this segment (we are going down to it)
+            const nextY = y - treeH * nextRatio; // The "top" of this segment (we are coming from it)
             
-            const bottomHalfW = (treeW / 2) * (1 - ratio * 0.8);
+            const currentBaseW = (treeW / 2) * (1 - ratio * 0.85);
             
-            const notchY = bottomY - (bottomY - topY) * 0.15;
-            const notchX = centerX + (bottomHalfW * 0.6);
+            const jitter = (random() - 0.5) * (treeW * 0.15);
+
+            // Notch logic mirrored
+            const notchY = currentY - (currentY - nextY) * (0.15 + random() * 0.1);
+            const notchDepth = 0.6 + random() * 0.2;
+            const notchX = centerX + (currentBaseW * notchDepth + jitter);
+            
+            const bottomTipX = centerX + (currentBaseW + jitter);
             
             d += ` L${notchX},${notchY}`;
-            d += ` L${centerX + bottomHalfW},${bottomY}`;
+            d += ` L${bottomTipX},${currentY}`;
           }
 
           x += treeW * density; 
@@ -230,7 +326,7 @@ const FantasyBackground: React.FC = () => {
       }
       
       d += ` V1080 H0 Z`;
-      return { d, windows, buildings };
+      return { d, windows, buildings, lighthouseGlow };
     };
 
     // Layer 2: Distant Ridges - Smoother with City
@@ -240,19 +336,24 @@ const FantasyBackground: React.FC = () => {
       windows: l2.windows,
       buildings: l2.buildings,
       fill: '#1b223d',
-      key: 'layer2'
+      key: 'layer2',
+      lighthouseGlow: l2.lighthouseGlow // Only this layer can have the glow
     });
 
     // Layer 3: Mid-ground - Rolling hills with distant tiny trees
     layers.push({
       d: createPath(820, 70, 10, 20, 0.0035, 0.8).d, // 0.8 density for slight overlap
-      fill: '#14182e', 
+      windows: [],
+      buildings: [],
+      fill: '#14182e',
       key: 'layer3'
     });
 
     // Layer 4: Near Hills - Distinct forest silhouette
     layers.push({
       d: createPath(920, 50, 5, 45, 0.003, 0.7).d, // More overlap for dense forest
+      windows: [],
+      buildings: [],
       fill: '#0d1021',
       key: 'layer4'
     });
@@ -260,7 +361,9 @@ const FantasyBackground: React.FC = () => {
     // Layer 5: Foreground - Close up detailed trees
     layers.push({
       d: createPath(1020, 30, 5, 80, 0.004, 0.65).d, // High overlap for detail
-      fill: '#05060e', 
+      windows: [],
+      buildings: [],
+      fill: '#05060e',
       key: 'layer5'
     });
 
@@ -279,6 +382,18 @@ const FantasyBackground: React.FC = () => {
         xmlns="http://www.w3.org/2000/svg"
         style={{ display: 'block' }}
       >
+        <defs>
+          <radialGradient id="lighthouse-glow" cx="50%" cy="50%" r="50%">
+            {/* Hot white core (lens intensity) */}
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+            {/* Warm transition */}
+            <stop offset="20%" stopColor="#fff4cc" stopOpacity="0.9" />
+            {/* Atmospheric scatter (haze) */}
+            <stop offset="50%" stopColor="#ffdd44" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#ffaa00" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
         {/* Stars */}
         <g>
           {stars.map((star) => (
@@ -328,9 +443,9 @@ const FantasyBackground: React.FC = () => {
                  y={w.y}
                  width={w.w}
                  height={w.h}
-                 fill={w.isOn ? "#fff6a9" : layer.fill} // Dark if off
+                 fill={w.isOn ? (w.color || "#fff6a9") : layer.fill} // Use custom color if set
                  // Opacity: If animated, let CSS handle it. If static ON, use randomization. If OFF, solid 1 (to block)
-                 opacity={w.isOn ? (w.animationType !== 'none' ? undefined : 0.4 + (i % 4) * 0.1) : 1}
+                 opacity={w.isOn ? (w.animationType !== 'none' ? undefined : 0.8) : 1}
                  className="cityWindow"
                  style={w.isOn && w.animationType !== 'none' ? {
                      animationName: w.animationType === 'flicker' ? 'flickerWindow' : 'toggleWindow',
@@ -342,6 +457,30 @@ const FantasyBackground: React.FC = () => {
                  } : {}}
                />
             ))}
+            {/* Lighthouse Glow (if present) */}
+            {layer.lighthouseGlow && (
+              <g className="lighthouseContainer">
+                {/* Outer atmospheric halo - Static, realistic haze */}
+                <ellipse
+                  cx={layer.lighthouseGlow.cx}
+                  cy={layer.lighthouseGlow.cy}
+                  rx={layer.lighthouseGlow.rx * 2}
+                  ry={layer.lighthouseGlow.ry * 2}
+                  fill="url(#lighthouse-glow)"
+                  opacity={0.3}
+                />
+                {/* Inner bright core - High intensity */}
+                <ellipse
+                  cx={layer.lighthouseGlow.cx}
+                  cy={layer.lighthouseGlow.cy}
+                  rx={layer.lighthouseGlow.rx}
+                  ry={layer.lighthouseGlow.ry}
+                  fill="url(#lighthouse-glow)"
+                  opacity={0.9}
+                  style={{ pointerEvents: 'none' }}
+                />
+              </g>
+            )}
           </React.Fragment>
         ))}
       </svg>
