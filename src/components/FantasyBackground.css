@@ -1,0 +1,41 @@
+.fantasyContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #0b1026 0%, #2b32b2 50%, #4a6fa5 100%);
+  z-index: 0;
+}
+
+.star {
+  fill: white;
+  animation: twinkle 70s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+.moon {
+  filter: drop-shadow(0 0 15px rgba(255, 255, 200, 0.6));
+}
+
+.landscapeLayer {
+  transition: transform 0.5s ease-out;
+}
+
+/* Subtle glow at the horizon */
+.glow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: radial-gradient(circle at 50% 100%, rgba(100, 200, 255, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
