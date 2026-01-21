@@ -1,10 +1,48 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useMotionValue, useAnimationFrame, useTransform } from 'framer-motion';
 import './FantasyBackground.css';
 
 const FantasyBackground: React.FC = () => {
-  // Generate random stars
+  const idleRef = useRef(0);
+  const { scrollY } = useScroll();
+  const starX = useMotionValue(0);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { innerWidth: w, innerHeight: h } = window;
+      const svgW = 1920;
+      const svgH = 1080;
+      
+      const scale = Math.max(w / svgW, h / svgH);
+      const scaledSvgW = svgW * scale;
+      const scaledSvgH = svgH * scale;
+      
+      const offsetX = (w - scaledSvgW) / 2;
+      const offsetY = (h - scaledSvgH) / 2;
+
+      const svgX = (e.clientX - offsetX) / scale;
+      const svgY = (e.clientY - offsetY) / scale;
+
+      mouseX.set(svgX);
+      mouseY.set(svgY);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  useAnimationFrame((_t, delta) => {
+    // Continuous slow drift
+    idleRef.current += delta * 0.003; 
+    
+    const scrollOffset = scrollY.get() * 0.08; 
+    const x = (idleRef.current + scrollOffset) % 1920;
+    starX.set(x);
+  });
+
   const stars = useMemo(() => {
-    return Array.from({ length: 200 }).map((_, i) => ({
+    return Array.from({ length: 80 }).map((_, i) => ({
       id: i,
       cx: Math.random() * 1920,
       cy: Math.random() * 800,
@@ -40,10 +78,11 @@ const FantasyBackground: React.FC = () => {
       // but "planted" into it.
       const buildings: { d: string }[] = [];
       // Windows with animation data
-      const windows: {x: number, y: number, w: number, h: number, delay: number, duration: number, animationType: 'none' | 'toggle' | 'flicker', isOn: boolean, color?: string}[] = [];
+      const windows: {x: number, y: number, w: number, h: number, delay: number, duration: number, animationType: 'none' | 'toggle' | 'flicker' | 'slowBlink', isOn: boolean, color?: string, isCabin?: boolean}[] = [];
       
       let lighthouseBuilt = false;
       let lighthouseGlow: { cx: number, cy: number, rx: number, ry: number } | null = null;
+      let cabinAnimCount = 0; // Track how many blinking cabins we've created
       
       // Move slightly off-screen to ensure full coverage
       while (x <= 1930) {
@@ -138,6 +177,44 @@ const FantasyBackground: React.FC = () => {
                 });
                 // Store glow info for this lighthouse
                 lighthouseGlow = { cx: x + lhW/2, cy: lanternY - lanternH/2, rx: 40, ry: 40 };
+           }
+
+           // Village Lights / Cabins at the bottom of the lighthouse mountain
+           if (x > 1500 && x < 1850 && Math.abs(x - 1670) > 40) {
+               // Higher chance per step to add more lights
+               if (random() > 0.4) {
+                   // Ensure they are DEEP in the mountain. 
+                   // y is the top edge. yOffset must be positive and significant.
+                   const yOffset = 15 + random() * 50; 
+                   
+                   // Spawn 1 to 3 small windows (cabin cluster)
+                   const count = Math.floor(1 + random() * 2.5);
+                   for(let k=0; k<count; k++) {
+                       const spacing = k * (3 + random() * 3);
+                       const wSize = 1.8 + random() * 1.5; // Much smaller: 1.8 - 3.3px
+                       
+                       // Determine animation: Only allow 2 to blink slowly
+                       let animType: 'none' | 'slowBlink' = 'none';
+                       // Use random chance, but capping at 2 per layer generation
+                       if (cabinAnimCount < 2 && random() > 0.85) {
+                           animType = 'slowBlink';
+                           cabinAnimCount++;
+                       }
+
+                       windows.push({
+                           x: x + spacing,
+                           y: y + yOffset + (random() * 3), // slight jitter
+                           w: wSize,
+                           h: wSize, // Square-ish
+                           animationType: animType,
+                           isOn: true,
+                           delay: 0,
+                           duration: animType === 'slowBlink' ? 10 : 0, // 10s cycle (5s on, 5s off)
+                           color: random() > 0.5 ? "#ffaa55" : "#ffcc77", // Varied warm colors
+                           isCabin: true
+                       });
+                   }
+               }
            }
 
            // Left-side City Logic
@@ -251,16 +328,17 @@ const FantasyBackground: React.FC = () => {
         
         // Add trees if this layer has them
         if (treeHeight > 0) {
-          const treeW = 15 + random() * 15; // Realistic: Wider, variable base
-          const treeH = treeHeight * (0.9 + random() * 0.6); // Taller, varied height
+          const treeW = 12 + random() * 18; // 12-30px width
+          const treeH = treeHeight * (0.8 + random() * 0.5); // Taller, varied height
           const centerX = x + treeW / 2;
           
-          // Realistic Detail: More segments (6-10 layers)
-          const segments = Math.floor(6 + random() * 5);
+          // Realistic Detail: More segments (High density: ~3-4px per segment)
+          const segments = Math.floor(treeH / 3.5) + 3;
+          
+          // Start at base left corner
+          d += ` L${x},${y}`; 
           
           // Left side (climbing up)
-          d += ` L${x},${y}`; // Start at base left corner
-          
           for (let i = 0; i < segments; i++) {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
@@ -268,25 +346,30 @@ const FantasyBackground: React.FC = () => {
             const currentY = y - treeH * ratio;
             const nextY = y - treeH * nextRatio;
             
-            // Width calculations with jitter for "rough" look
-            // Base width at this level (cone shape)
-            const currentBaseW = (treeW / 2) * (1 - ratio * 0.85);
-            // Tip width at next level
-            const nextBaseW = (treeW / 2) * (1 - nextRatio * 0.85);
+            // Curved taper for spruce/pine look (Power curve)
+            const currentHalfW = (treeW / 2) * Math.pow(1 - ratio, 1.15);
+            const nextHalfW = (treeW / 2) * Math.pow(1 - nextRatio, 1.15);
 
-            // Jitter/Randomness for realistic silhouette
-            const jitter = (random() - 0.5) * (treeW * 0.15); 
+            // Jitter for organic unevenness
+            const jitter = (random() - 0.5) * 1.5; 
             
-            // "Notch" is the indent between branches
-            const notchY = currentY - (currentY - nextY) * (0.15 + random() * 0.1);
-            const notchDepth = 0.6 + random() * 0.2; // How deep the indent goes
-            const notchX = centerX - (currentBaseW * notchDepth + jitter); 
-
             // Next Tip (Branch End)
-            const nextTipX = centerX - (nextBaseW + jitter);
-            
-            d += ` L${notchX},${notchY}`;
-            d += ` L${nextTipX},${nextY}`;
+            const nextTipX = centerX - (nextHalfW + jitter);
+
+            // "Notch" - the indent between branch layers
+            if (i === 0) {
+              // FIX: Skip inward notch for the base segment to avoid "floating" look.
+              // Connect strictly to the next tip.
+              d += ` L${nextTipX},${nextY}`;
+            } else {
+              const notchY = currentY - (currentY - nextY) * (0.35 + random() * 0.2);
+              // Indent is relative to the width at that height
+              const indentFactor = 0.5 + random() * 0.25; 
+              const notchX = centerX - (currentHalfW * indentFactor + jitter); 
+              
+              d += ` L${notchX},${notchY}`;
+              d += ` L${nextTipX},${nextY}`;
+            }
           }
           
           // Apex / Top Point
@@ -297,22 +380,27 @@ const FantasyBackground: React.FC = () => {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
             
-            const currentY = y - treeH * ratio; // The "bottom" of this segment (we are going down to it)
-            const nextY = y - treeH * nextRatio; // The "top" of this segment (we are coming from it)
+            const currentY = y - treeH * ratio; // Bottom of segment
+            const nextY = y - treeH * nextRatio; // Top of segment
             
-            const currentBaseW = (treeW / 2) * (1 - ratio * 0.85);
+            const currentHalfW = (treeW / 2) * Math.pow(1 - ratio, 1.15);
             
-            const jitter = (random() - 0.5) * (treeW * 0.15);
+            const jitter = (random() - 0.5) * 1.5;
+            
+            const bottomTipX = centerX + (currentHalfW + jitter);
 
             // Notch logic mirrored
-            const notchY = currentY - (currentY - nextY) * (0.15 + random() * 0.1);
-            const notchDepth = 0.6 + random() * 0.2;
-            const notchX = centerX + (currentBaseW * notchDepth + jitter);
-            
-            const bottomTipX = centerX + (currentBaseW + jitter);
-            
-            d += ` L${notchX},${notchY}`;
-            d += ` L${bottomTipX},${currentY}`;
+            if (i === 0) {
+               // Skip inward notch at base
+               d += ` L${bottomTipX},${currentY}`;
+            } else {
+               const notchY = currentY - (currentY - nextY) * (0.35 + random() * 0.2);
+               const indentFactor = 0.5 + random() * 0.25;
+               const notchX = centerX + (currentHalfW * indentFactor + jitter);
+               
+               d += ` L${notchX},${notchY}`;
+               d += ` L${bottomTipX},${currentY}`;
+            }
           }
 
           x += treeW * density; 
@@ -370,11 +458,92 @@ const FantasyBackground: React.FC = () => {
     return layers;
   }, []);
 
+  // Calculate dynamic beam path based on mouse position
+  // Find the lighthouse coordinates first (it's in layer2 usually)
+  const lhLayer = mountainLayers.find(l => l.lighthouseGlow);
+  const lhCx = lhLayer?.lighthouseGlow?.cx || 0;
+  const lhCy = lhLayer?.lighthouseGlow?.cy || 0;
+
+  // Calculate beam paths - Returns an object, so we need to split it for Framer Motion
+  const beamValues = useTransform([mouseX, mouseY], ([mx, my]) => {
+     if (!lhCx || !lhCy) return { outer: "", inner: "", core: "" };
+     
+     const dx = (mx as number) - lhCx;
+     const dy = (my as number) - lhCy;
+     const dist = Math.sqrt(dx*dx + dy*dy);
+     
+     // Beam shouldn't render if very close (avoids glitches)
+     if (dist < 5) return { outer: "", inner: "", core: "" };
+
+     const angle = Math.atan2(dy, dx);
+     const perpAngle = angle + Math.PI / 2;
+     
+     // Extend the geometry beyond the cursor to allow for a soft fade-out
+     // The mask radius will be set to dist * 1.5. 
+     // We extend geometry slightly past that to ensure no hard clip at the very end of the fade.
+     const geometryDist = dist * 1.6;
+     
+     const endX = lhCx + Math.cos(angle) * geometryDist;
+     const endY = lhCy + Math.sin(angle) * geometryDist;
+
+     // Helper to build a cone path
+     const getPath = (startW: number, endWBase: number) => { 
+        const oxStart = Math.cos(perpAngle) * (startW / 2);
+        const oyStart = Math.sin(perpAngle) * (startW / 2);
+        
+        // Width also grows with distance
+        const endW = endWBase * 1.4; 
+        
+        const oxEnd = Math.cos(perpAngle) * (endW / 2);
+        const oyEnd = Math.sin(perpAngle) * (endW / 2);
+
+        // Start from lighthouse
+        const pStart1x = lhCx + oxStart;
+        const pStart1y = lhCy + oyStart;
+        const pStart2x = lhCx - oxStart;
+        const pStart2y = lhCy - oyStart;
+
+        // End point
+        const pEnd1x = endX + oxEnd;
+        const pEnd1y = endY + oyEnd;
+        const pEnd2x = endX - oxEnd;
+        const pEnd2y = endY - oyEnd;
+
+        return `M${pStart1x},${pStart1y} L${pEnd1x},${pEnd1y} L${pEnd2x},${pEnd2y} L${pStart2x},${pStart2y} Z`;
+     };
+
+     // 1. Outer Haze (Wide, soft)
+     const outerPath = getPath(10, 150 + dist * 0.15);
+
+     // 2. Inner Beam (Brighter main body)
+     const innerPath = getPath(6, 60 + dist * 0.08);
+
+     // 3. Core Hotline (Intense center)
+     const corePath = getPath(2, 5 + dist * 0.01);
+
+     return { outer: outerPath, inner: innerPath, core: corePath };
+  });
+
+  const outerBeamPath = useTransform(beamValues, v => v.outer);
+  const innerBeamPath = useTransform(beamValues, v => v.inner);
+  const coreBeamPath = useTransform(beamValues, v => v.core);
+
+  // Dynamic radius for the fade mask so it always matches cursor distance
+  const maskRadius = useTransform([mouseX, mouseY], ([mx, my]) => {
+     if (!lhCx || !lhCy) return 0;
+     const dx = (mx as number) - lhCx;
+     const dy = (my as number) - lhCy;
+     // Radius equals EXACTLY the distance to the cursor.
+     // In combination with the gradient ending at 100%, 
+     // the beam will become effectively invisible precisely at the cursor.
+     return Math.sqrt(dx*dx + dy*dy); 
+  });
+
   return (
     <div className="fantasyContainer">
       <div className="glow" />
-      
       <svg
+        key={'beam-on'}
         width="100%"
         height="100%"
         viewBox="0 0 1920 1080"
@@ -392,13 +561,70 @@ const FantasyBackground: React.FC = () => {
             <stop offset="50%" stopColor="#ffdd44" stopOpacity="0.4" />
             <stop offset="100%" stopColor="#ffaa00" stopOpacity="0" />
           </radialGradient>
+
+          {/* Volumetric Beam Gradient (Radial to fade out with distance) */}
+           {/* Note: We use userSpaceOnUse so it stays centered on the lighthouse regardless of the path shape */}
+          <radialGradient 
+              id="volumetric-beam-gradient" 
+              cx={lhCx} cy={lhCy} r="1000" 
+              gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#fff" stopOpacity="0.8" />
+            <stop offset="15%" stopColor="#fff8db" stopOpacity="0.5" />
+            <stop offset="60%" stopColor="#ffaa44" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0" />
+          </radialGradient>
+
+          {/* Core Beam Gradient - Stays white longer but fades out matching the geometry */}
+          <radialGradient 
+              id="core-beam-gradient" 
+              cx={lhCx} cy={lhCy} r="1000" 
+              gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="60%" stopColor="#ffffff" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+          </radialGradient>
+
+          {/* Dynamic Mask to ensure fade out happens exactly at cursor distance */}
+          <mask id="beam-fade-mask">
+             {/* 
+                 Radius R = dist.
+                 White up to 70%, then fades to black at 100%.
+                 White up to 0.7 * dist.
+                 Fades from 0.7 * dist to dist.
+                 At dist (cursor), opacity is 0 (Black).
+                 This ensures the beam ends EXACTLY at the cursor.
+             */}
+             <radialGradient id="fade-gradient-mask">
+                <stop offset="0%" stopColor="white" stopOpacity="1" />
+                <stop offset="70%" stopColor="white" stopOpacity="1" />
+                <stop offset="100%" stopColor="black" stopOpacity="1" />
+             </radialGradient>
+             <motion.circle cx={lhCx} cy={lhCy} r={maskRadius} fill="url(#fade-gradient-mask)" />
+          </mask>
+
+          {/* Blur Filters for Beam */}
+          <filter id="beam-blur-heavy">
+             <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
+          </filter>
+          <filter id="beam-blur-medium">
+             <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+          </filter>
+
+          {/* Static Light Beam Gradient */}
+          <linearGradient id="static-beam-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stopColor="#fff" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#ffaa00" stopOpacity="0" />
+          </linearGradient>
         </defs>
 
-        {/* Stars */}
-        <g>
+        {/* Stars Container - seamless loop */}
+        <motion.g style={{ x: starX }}>
+          {/* Main set of stars */}
           {stars.map((star) => (
             <circle
-              key={star.id}
+              key={`star-${star.id}`}
               cx={star.cx}
               cy={star.cy}
               r={star.r}
@@ -408,7 +634,20 @@ const FantasyBackground: React.FC = () => {
               style={{ animationDelay: star.delay }}
             />
           ))}
-        </g>
+          {/* Duplicate set for looping (shifted left) */}
+          {stars.map((star) => (
+            <circle
+              key={`star-clone-${star.id}`}
+              cx={star.cx - 1920}
+              cy={star.cy}
+              r={star.r}
+              fill="white"
+              fillOpacity={star.opacity}
+              className="star"
+              style={{ animationDelay: star.delay }}
+            />
+          ))}
+        </motion.g>
 
         {/* Crescent Moon */}
         <g className="moon" transform="translate(1500, 350)">
@@ -443,24 +682,85 @@ const FantasyBackground: React.FC = () => {
                  y={w.y}
                  width={w.w}
                  height={w.h}
-                 fill={w.isOn ? (w.color || "#fff6a9") : layer.fill} // Use custom color if set
-                 // Opacity: If animated, let CSS handle it. If static ON, use randomization. If OFF, solid 1 (to block)
+                 rx={w.isCabin ? 0.5 : 0} // Soft corners for cabins
+                 fill={w.isOn ? (w.color || "#fff6a9") : layer.fill} 
                  opacity={w.isOn ? (w.animationType !== 'none' ? undefined : 0.8) : 1}
                  className="cityWindow"
                  style={w.isOn && w.animationType !== 'none' ? {
-                     animationName: w.animationType === 'flicker' ? 'flickerWindow' : 'toggleWindow',
+                     animationName: w.animationType === 'flicker' ? 'flickerWindow' : 
+                                  w.animationType === 'slowBlink' ? 'slowBlink' : 'toggleWindow',
                      animationDuration: `${w.duration}s`,
                      animationDelay: `${w.delay}s`,
                      animationIterationCount: 'infinite',
                      animationFillMode: 'both',
-                     willChange: 'opacity'
+                     willChange: 'opacity',
+                     filter: w.isCabin ? 'blur(0.4px)' : 'none' // Slight blur for realism without expensive svg filters
                  } : {}}
                />
             ))}
             {/* Lighthouse Glow (if present) */}
             {layer.lighthouseGlow && (
               <g className="lighthouseContainer">
-                {/* Outer atmospheric halo - Static, realistic haze */}
+                {/* 0. Ground Splash Light (Terrain Illumination) */}
+                <defs>
+                   <clipPath id={`clip-${layer.key}`}>
+                       <path d={layer.d} />
+                   </clipPath>
+                </defs>
+                <motion.g 
+                    style={{ opacity: 0.9, mixBlendMode: 'overlay' }} 
+                    clipPath={`url(#clip-${layer.key})`}
+                >
+                   {/* Wide soft glow on the surface */}
+                   <motion.ellipse
+                      cx={mouseX}
+                      cy={mouseY}
+                      rx={80}
+                      ry={40}
+                      fill="url(#lighthouse-glow)"
+                      style={{ filter: 'blur(15px)', pointerEvents: 'none' }}
+                   />
+                   {/* Intense impact point */}
+                   <motion.ellipse
+                      cx={mouseX}
+                      cy={mouseY}
+                      rx={30}
+                      ry={15}
+                      fill="#fff"
+                      style={{ filter: 'blur(5px)', pointerEvents: 'none' }}
+                   />
+                </motion.g>
+
+                {/* Lighthouse beam is always enabled */}
+                {/* 1. Outer Wide Haze (Soft, blurry, very faint) */}
+                <motion.path
+                  className="beamLayer"
+                  d={outerBeamPath}
+                  fill="url(#volumetric-beam-gradient)"
+                  mask="url(#beam-fade-mask)"
+                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'url(#beam-blur-heavy)' }}
+                  opacity={0.4}
+                />
+                {/* 2. Inner Main Beam (Defined but soft edges) */}
+                <motion.path
+                  className="beamLayer"
+                  d={innerBeamPath}
+                  fill="url(#volumetric-beam-gradient)"
+                  mask="url(#beam-fade-mask)"
+                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'url(#beam-blur-medium)' }}
+                  opacity={0.7}
+                />
+                {/* 3. Core Beam (Bright, sharp center) */}
+                <motion.path
+                  className="beamLayer"
+                  d={coreBeamPath}
+                  fill="url(#core-beam-gradient)"
+                  mask="url(#beam-fade-mask)" 
+                  fillOpacity={0.8}
+                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(2px)' }}
+                />
+                
+                {/* 2. Outer atmospheric halo - Static, realistic haze */}
                 <ellipse
                   cx={layer.lighthouseGlow.cx}
                   cy={layer.lighthouseGlow.cy}
@@ -469,8 +769,9 @@ const FantasyBackground: React.FC = () => {
                   fill="url(#lighthouse-glow)"
                   opacity={0.3}
                 />
-                {/* Inner bright core - High intensity */}
+                {/* 3. Inner bright core - High intensity */}
                 <ellipse
+                  className="lighthouseCore"
                   cx={layer.lighthouseGlow.cx}
                   cy={layer.lighthouseGlow.cy}
                   rx={layer.lighthouseGlow.rx}
