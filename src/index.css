@@ -524,3 +524,31 @@ nav {
   box-shadow: 0 10px 20px -5px var(--accent-glow);
   border-color: var(--accent-color);
 }
+
+
+/* City Window Animation */
+@keyframes toggleWindow {
+  0% { opacity: 0.1; }
+  50% { opacity: 1; }
+  100% { opacity: 0.1; }
+}
+
+.cityWindow {
+  /* No transition to allow instant flickering */
+}
+
+
+/* City Window Flicker Animation - More Aggressive */
+@keyframes flickerWindow {
+  0% { opacity: 1; }
+  2% { opacity: 0; }
+  4% { opacity: 1; }
+  6% { opacity: 0; }
+  8% { opacity: 1; }
+  10% { opacity: 0; }
+  12% { opacity: 1; }
+  50% { opacity: 1; }
+  52% { opacity: 0; }
+  54% { opacity: 1; }
+  100% { opacity: 1; }
+}

@@ -36,10 +36,11 @@ const FantasyBackground: React.FC = () => {
     ) => {
       let d = `M0,${baseY}`;
       let x = 0;
-      // We will collect separate building rectangles to render ON TOP of the mountain
+      // We will collect separate building path strings to render ON TOP of the mountain
       // but "planted" into it.
-      const buildings: {x: number, y: number, w: number, h: number}[] = [];
-      const windows: {x: number, y: number, w: number, h: number}[] = [];
+      const buildings: { d: string }[] = [];
+      // Windows with animation data
+      const windows: {x: number, y: number, w: number, h: number, delay: number, duration: number, animationType: 'none' | 'toggle' | 'flicker', isOn: boolean}[] = [];
       
       // Move slightly off-screen to ensure full coverage
       while (x <= 1930) {
@@ -61,39 +62,110 @@ const FantasyBackground: React.FC = () => {
         
         // CITY LOGIC: Independent of mountain shape
         // If we are in the city zone (left side), spawn buildings densely
-        if (hasCity && x < 750) {
-           // Very high chance (90%) to place a building for maximum density
-           if (random() > 0.1) {
-               const buildingW = 10 + random() * 20; // 10-30px width
-               const buildingH = 15 + random() * 40; // 15-55px height
+        if (hasCity && x < 850) {
+           // Very high chance (95%) to place a building
+           if (random() > 0.05) {
+               const buildingW = 12 + random() * 18; 
+               const buildingH = 20 + random() * 45;
+               const groundY = y + 3; // Planted slightly deep
                
-               // Building sits at (x, y). 
-               // To look "planted", we can nudge it down 1-2px
-               buildings.push({
-                   x: x,
-                   y: y - buildingH + 3, 
-                   w: buildingW,
-                   h: buildingH
-               });
+               let buildingPath = "";
+               const buildType = random(); // Determine shape style
 
-               // Windows for this building
-               if (random() > 0.2) {
-                   const rows = Math.floor(buildingH / 4);
-                   const cols = Math.floor(buildingW / 4);
+               // Helper to add window with animation data
+               const pushWindow = (wx: number, wy: number, ww: number, wh: number) => {
+                  const rand = random();
+                  // 50% chance to be completely off (dark)
+                  const isOn = rand > 0.5;
+                  
+                  // If ON, chance to animate
+                  let animationType: 'none' | 'toggle' | 'flicker' = 'none';
+                  if (isOn) {
+                      const animRand = random();
+                      if (animRand > 0.7) animationType = 'flicker'; // Increased to 30% flickering
+                      else if (animRand > 0.4) animationType = 'toggle'; // ~30% breathing
+                      // Rest are static ON
+                  }
+
+                        windows.push({
+                          x: wx, y: wy, w: ww, h: wh,
+                          animationType,
+                          isOn,
+                          delay: animationType !== 'none' ? random() * 18 : 0,
+                          duration: animationType === 'flicker' ? 20 + random() * 12 : 32 + random() * 24
+                        });
+               };
+
+               // Style 1: Stepped Skyscraper (0.0 - 0.3)
+               if (buildType < 0.3 && buildingH > 30) {
+                   const stepH = buildingH * 0.4;
+                   const topW = buildingW * 0.6;
+                   const margin = (buildingW - topW) / 2;
+                   
+                   // Base rect
+                   buildingPath += `M${x},${groundY} V${groundY - (buildingH - stepH)} H${x + margin} V${groundY - buildingH} H${x + buildingW - margin} V${groundY - (buildingH - stepH)} H${x + buildingW} V${groundY} Z`;
+                   
+                   // Windows (100% fill)
+                   const rows = Math.floor((buildingH - stepH)/5);
+                   const cols = Math.floor(buildingW/4);
                    for(let r=0; r<rows; r++) {
                        for(let c=0; c<cols; c++) {
-                           // Chaotic window lighting for realism
-                           if (random() > 0.5) {
-                               windows.push({
-                                   x: x + 2 + c * 4,
-                                   y: y - buildingH + 4 + r * 4,
-                                   w: 1.5,
-                                   h: 1.5
-                               });
-                           }
+                           pushWindow(x+2+c*4, groundY - (buildingH - stepH) + 4 + r*4, 1.5, 2);
                        }
                    }
                }
+               // Style 2: Spire / Antenna (0.3 - 0.5)
+               else if (buildType < 0.5) {
+                   const antennaH = 10 + random() * 10;
+                   // Body + thin line on top
+                   buildingPath += `M${x},${groundY} V${groundY - buildingH} H${x + buildingW/2 - 1} V${groundY - buildingH - antennaH} H${x + buildingW/2 + 1} V${groundY - buildingH} H${x+buildingW} V${groundY} Z`;
+                   
+                   // Windows (100% fill)
+                   const rows = Math.floor(buildingH/5);
+                   const cols = Math.floor(buildingW/4);
+                   for(let r=0; r<rows; r++) {
+                       for(let c=0; c<cols; c++) {
+                           pushWindow(x+2+c*4, groundY - buildingH + 4 + r*5, 1.5, 2);
+                       }
+                   }
+               }
+               // Style 3: Slanted Roof (0.5 - 0.7)
+               else if (buildType < 0.7) {
+                   const shortH = buildingH * 0.8;
+                   // L-R slant or R-L slant
+                   if (random() > 0.5) {
+                       // Left higher
+                       buildingPath += `M${x},${groundY} V${groundY - buildingH} L${x + buildingW},${groundY - shortH} V${groundY} Z`;
+                   } else {
+                       // Right higher
+                       buildingPath += `M${x},${groundY} V${groundY - shortH} L${x + buildingW},${groundY - buildingH} V${groundY} Z`;
+                   }
+                   
+                   // Windows (100% fill)
+                   const rows = Math.floor(shortH/5);
+                   const cols = Math.floor(buildingW/4);
+                   for(let r=0; r<rows; r++) {
+                       for(let c=0; c<cols; c++) {
+                           pushWindow(x+2+c*4, groundY - shortH + 4 + r*5, 1.5, 1.5);
+                       }
+                   }
+               }
+               // Style 4: Standard Box (Default)
+               else {
+                   buildingPath += `M${x},${groundY} V${groundY - buildingH} H${x + buildingW} V${groundY} Z`;
+                   
+                   // Windows (100% fill)
+                   const rows = Math.floor(buildingH/6);
+                   const cols = Math.floor(buildingW/5);
+                   for(let r=0; r<rows; r++) {
+                       for(let c=0; c<cols; c++) {
+                           pushWindow(x+3+c*5, groundY - buildingH + 5 + r*6, 2, 2);
+                       }
+                   }
+               }
+               
+               // Add the path object
+               buildings.push({ d: buildingPath });
            }
         }
         
@@ -150,7 +222,9 @@ const FantasyBackground: React.FC = () => {
           x += treeW * density; 
         } else {
           // Just move forward for smooth mountains
-          x += 20;
+          // CITY TWEAK: Smaller steps in city area = more buildings
+          const step = (hasCity && x < 850) ? 8 : 20;
+          x += step;
           d += ` L${x},${y}`;
         }
       }
@@ -239,12 +313,9 @@ const FantasyBackground: React.FC = () => {
             />
             {/* Render Buildings separately on top of mountain */}
             {(layer as any).buildings?.map((b: any, i: number) => (
-               <rect
+               <path
                  key={`build-${layer.key}-${i}`}
-                 x={b.x}
-                 y={b.y}
-                 width={b.w}
-                 height={b.h}
+                 d={b.d}
                  fill={layer.fill} // Same color as mountain to look connected
                  className="landscapeLayer"
                />
@@ -257,9 +328,18 @@ const FantasyBackground: React.FC = () => {
                  y={w.y}
                  width={w.w}
                  height={w.h}
-                 fill="#fff6a9"
-                 opacity={Math.random() * 0.4 + 0.3}
+                 fill={w.isOn ? "#fff6a9" : layer.fill} // Dark if off
+                 // Opacity: If animated, let CSS handle it. If static ON, use randomization. If OFF, solid 1 (to block)
+                 opacity={w.isOn ? (w.animationType !== 'none' ? undefined : 0.4 + (i % 4) * 0.1) : 1}
                  className="cityWindow"
+                 style={w.isOn && w.animationType !== 'none' ? {
+                     animationName: w.animationType === 'flicker' ? 'flickerWindow' : 'toggleWindow',
+                     animationDuration: `${w.duration}s`,
+                     animationDelay: `${w.delay}s`,
+                     animationIterationCount: 'infinite',
+                     animationFillMode: 'both',
+                     willChange: 'opacity'
+                 } : {}}
                />
             ))}
           </React.Fragment>

@@ -39,3 +39,28 @@
   background: radial-gradient(circle at 50% 100%, rgba(100, 200, 255, 0.2) 0%, transparent 70%);
   pointer-events: none;
 }
+
+/* City Window Animations */
+@keyframes toggleWindow {
+  0% { opacity: 0.1; }
+  50% { opacity: 1; }
+  100% { opacity: 0.1; }
+}
+
+@keyframes flickerWindow {
+  0% { opacity: 1; }
+  2% { opacity: 0; }
+  4% { opacity: 1; }
+  6% { opacity: 0; }
+  8% { opacity: 1; }
+  10% { opacity: 0; }
+  12% { opacity: 1; }
+  50% { opacity: 1; }
+  52% { opacity: 0; }
+  54% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.cityWindow {
+  /* No transition to allow instant flickering */
+}
