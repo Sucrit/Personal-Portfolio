@@ -146,7 +146,7 @@ function App() {
               <FaMapMarkerAlt /> BASED IN PANGASINAN, PHILIPPINES
             </div>
             
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-mono)' }}>
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-main)' }}>
               {devName} <motion.div 
                 style={{ display: 'inline-block', originX: 0.7, originY: 0.7 }}
                 whileHover={{ rotate: 18, scale: 1.1 }}
@@ -161,7 +161,7 @@ function App() {
               color: '#f8fafc',
               textShadow: '0 2px 10px rgba(0,0,0,0.5)',
               marginBottom: '2rem',
-              fontFamily: 'var(--font-mono)' 
+              fontFamily: 'var(--font-main)' 
             }}>
               Backend Dev | Cybersecurity
             </div>
@@ -230,7 +230,7 @@ function App() {
                       fontSize: 36,
                       color: '#fff',
                       letterSpacing: 2,
-                      fontFamily: 'JetBrains Mono, Fira Code, monospace',
+                      fontFamily: 'var(--font-main)'
                     }}
                   >
                     EX
@@ -338,7 +338,7 @@ function App() {
               </p>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '2.5rem', fontSize: '2rem', marginBottom: 24 }}>
                 <a href="mailto:oliver.smith@email.com" aria-label="Email" style={{ color: 'var(--accent-color)' }}><FaEnvelope /></a>
-                <a href="https://github.com/endevium" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--accent-color)' }}><FaGithub /></a>
+                <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--accent-color)' }}><FaGithub /></a>
                 <a href="https://linkedin.com/in/endevium" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--accent-color)' }}><FaLinkedin /></a>
               </div>
               <div style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>

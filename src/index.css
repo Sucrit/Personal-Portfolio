@@ -53,7 +53,8 @@
   --border-color: rgba(130, 150, 200, 0.2);
   --glass-border: rgba(255, 255, 255, 0.1);
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  /* Use a single font across the site - map mono to the main font */
+  --font-mono: var(--font-main);
   --container-width: 1200px;
   --nav-height: 70px;
 }
@@ -196,7 +197,7 @@ nav {
 .hero-content .tagline {
   font-size: 1.5rem;
   color: var(--accent-color);
-  font-family: 'Courier New', Courier, monospace; /* Monospace for code aesthetic */
+  font-family: var(--font-main);
   margin-bottom: 2rem;
 }
 
@@ -292,7 +293,7 @@ nav {
   content: '>';
   color: var(--accent-color);
   margin-right: 10px;
-  font-family: monospace;
+  font-family: var(--font-main);
 }
 
 /* Projects Section */
@@ -319,7 +320,7 @@ nav {
   font-size: 0.85rem;
   color: var(--accent-color);
   margin-bottom: 1rem;
-  font-family: monospace;
+  font-family: var(--font-main);
 }
 
 .project-links {
@@ -515,7 +516,7 @@ nav {
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(4px);
-  font-family: var(--font-mono), monospace !important;
+  font-family: var(--font-main) !important;
 }
 
 .resume-btn:hover {
