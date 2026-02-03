@@ -8,6 +8,12 @@ import Navbar from './components/Navbar';
 
 const skills = [
   {
+    name: 'MySQL',
+    icon: '/mysql.svg',
+    color: '#4479A1',
+    description: 'Relational Database',
+  },
+  {
     name: 'Rust',
     icon: '/Rust.png',
     color: '#DEA584',
@@ -43,6 +49,12 @@ const skills = [
     color: '#777BB4',
     description: 'Old but Gold',
   },
+    {
+    name: 'FTK Imager',
+    icon: '/ftk.png',
+    color: '#2E4053',
+    description: 'Data Forensics',
+  },
   {
     name: 'Laravel',
     icon: '/Laravel.svg',
@@ -66,18 +78,6 @@ const skills = [
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     color: '#47A248',
     description: 'NoSQL Database',
-  },
-  {
-    name: 'MySQL',
-    icon: '/mysql.svg',
-    color: '#4479A1',
-    description: 'Relational Database',
-  },
-  {
-    name: 'FTK Imager',
-    icon: '/ftk.png',
-    color: '#2E4053',
-    description: 'Data Forensics',
   },
   {
     name: 'Volatility',

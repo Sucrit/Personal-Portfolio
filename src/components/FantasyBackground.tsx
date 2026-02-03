@@ -533,10 +533,40 @@ const FantasyBackground: React.FC = () => {
      if (!lhCx || !lhCy) return 0;
      const dx = (mx as number) - lhCx;
      const dy = (my as number) - lhCy;
-     // Radius equals EXACTLY the distance to the cursor.
-     // In combination with the gradient ending at 100%, 
-     // the beam will become effectively invisible precisely at the cursor.
-     return Math.sqrt(dx*dx + dy*dy); 
+     const dist = Math.sqrt(dx*dx + dy*dy);
+     
+     // Limit the visual beam length? 
+     // The user previously wanted "fade out at cursor".
+     // But if the cursor is WAY out of range (e.g. 2000px), infinite beam is weird?
+     // For now, adhere to "end at cursor" for the beam itself, as that feels best for "pointing".
+     // We only strictly limit the splash "impact".
+     return dist; 
+  });
+
+  // Splash Opacity - Fades out if cursor is too far (Range Limit)
+  const splashOpacity = useTransform([mouseX, mouseY], ([mx, my]) => {
+     if (!lhCx || !lhCy) return 0;
+     const dx = (mx as number) - lhCx;
+     const dy = (my as number) - lhCy;
+     const dist = Math.sqrt(dx*dx + dy*dy);
+     
+     // Adjusted Range Limit:
+     // - Lighthouse is at ~1680. 
+     // - City starts at x < 850.
+     // - Distance to city edge is ~830px.
+     // - To reach the first few buildings (approx x=750 to 800), we need range around 900-950px.
+     // - We want it "barely visible" (low brightness) at that point.
+     
+    const maxRange = 1300; // Increased range for the light beam
+    const fadeRange = 400; // Longer fade for a smoother, more natural falloff
+     
+     if (dist > maxRange) return 0;
+     
+     // Smooth fade out as it approaches the limit
+     if (dist > maxRange - fadeRange) {
+        return 0.9 * (1 - (dist - (maxRange - fadeRange)) / fadeRange);
+     }
+     return 0.9;
   });
 
   return (
@@ -705,10 +735,14 @@ const FantasyBackground: React.FC = () => {
                 <defs>
                    <clipPath id={`clip-${layer.key}`}>
                        <path d={layer.d} />
+                       {/* Include buildings in the clip path so light hits them too */}
+                       {(layer as any).buildings?.map((b: any, i: number) => (
+                           <path key={`clip-build-${i}`} d={b.d} />
+                       ))}
                    </clipPath>
                 </defs>
                 <motion.g 
-                    style={{ opacity: 0.9, mixBlendMode: 'overlay' }} 
+                    style={{ opacity: splashOpacity, mixBlendMode: 'overlay' }} 
                     clipPath={`url(#clip-${layer.key})`}
                 >
                    {/* Wide soft glow on the surface */}
@@ -760,24 +794,24 @@ const FantasyBackground: React.FC = () => {
                   style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(2px)' }}
                 />
                 
-                {/* 2. Outer atmospheric halo - Static, realistic haze */}
+                {/* 2. Outer atmospheric halo - Static, realistic haze (reduced brightness) */}
                 <ellipse
                   cx={layer.lighthouseGlow.cx}
                   cy={layer.lighthouseGlow.cy}
                   rx={layer.lighthouseGlow.rx * 2}
                   ry={layer.lighthouseGlow.ry * 2}
                   fill="url(#lighthouse-glow)"
-                  opacity={0.3}
+                  opacity={0.18}
                 />
-                {/* 3. Inner bright core - High intensity */}
+                {/* 3. Inner bright core - Lower intensity, smaller size */}
                 <ellipse
                   className="lighthouseCore"
                   cx={layer.lighthouseGlow.cx}
                   cy={layer.lighthouseGlow.cy}
-                  rx={layer.lighthouseGlow.rx}
-                  ry={layer.lighthouseGlow.ry}
+                  rx={layer.lighthouseGlow.rx * 0.7}
+                  ry={layer.lighthouseGlow.ry * 0.7}
                   fill="url(#lighthouse-glow)"
-                  opacity={0.9}
+                  opacity={0.45}
                   style={{ pointerEvents: 'none' }}
                 />
               </g>
