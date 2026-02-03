@@ -6,10 +6,27 @@ import './Navbar.css';
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      // Scroll Spy Logic
+      const sections = ['about', 'skills', 'projects', 'contact'];
+      let current = '';
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // If the top of the section is within the viewport (with some offset)
+          if (rect.top <= 150 && rect.bottom >= 150) {
+            current = section;
+          }
+        }
+      }
+      setActiveSection(current);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -17,10 +34,10 @@ const Navbar: React.FC = () => {
   }, []);
 
   const links = [
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'About', href: '#about', id: 'about' },
+    { name: 'Skills', href: '#skills', id: 'skills' },
+    { name: 'Projects', href: '#projects', id: 'projects' },
+    { name: 'Contact', href: '#contact', id: 'contact' },
   ];
 
   return (
@@ -31,15 +48,23 @@ const Navbar: React.FC = () => {
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       <div className="nav-content">
-        <a href="#" className="logo">
-          whoam<span>i_</span>
-        </a>
 
         {/* Desktop Links */}
         <div className="nav-links">
           {links.map((link) => (
-            <a key={link.name} href={link.href} className="nav-link">
+            <a 
+              key={link.name} 
+              href={link.href} 
+              className={`nav-link ${activeSection === link.id ? 'active' : ''}`}
+            >
               {link.name}
+              {activeSection === link.id && (
+                <motion.div 
+                  className="active-indicator"
+                  layoutId="activeTab"
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+              )}
             </a>
           ))}
         </div>

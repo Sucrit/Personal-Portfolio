@@ -8,6 +8,15 @@ const FantasyBackground: React.FC = () => {
   const starX = useMotionValue(0);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const [showShootingStar, setShowShootingStar] = useState(false);
+
+  // Trigger shooting star after 6 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowShootingStar(true);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -478,9 +487,6 @@ const FantasyBackground: React.FC = () => {
      const angle = Math.atan2(dy, dx);
      const perpAngle = angle + Math.PI / 2;
      
-     // Extend the geometry beyond the cursor to allow for a soft fade-out
-     // The mask radius will be set to dist * 1.5. 
-     // We extend geometry slightly past that to ensure no hard clip at the very end of the fade.
      const geometryDist = dist * 1.6;
      
      const endX = lhCx + Math.cos(angle) * geometryDist;
@@ -534,12 +540,6 @@ const FantasyBackground: React.FC = () => {
      const dx = (mx as number) - lhCx;
      const dy = (my as number) - lhCy;
      const dist = Math.sqrt(dx*dx + dy*dy);
-     
-     // Limit the visual beam length? 
-     // The user previously wanted "fade out at cursor".
-     // But if the cursor is WAY out of range (e.g. 2000px), infinite beam is weird?
-     // For now, adhere to "end at cursor" for the beam itself, as that feels best for "pointing".
-     // We only strictly limit the splash "impact".
      return dist; 
   });
 
@@ -549,16 +549,10 @@ const FantasyBackground: React.FC = () => {
      const dx = (mx as number) - lhCx;
      const dy = (my as number) - lhCy;
      const dist = Math.sqrt(dx*dx + dy*dy);
-     
-     // Adjusted Range Limit:
-     // - Lighthouse is at ~1680. 
-     // - City starts at x < 850.
-     // - Distance to city edge is ~830px.
-     // - To reach the first few buildings (approx x=750 to 800), we need range around 900-950px.
-     // - We want it "barely visible" (low brightness) at that point.
-     
-    const maxRange = 1300; // Increased range for the light beam
-    const fadeRange = 400; // Longer fade for a smoother, more natural falloff
+
+    // Define max effective range
+    const maxRange = 1300; 
+    const fadeRange = 400;
      
      if (dist > maxRange) return 0;
      
@@ -679,6 +673,50 @@ const FantasyBackground: React.FC = () => {
           ))}
         </motion.g>
 
+        {/* Shooting Star - Rendered before mountains so it goes behind them */}
+        {showShootingStar && (
+          <g className="shootingStarContainer">
+            <defs>
+              <linearGradient id="shooting-star-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                <stop offset="40%" stopColor="#a5d8ff" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+              </linearGradient>
+              <filter id="shooting-star-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            {/* Shooting star tail - Tapered path for speed look */}
+            <path
+              className="shootingStarTail"
+              d="M0,0 L140,-1.5 L150,0 L140,1.5 Z"
+              fill="url(#shooting-star-gradient)"
+              filter="url(#shooting-star-glow)"
+            />
+            {/* Bright head of the shooting star */}
+            <circle
+              className="shootingStarHead"
+              cx="150"
+              cy="0"
+              r="3.5"
+              fill="#ffffff"
+              filter="url(#shooting-star-glow)"
+            />
+            {/* Cross flare for magical feel */}
+            <path
+              d="M142,0 L158,0 M150,-8 L150,8"
+              stroke="#ffffff"
+              strokeWidth="0.8"
+              opacity="0.8"
+              filter="url(#shooting-star-glow)"
+            />
+          </g>
+        )}
+
         {/* Crescent Moon */}
         <g className="moon" transform="translate(1500, 350)">
           {/* Main glowing circle */}
@@ -700,7 +738,7 @@ const FantasyBackground: React.FC = () => {
                <path
                  key={`build-${layer.key}-${i}`}
                  d={b.d}
-                 fill={layer.fill} // Same color as mountain to look connected
+                 fill={layer.fill} 
                  className="landscapeLayer"
                />
             ))}

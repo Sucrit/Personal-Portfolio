@@ -1,8 +1,6 @@
-// ...existing code...
-import { useState } from 'react';
+// import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload } from 'react-icons/fa';
-import PhilippinesFlag from './components/PhilippinesFlag';
 import FantasyBackground from './components/FantasyBackground';
 import Navbar from './components/Navbar';
 
@@ -39,7 +37,7 @@ const skills = [
   },
   {
     name: 'Express',
-    icon: '', // Will render custom white EX below
+    icon: '', 
     color: '#ffffff',
     description: 'Node.js Framework',
   },
@@ -145,9 +143,7 @@ function App() {
                 boxShadow: '0 0 15px var(--accent-glow)'
               }}
             >
-              <FaMapMarkerAlt /> BASED IN PHILIPPINES
-              <span style={{ width: 1, height: 16, background: 'var(--accent-color)', opacity: 0.3, margin: '0 0.5rem' }}></span>
-              <PhilippinesFlag className="flag-wave" style={{ width: 24, height: 12, display: 'block' }} />
+              <FaMapMarkerAlt /> BASED IN PANGASINAN, PHILIPPINES
             </div>
             
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-mono)' }}>
@@ -167,7 +163,6 @@ function App() {
               marginBottom: '2rem',
               fontFamily: 'var(--font-mono)' 
             }}>
-              <span style={{ color: 'var(--accent-color)', marginRight: '10px' }}>&gt;</span>
               Backend Dev | Cybersecurity
             </div>
             
@@ -184,7 +179,7 @@ function App() {
               borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.05)'
             }}>
-              I'm 22 yrs old, an undergrad IT student specialized in developing backend API's using Node.js environment, with a passion for cybersecurity.
+              I'm a 22-year-old undergrad IT student specializing in backend development with Node.js, with a strong passion in cybersecurity and secure system design.
             </p>
 
             <div className="contact-actions">
@@ -347,7 +342,7 @@ function App() {
                 <a href="https://linkedin.com/in/endevium" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--accent-color)' }}><FaLinkedin /></a>
               </div>
               <div style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
-                <FaMapMarkerAlt style={{ marginRight: 6 }} /> Philippines
+                <FaMapMarkerAlt style={{ marginRight: 6 }} /> Pangasinan, Philippines
               </div>
             </div>
           </section>
