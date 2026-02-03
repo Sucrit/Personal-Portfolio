@@ -44,7 +44,7 @@ const skills = [
     name: 'Python',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
     color: '#3776AB',
-    description: 'General Purpose',
+    description: 'All-rounder Language',
   },
   {
     name: 'Node.js',
@@ -188,7 +188,7 @@ function App() {
               borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.05)'
             }}>
-              I'm a 22-year-old undergrad IT student specializing in backend development with Node.js, an a strong passion in cybersecurity and secure system design.
+              I'm a 22-year-old undergrad IT student specializing in backend development with Node.js, and a strong passion in cybersecurity and secure system design.
             </p>
 
             <div className="contact-actions">
@@ -278,11 +278,14 @@ function App() {
                   />
               </div>
               <div className="project-content">
-                <h3>RoomFinder</h3>
+                <div className="project-title-inline">
+                  <img src="/roomfinder/roomfinder_logo.png" alt="RoomFinder logo" className="project-logo" />
+                  <h3>RoomFinder</h3>
+                </div>
                 <div className="project-role">Role: Backend Developer</div>
                 <p>
-                  A cross-platform room booking and management system for
-                  University of Pangasinan (UPang).
+                  A mobile and web platform for room booking and management system for
+                  University of Pangasinan.
                 </p>
                 <div className="project-tech">
                   <TechTag name="JavaScript" />
@@ -303,13 +306,18 @@ function App() {
                     images={[
                       '/evacudesk/adl.png', 
                       '/evacudesk/evacudesk.png', 
-                      '/evacudesk/qq.png'
+                      '/evacudesk/web1.png',
+                      '/evacudesk/ss2.png',
+                      '/evacudesk/ss3.png'
                     ]} 
                     alt="EvacuDesk Screenshot" 
                   />
               </div>
               <div className="project-content">
-                <h3>EvacuDesk</h3>
+                <div className="project-title-inline">
+                  <img src="/evacudesk/evacudesk_logo.png" alt="EvacuDesk logo" className="project-logo" />
+                  <h3>EvacuDesk</h3>
+                </div>
                 <div className="project-role">Role: Backend Developer</div>
                 <p>
                   An evacuation center management system designed for CDRRMO in Dagupan, Philippines.

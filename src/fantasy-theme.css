@@ -639,6 +639,35 @@ h2 {
   background-color: #000;
 }
 
+.project-title-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.project-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  /* remove extra padding to keep it compact */
+  margin: 0;
+  vertical-align: middle;
+  border-radius: 6px;
+}
+
+.project-content h3 {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .project-title-inline { gap: 0.5rem; }
+  .project-logo { width: 24px; height: 24px; }
+  .project-content h3 { font-size: 1.25rem; }
+}
+
 .phone-notch {
   position: absolute;
   top: 0;
