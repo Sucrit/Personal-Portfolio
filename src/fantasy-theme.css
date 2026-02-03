@@ -63,14 +63,12 @@ h2 {
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 2px;
-  background: linear-gradient(to right, 
-    transparent, 
-    rgba(255, 222, 33, 0.1), 
-    transparent
-  );
-  padding: 0.5rem 0;
-  border-top: 1px solid rgba(255, 222, 33, 0.2);
-  border-bottom: 1px solid rgba(255, 222, 33, 0.2);
+  position: relative;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 2px solid var(--accent-color);
+  padding-bottom: 0.5rem;
 }
 
 /* Fantasy Card Style */
@@ -581,7 +579,7 @@ h2 {
 }
 
 .carousel-btn:hover {
-  background: var(--accent-color);
+  background: rgb(148, 144, 144);
   color: #0b1026;
 }
 
@@ -614,7 +612,7 @@ h2 {
 }
 
 .dot.active {
-    background: var(--accent-color);
+    background: rgb(139, 139, 139);
     transform: scale(1.2);
     opacity: 1;
 }
@@ -629,7 +627,7 @@ h2 {
   position: relative;
   overflow: hidden;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-  margin-top: 10px; /* Slight offset for center */
+  margin-top: 10px; 
 }
 
 .phone-screen {
@@ -650,7 +648,6 @@ h2 {
   width: 32px;
   height: 32px;
   object-fit: contain;
-  /* remove extra padding to keep it compact */
   margin: 0;
   vertical-align: middle;
   border-radius: 6px;
