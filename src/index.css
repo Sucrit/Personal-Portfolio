@@ -52,7 +52,7 @@
   --mono-accent: #6b7280;
   --border-color: rgba(130, 150, 200, 0.2);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-main: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   /* Use a single font across the site - map mono to the main font */
   --font-mono: var(--font-main);
   --container-width: 1200px;

@@ -337,9 +337,9 @@ function App() {
                 Want to connect, collaborate, or just say hi? Reach out below!
               </p>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '2.5rem', fontSize: '2rem', marginBottom: 24 }}>
-                <a href="mailto:oliver.smith@email.com" aria-label="Email" style={{ color: 'var(--accent-color)' }}><FaEnvelope /></a>
+                <a href="mailto:smitholiver106@gmail.com" aria-label="Email" style={{ color: 'var(--accent-color)' }}><FaEnvelope /></a>
                 <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--accent-color)' }}><FaGithub /></a>
-                <a href="https://linkedin.com/in/endevium" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--accent-color)' }}><FaLinkedin /></a>
+                <a href="https://linkedin.com/in/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--accent-color)' }}><FaLinkedin /></a>
               </div>
               <div style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
                 <FaMapMarkerAlt style={{ marginRight: 6 }} /> Pangasinan, Philippines

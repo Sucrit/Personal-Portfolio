@@ -10,7 +10,7 @@
   --accent-glow: rgba(255, 215, 0, 0.2);
   --success-color: #22c55e;
   
-  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-main: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   /* Keep a single font for consistency */
   --font-mono: var(--font-main);
   
