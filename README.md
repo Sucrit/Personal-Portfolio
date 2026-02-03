@@ -1,5 +1,11 @@
 # DEPLOYED
 View my personal portfolio at sample.com
 
-# DEVELOPMENT
-Developed using React, Typescript, Vite, and Tailwind CSS
+## DEVELOPMENT
+Developed using React, TypeScript, and Vite and Framer Motion.
+
+### TODO
+- improve lightbeam realism when pointing the sky.
+- about me unfinished
+- add light mode with dynamic bg changes
+- more details btn + modal with detailed info of projects such as system arch, security implemented etc.
