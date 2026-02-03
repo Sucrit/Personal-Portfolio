@@ -14,7 +14,7 @@ const FantasyBackground: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowShootingStar(true);
-    }, 6000);
+    }, 8000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -335,14 +335,24 @@ const FantasyBackground: React.FC = () => {
         }
       }
         
-        // Add trees if this layer has them
-        if (treeHeight > 0) {
-          const treeW = 12 + random() * 18; // 12-30px width
-          const treeH = treeHeight * (0.8 + random() * 0.5); // Taller, varied height
+        // Determine effective tree configuration for this segment
+        let effectiveTreeH = treeHeight;
+        
+        // FEATURE: Add small, detailed forest to the lighthouse mountain (Layer 2)
+        // Only applies to the right side (mountain area) of the city layer
+        if (hasCity && x > 850) {
+           effectiveTreeH = 6; 
+        }
+
+        // Add trees if this layer has them (or if we forced them above)
+        if (effectiveTreeH > 0) {
+          const baseW = effectiveTreeH * (0.6 + random() * 0.5);
+          const treeW = Math.max(3, baseW);
+
+          const treeH = effectiveTreeH * (0.8 + random() * 0.5); 
           const centerX = x + treeW / 2;
           
-          // Realistic Detail: More segments (High density: ~3-4px per segment)
-          const segments = Math.floor(treeH / 3.5) + 3;
+          const segments = Math.floor(treeH / 2.5) + 3;
           
           // Start at base left corner
           d += ` L${x},${y}`; 

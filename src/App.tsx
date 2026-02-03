@@ -8,14 +8,30 @@ const skills = [
   {
     name: 'MySQL',
     icon: '/mysql.svg',
-    color: '#4479A1',
+    color: '#4ca7ec',
     description: 'Relational Database',
+  },
+  {    name: 'PostgreSQL',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+    color: '#336791',
+    description: 'Relational Database',
+  },
+  {    name: 'MongoDB',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+    color: '#25ff29',
+    description: 'NoSQL Database',
   },
   {
     name: 'Rust',
     icon: '/Rust.png',
-    color: '#DEA584',
+    color: '#dea584',
     description: 'Twin of C++',
+  },
+  {
+    name: 'JavaScript',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+    color: '#b8ac54',
+    description: 'Web Scripting',
   },
   {
     name: 'TypeScript',
@@ -32,25 +48,25 @@ const skills = [
   {
     name: 'Node.js',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-    color: '#3C873A',
+    color: '#36dc31',
     description: 'Server-side JavaScript',
   },
   {
     name: 'Express',
-    icon: '', 
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
     color: '#ffffff',
     description: 'Node.js Framework',
   },
   {
     name: 'PHP',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
-    color: '#777BB4',
+    color: '#3843debb',
     description: 'Old but Gold',
   },
     {
     name: 'FTK Imager',
     icon: '/ftk.png',
-    color: '#2E4053',
+    color: '#0e5aac',
     description: 'Data Forensics',
   },
   {
@@ -62,31 +78,25 @@ const skills = [
   {
     name: 'Docker',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
-    color: '#2496ED',
+    color: '#0091ff',
     description: 'Containerization',
   },
   {
     name: 'GitHub',
     icon: '/github-white-icon.svg',
-    color: '#fff', // White shadow for GitHub
+    color: '#ffffffd9', 
     description: 'Version Control',
-  },
-  {
-    name: 'MongoDB',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-    color: '#47A248',
-    description: 'NoSQL Database',
   },
   {
     name: 'Volatility',
     icon: '/volatility.png',
-    color: '#4B4B4B',
+    color: '#d6d3d3',
     description: 'Memory Forensics',
   },
   {
     name: 'Ghidra',
     icon: '/ghidra.svg', 
-    color: '#F7CE3E',
+    color: '#ff5500',
     description: 'Reverse Engineering',
   },
 ];
@@ -94,23 +104,20 @@ const skills = [
 function App() {
   const devName = ("Hi, Oliver here");
 
-  const projectImgWrapperStyle = {
-    width: '100%',
-    aspectRatio: '16/9',
-    background: '#222',
-    borderRadius: '12px',
-    overflow: 'hidden',
-    marginBottom: '1rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
+  const findSkillIcon = (name: string) => {
+    const skill = skills.find(s => s.name.toLowerCase() === name.toLowerCase());
+    return skill?.icon ?? '';
   };
-  const projectImgStyle: React.CSSProperties = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    display: 'block',
+
+  const TechTag = ({ name }: { name: string }) => {
+    const src = findSkillIcon(name);
+    const invert = name.toLowerCase() === 'express' || name.toLowerCase() === 'flask';
+    return (
+      <span className="tech-tag">
+        {src ? <img src={src} alt={name} className={invert ? 'invert-icon' : ''} /> : <span aria-hidden className="tech-tag-fallback">•</span>}
+        {name}
+      </span>
+    );
   };
 
   return (
@@ -132,21 +139,22 @@ function App() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                background: 'rgba(255, 215, 0, 0.1)',
+                background: 'rgba(255, 222, 33, 0.1)',
                 color: 'var(--accent-color)',
                 padding: '0.5rem 1.5rem',
                 borderRadius: '50px',
                 marginBottom: '2rem',
                 fontSize: '0.9rem',
                 fontWeight: '600',
-                border: '1px solid rgba(255, 215, 0, 0.2)',
+                border: '1px solid rgba(255, 222, 33, 0.2)',
                 boxShadow: '0 0 15px var(--accent-glow)'
               }}
             >
               <FaMapMarkerAlt /> BASED IN PANGASINAN, PHILIPPINES
+              <img src="../public/Flag_of_the_Philippines.svg" alt="Philippines" style={{ height: '1rem', width: '1.6rem', objectFit: 'cover' }} />
             </div>
             
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-main)' }}>
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-mono)' }}>
               {devName} <motion.div 
                 style={{ display: 'inline-block', originX: 0.7, originY: 0.7 }}
                 whileHover={{ rotate: 18, scale: 1.1 }}
@@ -161,7 +169,7 @@ function App() {
               color: '#f8fafc',
               textShadow: '0 2px 10px rgba(0,0,0,0.5)',
               marginBottom: '2rem',
-              fontFamily: 'var(--font-main)' 
+              fontFamily: 'var(--font-mono)' 
             }}>
               Backend Dev | Cybersecurity
             </div>
@@ -230,7 +238,7 @@ function App() {
                       fontSize: 36,
                       color: '#fff',
                       letterSpacing: 2,
-                      fontFamily: 'var(--font-main)'
+                      fontFamily: 'JetBrains Mono, Fira Code, monospace',
                     }}
                   >
                     EX
@@ -264,11 +272,16 @@ function App() {
               </div>
               <div className="project-content">
                 <h3>RoomFinder</h3>
-                <div className="project-tech">JavaScript, PHP, MySQL</div>
+                <div className="project-role">Role: Backend Developer</div>
                 <p>
                   A cross-platform room booking and management system for
                   University of Pangasinan (UPang).
                 </p>
+                <div className="project-tech">
+                  <TechTag name="JavaScript" />
+                  <TechTag name="PHP" />
+                  <TechTag name="MySQL" />
+                </div>
                 <div className="project-links">
                   <a href="https://github.com/Sucrit/RoomFinder_API" className="project-link-btn">
                     View Code &rarr;
@@ -286,10 +299,15 @@ function App() {
               </div>
               <div className="project-content">
                 <h3>EvacuDesk</h3>
-                <div className="project-tech">Node.js, Express, MongoDB</div>
+                <div className="project-role">Role: Backend Developer</div>
                 <p>
                   An evacuation center management system designed for CDRRMO in Dagupan, Philippines.
                 </p>
+                <div className="project-tech">
+                  <TechTag name="Node.js" />
+                  <TechTag name="Express" />
+                  <TechTag name="MongoDB" />
+                </div>
                 <div className="project-links">
                   <a href="https://github.com/endevium/EvacuDesk/tree/backend/UpdatedAPI2" className="project-link-btn">
                     View Code &rarr;
@@ -298,7 +316,7 @@ function App() {
               </div>
             </div>
 
-            <div className="project-card">
+            {/* <div className="project-card">
               <div className="project-image-container">
                   <img
                     src="/nethunter/nethunter.png"
@@ -307,11 +325,15 @@ function App() {
               </div>
               <div className="project-content">
                 <h3>NetHunter (In Development)</h3>
-                <div className="project-tech">Python, Flask, MongoDB</div>
                 <p>
                   An OSINT platform that generates masked links to gather deep
                   intelligence on targets.
                 </p>
+                <div className="project-tech">
+                  <TechTag name="Python" />
+                  <TechTag name="Flask" />
+                  <TechTag name="MongoDB" />
+                </div>
                 <div className="project-links">
                   <span
                     style={{
@@ -323,23 +345,22 @@ function App() {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
 
 
           {/* Contact Section */}
-          <section id="contact" style={{ background: 'var(--card-bg)', padding: '60px 0 40px 0', marginTop: '0', backdropFilter: 'blur(10px)' }}>
+          <section id="contact" style={{ background: 'var(--card-bg)', padding: '40px 0 20px 0', marginTop: '0', backdropFilter: 'blur(10px)' }}>
             <div className="container" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
-              <h2>Contact</h2>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: 32 }}>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: 14, fontSize: '1.1rem', fontWeight: 500 }}>
                 Want to connect, collaborate, or just say hi? Reach out below!
               </p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '2.5rem', fontSize: '2rem', marginBottom: 24 }}>
-                <a href="mailto:smitholiver106@gmail.com" aria-label="Email" style={{ color: 'var(--accent-color)' }}><FaEnvelope /></a>
-                <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--accent-color)' }}><FaGithub /></a>
-                <a href="https://linkedin.com/in/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--accent-color)' }}><FaLinkedin /></a>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.6rem', marginBottom: 16 }}>
+                <a href="mailto:smitholiver106@gmail.com@gmail" aria-label="Gmail" style={{ color: 'var(--text-primary)' }}><FaEnvelope /></a>
+                <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-primary)' }}><FaGithub /></a>
+                <a href="https://linkedin.com/in/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--text-primary)' }}><FaLinkedin /></a>
               </div>
               <div style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
                 <FaMapMarkerAlt style={{ marginRight: 6 }} /> Pangasinan, Philippines

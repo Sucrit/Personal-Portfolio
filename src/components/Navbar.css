@@ -1,91 +1,96 @@
 .navbar-container {
   position: fixed;
-  top: 25px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  min-width: 400px;
-  max-width: 90%;
+  top: 50%;
+  left: 0; /* flush to the left edge */
+  transform: translateY(-50%);
+  width: 56px; /* compact fixed width */
+  min-width: 56px;
   z-index: 1000;
-  padding: 0.5rem 0.5rem;
-  border-radius: 999px;
+  padding: 0.6rem 0.35rem 0.6rem 0.15rem; /* reduce left padding to bring icons closer to the edge */
+  border-radius: 0 18px 18px 0; /* only round the right side so the left edge aligns with the page */
   
-  /* Advanced Glassmorphism */
-  background: rgba(10, 15, 30, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* Persistent subtle glass effect — always slightly transparent and static */
+  background: rgba(10, 15, 30, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   
   /* Gradient Border Trick */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 
     0 4px 6px -1px rgba(0, 0, 0, 0.1), 
     0 2px 4px -1px rgba(0, 0, 0, 0.06),
-    inset 0 0 20px rgba(255, 255, 255, 0.02);
+    inset 0 0 8px rgba(255, 255, 255, 0.02);
     
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: none; /* static */
 }
 
 .navbar-container.scrolled {
-  background: rgba(10, 15, 30, 0.75);
+  /* Scrolled state disabled — keep same appearance */
+  background: rgba(10, 15, 30, 0.25);
   box-shadow: 
-    0 20px 25px -5px rgba(0, 0, 0, 0.2), 
-    0 10px 10px -5px rgba(0, 0, 0, 0.1),
-    inset 0 0 1px rgba(255, 255, 255, 0.15);
-  top: 15px;
-  padding: 0.4rem 0.4rem;
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    inset 0 0 8px rgba(255, 255, 255, 0.02);
 }
 
 .nav-content {
   display: flex;
+  flex-direction: column;
   position: relative;
   align-items: center;
-  justify-content: center; /* Enforce centering */
-  width: 100%;
+  justify-content: center;
 }
 
 .nav-links {
   display: flex;
-  gap: 0.5rem; /* Gap is smaller because we use padding on links */
-  align-items: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start; /* align to left edge */
   margin: 0;
-  padding: 0 0.5rem;
+  padding: 0 0 0 0.25rem; /* minimal left padding so icons don't touch container edge */
 }
 
 .nav-link {
   position: relative;
   color: #94a3b8;
-  font-weight: 500;
-  font-size: 0.9rem;
-  padding: 0.6rem 1.2rem;
-  border-radius: 999px;
-  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* align icon to the left */
+  padding-left: 6px; /* small inner padding so icon is slightly inset */
+  width: 40px; /* slightly smaller icons */
+  height: 40px;
+  border-radius: 10px;
+  transition: none; /* static */
   text-decoration: none;
   z-index: 1;
 }
 
 .nav-link:hover {
-  color: #e2e8f0;
+  /* Hover disabled for nav icons */
+  color: #94a3b8;
+  background: transparent;
+  transform: none;
+  cursor: default;
 }
 
 .nav-link.active {
   color: #fff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* Replaces the old underline with a floating pill background */
 .nav-link::after {
   display: none;
 }
 
-/* Framer Motion Active Indicator */
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* Active indicator hidden to remove yellow highlight when scrolling/selection */
 .active-indicator {
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
-  z-index: -1;
-  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: none;
 }
 
 .mobile-toggle {
@@ -93,51 +98,67 @@
   font-size: 1.2rem;
   color: #e2e8f0;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.6rem;
-  border-radius: 50%;
-  margin-left: auto; /* Push to right on mobile if container is flex */
-  transition: all 0.2s ease;
-}
-
-.mobile-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-left: 0;
 }
 
 /* Mobile Menu */
 .mobile-menu {
-  position: absolute;
-  top: calc(100% + 15px);
-  left: 50%;
-  transform: translateX(-50%) !important; /* Override inline framer if needed */
-  width: 200px;
-  background: rgba(15, 20, 40, 0.9);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background: rgba(10, 15, 30, 0.95);
+  backdrop-filter: blur(15px);
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+  gap: 1rem;
+  z-index: 999;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+}
+
+.nav-link-mobile {
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 1rem;
+  display: flex;
   align-items: center;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.nav-link-mobile:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {
+  .navbar-container {
+    padding: 0.5rem;
+    left: auto;
+    right: 20px;
+    top: 20px;
+    transform: none;
+    flex-direction: row;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    min-width: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
   .nav-links {
     display: none;
   }
   
   .mobile-toggle {
     display: block;
-  }
-  
-  .navbar-container {
-    min-width: unset;
-    padding: 0.5rem 1rem;
-    width: auto;
-    left: 50%;
-    transform: translateX(-50%);
   }
 }

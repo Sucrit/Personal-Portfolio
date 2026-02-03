@@ -1,7 +1,7 @@
 .skill-item {
   background: var(--card-bg);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(255, 222, 33, 0.08);
   border: 2px solid transparent;
   transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
@@ -46,15 +46,14 @@
   --card-bg: rgba(20, 25, 50, 0.7); /* Deep blue-tinted glass */
   --text-primary: #f0f4ff;
   --text-secondary: #b8c1d6;
-  --accent-color: #ffd700; /* Gold */
-  --accent-hover: #ffe44d;
-  --accent-glow: rgba(255, 215, 0, 0.3);
+  --accent-color: #FFDE21; /* Gold */
+  --accent-hover: #FFE44D;
+  --accent-glow: rgba(255, 222, 33, 0.3);
   --mono-accent: #6b7280;
   --border-color: rgba(130, 150, 200, 0.2);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --font-main: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  /* Use a single font across the site - map mono to the main font */
-  --font-mono: var(--font-main);
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --container-width: 1200px;
   --nav-height: 70px;
 }
@@ -197,7 +196,7 @@ nav {
 .hero-content .tagline {
   font-size: 1.5rem;
   color: var(--accent-color);
-  font-family: var(--font-main);
+  font-family: 'Courier New', Courier, monospace; /* Monospace for code aesthetic */
   margin-bottom: 2rem;
 }
 
@@ -234,7 +233,7 @@ nav {
   background: var(--card-bg) !important;
   background-color: var(--card-bg) !important;
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(255, 215, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(255, 222, 33, 0.06);
   padding: 0.75rem 1rem !important;
   font-size: 0.95rem;
 }
@@ -243,7 +242,7 @@ nav {
   background: var(--card-bg) !important;
   background-color: var(--card-bg) !important;
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(255, 215, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(255, 222, 33, 0.06);
   padding: 0.5rem 0.75rem !important;
   font-size: 0.85rem;
 }
@@ -262,20 +261,20 @@ nav {
   padding: 2rem;
   border-radius: 10px;
   border: none;
-  box-shadow: 0 4px 24px 0 rgba(255, 215, 0, 0.10), 0 1.5px 8px 0 var(--mono-accent);
+  box-shadow: 0 4px 24px 0 rgba(255, 222, 33, 0.10), 0 1.5px 8px 0 var(--mono-accent);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .skill-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 32px 0 rgba(255, 215, 0, 0.18), 0 2px 12px 0 var(--mono-accent);
+  box-shadow: 0 8px 32px 0 rgba(255, 222, 33, 0.18), 0 2px 12px 0 var(--mono-accent);
 }
 
 .skill-card h3 {
   color: var(--accent-color);
   font-size: 1.2rem;
   margin-bottom: 1rem;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.18);
+  text-shadow: 0 0 10px rgba(255, 222, 33, 0.18);
 }
 
 .skill-list {
@@ -293,7 +292,7 @@ nav {
   content: '>';
   color: var(--accent-color);
   margin-right: 10px;
-  font-family: var(--font-main);
+  font-family: monospace;
 }
 
 /* Projects Section */
@@ -320,7 +319,7 @@ nav {
   font-size: 0.85rem;
   color: var(--accent-color);
   margin-bottom: 1rem;
-  font-family: var(--font-main);
+  font-family: monospace;
 }
 
 .project-links {
@@ -516,7 +515,7 @@ nav {
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(4px);
-  font-family: var(--font-main) !important;
+  font-family: var(--font-mono), monospace !important;
 }
 
 .resume-btn:hover {
