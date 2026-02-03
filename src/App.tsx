@@ -3,12 +3,13 @@ import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload } from 'react-icons/fa';
 import FantasyBackground from './components/FantasyBackground';
 import Navbar from './components/Navbar';
+import ProjectCarousel from './components/ProjectCarousel';
 
 const skills = [
   {
     name: 'MySQL',
     icon: '/mysql.svg',
-    color: '#4ca7ec',
+    color: '#0051ff',
     description: 'Relational Database',
   },
   {    name: 'PostgreSQL',
@@ -30,7 +31,7 @@ const skills = [
   {
     name: 'JavaScript',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
-    color: '#b8ac54',
+    color: '#b8ac54af',
     description: 'Web Scripting',
   },
   {
@@ -151,7 +152,7 @@ function App() {
               }}
             >
               <FaMapMarkerAlt /> BASED IN PANGASINAN, PHILIPPINES
-              <img src="../public/Flag_of_the_Philippines.svg" alt="Philippines" style={{ height: '1rem', width: '1.6rem', objectFit: 'cover' }} />
+              <img src="/Flag_of_the_Philippines.svg" alt="Philippines" style={{ height: '1rem', width: '1.6rem', objectFit: 'cover' }} />
             </div>
             
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-mono)' }}>
@@ -187,7 +188,7 @@ function App() {
               borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.05)'
             }}>
-              I'm a 22-year-old undergrad IT student specializing in backend development with Node.js, with a strong passion in cybersecurity and secure system design.
+              I'm a 22-year-old undergrad IT student specializing in backend development with Node.js, an a strong passion in cybersecurity and secure system design.
             </p>
 
             <div className="contact-actions">
@@ -215,7 +216,7 @@ function App() {
           <div className="about-grid">
             <div>
               <p>
-                I'm an undergrad student studying Information Technology at University of Pangasinan. I have a passion for backend development and cybersecurity, constantly seeking to enhance my skills in building secure and efficient systems.
+                I’m a 3rd-year BSIT student specializing in Cybersecurity at the University of Pangasinan in Dagupan, focused on backend development using the MERN and PERN stacks. I build secure and scalable RESTful API's and database design, and also have experience with PHP (Laravel) and MySQL. I’m currently open to remote freelance projects.
               </p>
             </div>
           </div>
@@ -265,9 +266,15 @@ function App() {
           <div className="projects-grid">
             <div className="project-card">
               <div className="project-image-container">
-                  <img
-                    src="/roomfinder/ss1.png"
-                    alt="RoomFinder Screenshot"
+                  <ProjectCarousel 
+                    images={[
+                      '/roomfinder/ss1.png',
+                      '/roomfinder/ss2.png',
+                      '/roomfinder/ss3.png',
+                      { src: '/roomfinder/mobile1.png', type: 'mobile' },
+                      { src: '/roomfinder/mobile2.png', type: 'mobile' }
+                    ]} 
+                    alt="RoomFinder Screenshot" 
                   />
               </div>
               <div className="project-content">
@@ -292,9 +299,13 @@ function App() {
 
             <div className="project-card">
               <div className="project-image-container">
-                  <img
-                    src="/evacudesk/adl.png"
-                    alt="EvacuDesk Screenshot"
+                  <ProjectCarousel 
+                    images={[
+                      '/evacudesk/adl.png', 
+                      '/evacudesk/evacudesk.png', 
+                      '/evacudesk/qq.png'
+                    ]} 
+                    alt="EvacuDesk Screenshot" 
                   />
               </div>
               <div className="project-content">
@@ -315,37 +326,6 @@ function App() {
                 </div>
               </div>
             </div>
-
-            {/* <div className="project-card">
-              <div className="project-image-container">
-                  <img
-                    src="/nethunter/nethunter.png"
-                    alt="NetHunter Screenshot"
-                  />
-              </div>
-              <div className="project-content">
-                <h3>NetHunter (In Development)</h3>
-                <p>
-                  An OSINT platform that generates masked links to gather deep
-                  intelligence on targets.
-                </p>
-                <div className="project-tech">
-                  <TechTag name="Python" />
-                  <TechTag name="Flask" />
-                  <TechTag name="MongoDB" />
-                </div>
-                <div className="project-links">
-                  <span
-                    style={{
-                      color: 'var(--text-secondary)',
-                      fontSize: '0.9rem',
-                    }}
-                  >
-                    Private Repository
-                  </span>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </section>
@@ -358,9 +338,9 @@ function App() {
                 Want to connect, collaborate, or just say hi? Reach out below!
               </p>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.6rem', marginBottom: 16 }}>
-                <a href="mailto:smitholiver106@gmail.com@gmail" aria-label="Gmail" style={{ color: 'var(--text-primary)' }}><FaEnvelope /></a>
+                <a href="mailto:smitholiver106@gmail.com" aria-label="Gmail" style={{ color: 'var(--text-primary)' }}><FaEnvelope /></a>
                 <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-primary)' }}><FaGithub /></a>
-                <a href="https://linkedin.com/in/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--text-primary)' }}><FaLinkedin /></a>
+                <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--text-primary)' }}><FaLinkedin /></a>
               </div>
               <div style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
                 <FaMapMarkerAlt style={{ marginRight: 6 }} /> Pangasinan, Philippines
