@@ -11,7 +11,7 @@
   --success-color: #22c55e;
   
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-mono: monospace;
   
   --container-width: 1200px;
 }

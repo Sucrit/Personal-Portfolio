@@ -10,7 +10,7 @@ const FantasyBackground: React.FC = () => {
   const mouseY = useMotionValue(0);
   const [showShootingStar, setShowShootingStar] = useState(false);
 
-  // Trigger shooting star after 6 seconds
+  // shooting star after 6 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowShootingStar(true);
@@ -42,7 +42,6 @@ const FantasyBackground: React.FC = () => {
   }, []);
 
   useAnimationFrame((_t, delta) => {
-    // Continuous slow drift
     idleRef.current += delta * 0.003; 
     
     const scrollOffset = scrollY.get() * 0.08; 
@@ -61,7 +60,7 @@ const FantasyBackground: React.FC = () => {
     }));
   }, []);
 
-  // Generate mountain layers procedurally to ensure detailed, organic 3D look
+  // Generate mountain layers
   const mountainLayers = useMemo(() => {
     const layers = [];
     let seed = 12345;
@@ -83,19 +82,15 @@ const FantasyBackground: React.FC = () => {
     ) => {
       let d = `M0,${baseY}`;
       let x = 0;
-      // We will collect separate building path strings to render ON TOP of the mountain
-      // but "planted" into it.
       const buildings: { d: string }[] = [];
-      // Windows with animation data
       const windows: {x: number, y: number, w: number, h: number, delay: number, duration: number, animationType: 'none' | 'toggle' | 'flicker' | 'slowBlink', isOn: boolean, color?: string, isCabin?: boolean}[] = [];
       
       let lighthouseBuilt = false;
       let lighthouseGlow: { cx: number, cy: number, rx: number, ry: number } | null = null;
-      let cabinAnimCount = 0; // Track how many blinking cabins we've created
+      let cabinAnimCount = 0; 
       
       // Move slightly off-screen to ensure full coverage
       while (x <= 1930) {
-        // Flatten start logic
         let currentAmp = amplitude;
         if (flattenStart && x < 600) {
            currentAmp = amplitude * (x / 600);
@@ -112,7 +107,6 @@ const FantasyBackground: React.FC = () => {
         const y = baseY + globalShape + noise;
         
         // CITY LOGIC: Independent of mountain shape
-        // If we are in the city zone (left side), spawn buildings densely
         if (hasCity) {
            // Right-side Lighthouse Placement Logic
            // Only 1 lighthouse, on the actual highest peak (calculated at x=1680)
@@ -190,17 +184,14 @@ const FantasyBackground: React.FC = () => {
 
            // Village Lights / Cabins at the bottom of the lighthouse mountain
            if (x > 1500 && x < 1850 && Math.abs(x - 1670) > 40) {
-               // Higher chance per step to add more lights
                if (random() > 0.4) {
-                   // Ensure they are DEEP in the mountain. 
-                   // y is the top edge. yOffset must be positive and significant.
                    const yOffset = 15 + random() * 50; 
                    
                    // Spawn 1 to 3 small windows (cabin cluster)
                    const count = Math.floor(1 + random() * 2.5);
                    for(let k=0; k<count; k++) {
                        const spacing = k * (3 + random() * 3);
-                       const wSize = 1.8 + random() * 1.5; // Much smaller: 1.8 - 3.3px
+                       const wSize = 1.8 + random() * 1.5;  
                        
                        // Determine animation: Only allow 2 to blink slowly
                        let animType: 'none' | 'slowBlink' = 'none';
@@ -212,14 +203,14 @@ const FantasyBackground: React.FC = () => {
 
                        windows.push({
                            x: x + spacing,
-                           y: y + yOffset + (random() * 3), // slight jitter
+                           y: y + yOffset + (random() * 3), 
                            w: wSize,
                            h: wSize, // Square-ish
                            animationType: animType,
                            isOn: true,
                            delay: 0,
-                           duration: animType === 'slowBlink' ? 10 : 0, // 10s cycle (5s on, 5s off)
-                           color: random() > 0.5 ? "#ffaa55" : "#ffcc77", // Varied warm colors
+                           duration: animType === 'slowBlink' ? 10 : 0,   
+                           color: random() > 0.5 ? "#ffaa55" : "#ffcc77",   
                            isCabin: true
                        });
                    }
@@ -232,10 +223,10 @@ const FantasyBackground: React.FC = () => {
            if (random() > 0.05) {
                const buildingW = 12 + random() * 18; 
                const buildingH = 20 + random() * 45;
-               const groundY = y + 3; // Planted slightly deep
+               const groundY = y + 3;   
                
                let buildingPath = "";
-               const buildType = random(); // Determine shape style
+               const buildType = random();  
 
                // Helper to add window with animation data
                const pushWindow = (wx: number, wy: number, ww: number, wh: number) => {
@@ -249,7 +240,6 @@ const FantasyBackground: React.FC = () => {
                       const animRand = random();
                       if (animRand > 0.7) animationType = 'flicker'; // Increased to 30% flickering
                       else if (animRand > 0.4) animationType = 'toggle'; // ~30% breathing
-                      // Rest are static ON
                   }
 
                         windows.push({
@@ -334,12 +324,10 @@ const FantasyBackground: React.FC = () => {
            }
         }
       }
+
+      let effectiveTreeH = treeHeight;
         
-        // Determine effective tree configuration for this segment
-        let effectiveTreeH = treeHeight;
-        
-        // FEATURE: Add small, detailed forest to the lighthouse mountain (Layer 2)
-        // Only applies to the right side (mountain area) of the city layer
+        // small, detailed forest to the lighthouse mountain (Layer 2)
         if (hasCity && x > 850) {
            effectiveTreeH = 6; 
         }
@@ -399,8 +387,8 @@ const FantasyBackground: React.FC = () => {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
             
-            const currentY = y - treeH * ratio; // Bottom of segment
-            const nextY = y - treeH * nextRatio; // Top of segment
+            const currentY = y - treeH * ratio;   
+            const nextY = y - treeH * nextRatio;  
             
             const currentHalfW = (treeW / 2) * Math.pow(1 - ratio, 1.15);
             
@@ -424,7 +412,6 @@ const FantasyBackground: React.FC = () => {
 
           x += treeW * density; 
         } else {
-          // Just move forward for smooth mountains
           // CITY TWEAK: Smaller steps in city area = more buildings
           const step = (hasCity && x < 850) ? 8 : 20;
           x += step;
@@ -444,12 +431,12 @@ const FantasyBackground: React.FC = () => {
       buildings: l2.buildings,
       fill: '#1b223d',
       key: 'layer2',
-      lighthouseGlow: l2.lighthouseGlow // Only this layer can have the glow
+      lighthouseGlow: l2.lighthouseGlow   
     });
 
     // Layer 3: Mid-ground - Rolling hills with distant tiny trees
     layers.push({
-      d: createPath(820, 70, 10, 20, 0.0035, 0.8).d, // 0.8 density for slight overlap
+      d: createPath(820, 70, 10, 20, 0.0035, 0.8).d,  
       windows: [],
       buildings: [],
       fill: '#14182e',
@@ -458,7 +445,7 @@ const FantasyBackground: React.FC = () => {
 
     // Layer 4: Near Hills - Distinct forest silhouette
     layers.push({
-      d: createPath(920, 50, 5, 45, 0.003, 0.7).d, // More overlap for dense forest
+      d: createPath(920, 50, 5, 45, 0.003, 0.7).d,  
       windows: [],
       buildings: [],
       fill: '#0d1021',
@@ -467,7 +454,7 @@ const FantasyBackground: React.FC = () => {
 
     // Layer 5: Foreground - Close up detailed trees
     layers.push({
-      d: createPath(1020, 30, 5, 80, 0.004, 0.65).d, // High overlap for detail
+      d: createPath(1020, 30, 5, 80, 0.004, 0.65).d,  
       windows: [],
       buildings: [],
       fill: '#05060e',
@@ -478,7 +465,6 @@ const FantasyBackground: React.FC = () => {
   }, []);
 
   // Calculate dynamic beam path based on mouse position
-  // Find the lighthouse coordinates first (it's in layer2 usually)
   const lhLayer = mountainLayers.find(l => l.lighthouseGlow);
   const lhCx = lhLayer?.lighthouseGlow?.cx || 0;
   const lhCy = lhLayer?.lighthouseGlow?.cy || 0;
@@ -597,7 +583,6 @@ const FantasyBackground: React.FC = () => {
           </radialGradient>
 
           {/* Volumetric Beam Gradient (Radial to fade out with distance) */}
-           {/* Note: We use userSpaceOnUse so it stays centered on the lighthouse regardless of the path shape */}
           <radialGradient 
               id="volumetric-beam-gradient" 
               cx={lhCx} cy={lhCy} r="1000" 
@@ -622,14 +607,6 @@ const FantasyBackground: React.FC = () => {
 
           {/* Dynamic Mask to ensure fade out happens exactly at cursor distance */}
           <mask id="beam-fade-mask">
-             {/* 
-                 Radius R = dist.
-                 White up to 70%, then fades to black at 100%.
-                 White up to 0.7 * dist.
-                 Fades from 0.7 * dist to dist.
-                 At dist (cursor), opacity is 0 (Black).
-                 This ensures the beam ends EXACTLY at the cursor.
-             */}
              <radialGradient id="fade-gradient-mask">
                 <stop offset="0%" stopColor="white" stopOpacity="1" />
                 <stop offset="70%" stopColor="white" stopOpacity="1" />
@@ -813,8 +790,6 @@ const FantasyBackground: React.FC = () => {
                    />
                 </motion.g>
 
-                {/* Lighthouse beam is always enabled */}
-                {/* 1. Outer Wide Haze (Soft, blurry, very faint) */}
                 <motion.path
                   className="beamLayer"
                   d={outerBeamPath}

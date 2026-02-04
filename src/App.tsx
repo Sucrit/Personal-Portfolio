@@ -1,6 +1,6 @@
 // import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload, FaUniversity, FaLaptopCode, FaShieldAlt, FaServer, FaUserGraduate, FaHourglassHalf, FaScroll, FaUserSecret } from 'react-icons/fa';
 import FantasyBackground from './components/FantasyBackground';
 import Navbar from './components/Navbar';
 import LocationBadge from './components/LocationBadge';
@@ -16,18 +16,18 @@ const skills = [
   {    name: 'PostgreSQL',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
     color: '#336791',
-    description: 'Relational Database',
+    description: 'SQL Powerhouse',
   },
   {    name: 'MongoDB',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     color: '#25ff29',
-    description: 'NoSQL Database',
+    description: 'The NoSQL Goat',
   },
   {
     name: 'Rust',
     icon: '/Rust.png',
     color: '#dea584',
-    description: 'Twin of C++',
+    description: 'C++ Bff',
   },
   {
     name: 'JavaScript',
@@ -40,12 +40,6 @@ const skills = [
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
     color: '#3178C6',
     description: 'JavaScript but Better',
-  },
-  {
-    name: 'Python',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-    color: '#3776AB',
-    description: 'All-rounder Language',
   },
   {
     name: 'Node.js',
@@ -84,6 +78,18 @@ const skills = [
     description: 'Containerization',
   },
   {
+    name: 'Ghidra',
+    icon: '/ghidra.svg', 
+    color: '#ff5500',
+    description: 'Reverse Engineering',
+  },
+  {
+    name: 'Linux',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+    color: '#968b0d',
+    description: 'Operating System',
+  },
+  {
     name: 'GitHub',
     icon: '/github-white-icon.svg',
     color: '#ffffffd9', 
@@ -96,10 +102,10 @@ const skills = [
     description: 'Memory Forensics',
   },
   {
-    name: 'Ghidra',
-    icon: '/ghidra.svg', 
-    color: '#ff5500',
-    description: 'Reverse Engineering',
+    name: 'Python',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+    color: '#3776AB',
+    description: 'All-rounder Language',
   },
 ];
 
@@ -171,7 +177,7 @@ function App() {
               borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.05)'
             }}>
-              I’m a 3rd-year BSIT student specializing in backend development using the MERN and PERN stacks and also have experience with PHP (Laravel) and MySQL. I’m currently open to remote freelance projects.
+              I’m a 3rd-year BSIT student specialized in backend development using MERN and PERN stacks and also have experience with PHP (Laravel) and MySQL. I’m currently open to remote freelance projects.
             </p>
 
             <div className="contact-actions">
@@ -193,13 +199,246 @@ function App() {
         </div>
       </section>
 
-      <section id="about">
+      <section id="about" style={{ position: 'relative', overflow: 'hidden', padding: '100px 0' }}>
+        {/* Decorative background element for this section */}
+        <div style={{ position: 'absolute', top: '20%', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
+        
         <div className="container">
-          <h2>About Me</h2>
-          <div className="about-grid">
-            <div>
-              {/* TODO */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            style={{ textAlign: 'center', marginBottom: '4rem' }}
+          >
+            <h2 style={{ fontSize: '3rem', marginBottom: '1rem', textShadow: '0 0 20px rgba(255, 222, 33, 0.2)' }}>About Me</h2>
+          </motion.div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr', 
+            gap: '2.5rem',
+            alignItems: 'start'
+          }}>
+            
+            {/* Right Column: Lore & Questline */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+              
+              {/* Lore Section */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                   <h3 style={{ fontSize: '1.8rem', color: '#fff', margin: 0 }}>Who Am I?</h3>
+                </div>
+                <div style={{ 
+                  background: 'linear-gradient(180deg, rgba(20, 20, 30, 0.6) 0%, rgba(20, 20, 30, 0.3) 100%)', 
+                  padding: '1.5rem', 
+                  borderRadius: '16px',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(4px)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+                }}>
+                  <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#e2e8f0', marginBottom: '1.5rem' }}>
+                    My journey began in the quiet town of Bugallon, where I discovered my affinity for logic and systems. Unlike those drawn to surface-level aesthetics, I found my calling in the <strong style={{color: 'var(--accent-color)'}}>engine room</strong> of the web—the backend.
+                  </p>
+                  <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#e2e8f0', margin: 0 }}>
+                    Now, as I advance through my 3rd year at university, I'm forging a path in <strong style={{color: 'var(--accent-color)'}}>Cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>Backend Engineering</strong>. I don't just write code; I architect secure fortresses and efficient data pipelines utilizing the PERN and MERN stacks.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Educational Background - Timeline Layout */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
+                   <FaUserGraduate size={28} style={{ color: 'var(--accent-color)' }} />
+                   <h3 style={{ fontSize: '1.8rem', color: '#fff', margin: 0 }}>Educational Background</h3>
+                </div>
+
+                {/* Timeline Container */}
+                <div style={{ 
+                  position: 'relative', 
+                  minHeight: '400px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center'
+                }}>
+                  
+                  {/* Central Vertical Progress Bar */}
+                  <div style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: 0,
+                    bottom: 0,
+                    width: '4px',
+                    background: 'linear-gradient(180deg, #475569 0%, var(--accent-color) 100%)',
+                    transform: 'translateX(-50%)',
+                    borderRadius: '4px',
+                    boxShadow: '0 0 20px rgba(255, 222, 33, 0.15)'
+                  }} />
+
+                  {/* High School - Top Left */}
+                  <div style={{ 
+                    display: 'flex', 
+                    width: '100%', 
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    marginBottom: '3rem',
+                    position: 'relative'
+                  }}>
+                    {/* High School Card */}
+                    <motion.div 
+                      initial={{ x: -50, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(0,0,0,0.3)' }}
+                      style={{ 
+                        width: 'calc(50% - 40px)',
+                        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%)',
+                        padding: '1.5rem',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                        backdropFilter: 'blur(8px)'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0', margin: 0, fontWeight: '600' }}>High School in Bugallon</h4>
+                        <span style={{ 
+                          fontSize: '0.7rem', 
+                          padding: '4px 12px', 
+                          background: 'rgba(71, 85, 105, 0.5)',
+                          color: '#94a3b8', 
+                          borderRadius: '12px', 
+                          fontWeight: '600',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em'
+                        }}>Completed</span>
+                      </div>
+                      <p style={{ color: '#94a3b8', fontSize: '1rem', marginBottom: '0.5rem', fontWeight: '500' }}>Secondary Education</p>
+                      <p style={{ color: '#64748b', fontSize: '0.9rem', margin: 0 }}>2018 - 2022</p>
+                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                        <p style={{ color: '#64748b', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>Where the foundations were laid.</p>
+                      </div>
+                    </motion.div>
+
+                    {/* Horizontal Connector Line - Right */}
+                    <div style={{
+                      width: '40px',
+                      height: '3px',
+                      background: '#475569',
+                      position: 'relative'
+                    }}>
+                      {/* Node Point */}
+                      <div style={{
+                        position: 'absolute',
+                        right: '-8px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '16px',
+                        height: '16px',
+                        background: '#1e293b',
+                        border: '3px solid #475569',
+                        borderRadius: '50%'
+                      }} />
+                    </div>
+
+                    {/* Spacer for right side */}
+                    <div style={{ width: 'calc(50% - 40px)' }} />
+                  </div>
+
+                  {/* College - Bottom Right */}
+                  <div style={{ 
+                    display: 'flex', 
+                    width: '100%', 
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    position: 'relative'
+                  }}>
+                    {/* Spacer for left side */}
+                    <div style={{ width: 'calc(50% - 40px)' }} />
+
+                    {/* Horizontal Connector Line - Left */}
+                    <div style={{
+                      width: '40px',
+                      height: '3px',
+                      background: 'var(--accent-color)',
+                      position: 'relative',
+                      boxShadow: '0 0 10px rgba(255, 222, 33, 0.3)'
+                    }}>
+                      {/* Node Point */}
+                      <div style={{
+                        position: 'absolute',
+                        left: '-8px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '16px',
+                        height: '16px',
+                        background: 'var(--accent-color)',
+                        border: '3px solid #0f172a',
+                        borderRadius: '50%',
+                        boxShadow: '0 0 15px rgba(255, 222, 33, 0.5)'
+                      }} />
+                    </div>
+
+                    {/* College Card */}
+                    <motion.div 
+                      initial={{ x: 50, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.4 }}
+                      whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(255, 222, 33, 0.15)' }}
+                      style={{ 
+                        width: 'calc(50% - 40px)',
+                        background: 'linear-gradient(135deg, rgba(255, 222, 33, 0.08) 0%, rgba(15, 23, 42, 0.9) 100%)',
+                        padding: '1.5rem',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(255, 222, 33, 0.15)',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.2), 0 0 30px rgba(255, 222, 33, 0.05)',
+                        backdropFilter: 'blur(8px)'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        <h4 style={{ fontSize: '1.25rem', color: '#fff', margin: 0, fontWeight: '700' }}>University of Pangasinan</h4>
+                        <span style={{ 
+                          fontSize: '0.7rem', 
+                          padding: '5px 14px', 
+                          background: 'var(--accent-color)', 
+                          color: '#0f172a', 
+                          borderRadius: '12px', 
+                          fontWeight: '800',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                          boxShadow: '0 0 15px rgba(255, 222, 33, 0.4)'
+                        }}>Current</span>
+                      </div>
+                      <p style={{ color: '#f1f5f9', fontSize: '1.05rem', marginBottom: '0.5rem', fontWeight: '500' }}>Bachelor of Science in Information Technology</p>
+                      <p style={{ color: '#cbd5e1', fontSize: '0.9rem', margin: 0 }}>2022 - Present</p>
+                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255, 222, 33, 0.1)' }}>
+                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Specializing in Backend Systems
+                        </p>
+                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Focus on Cybersecurity
+                        </p>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                </div>
+              </motion.div>
+
             </div>
+
           </div>
         </div>
       </section>
@@ -220,7 +459,7 @@ function App() {
                       fontSize: 36,
                       color: '#fff',
                       letterSpacing: 2,
-                      fontFamily: 'JetBrains Mono, Fira Code, monospace',
+                      fontFamily: 'monospace',
                     }}
                   >
                     EX

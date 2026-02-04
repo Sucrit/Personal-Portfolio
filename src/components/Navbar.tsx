@@ -92,14 +92,16 @@ const Navbar: React.FC = () => {
         return (
           <motion.div
             animate={isActive ? { 
-              rotate: [0, -3, 3, -3, 3, 0],
-              x: [0, -1, 1, -1, 1, 0], /* Subtle shake */
-            } : { rotate: 0, x: 0 }}
+              rotate: [0, -6, 6, -6, 6, 0],
+              x: [0, -1.5, 1.5, -1.5, 1.5, 0],  
+              y: [0, -0.5, 0.5, -0.5, 0.5, 0],  
+              scale: [1, 1.03, 1],  
+            } : { rotate: 0, x: 0, y: 0, scale: 1 }}
             transition={{ 
-              duration: 0.3, 
+              duration: 0.36, 
               repeat: isActive ? Infinity : 0,
-              repeatDelay: 1.5,
-              ease: "linear"
+              repeatDelay: 1.2,
+              ease: "easeInOut"
             }}
             style={{ display: 'inline-block', transformOrigin: 'center' }}
           >

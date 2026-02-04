@@ -1,5 +1,5 @@
 # DEPLOYED
-View my personal portfolio at sample.com
+View my small personal website portfolio at sample.com
 
 ## DEVELOPMENT
 Developed using React, Vite, TypeScript, and Framer Motion.
