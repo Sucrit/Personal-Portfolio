@@ -2,7 +2,7 @@
 View my personal portfolio at sample.com
 
 ## DEVELOPMENT
-Developed using React, TypeScript, and Vite and Framer Motion.
+Developed using React, Vite, TypeScript, and Framer Motion.
 
 ### TODO
 - improve lightbeam realism when pointing the sky.

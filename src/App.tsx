@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload } from 'react-icons/fa';
 import FantasyBackground from './components/FantasyBackground';
 import Navbar from './components/Navbar';
+import LocationBadge from './components/LocationBadge';
 import ProjectCarousel from './components/ProjectCarousel';
 
 const skills = [
@@ -135,25 +136,7 @@ function App() {
             transition={{ duration: 0.8 }}
             style={{ maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
           >
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                background: 'rgba(255, 222, 33, 0.1)',
-                color: 'var(--accent-color)',
-                padding: '0.5rem 1.5rem',
-                borderRadius: '50px',
-                marginBottom: '2rem',
-                fontSize: '0.9rem',
-                fontWeight: '600',
-                border: '1px solid rgba(255, 222, 33, 0.2)',
-                boxShadow: '0 0 15px var(--accent-glow)'
-              }}
-            >
-              <FaMapMarkerAlt /> BASED IN PANGASINAN, PHILIPPINES
-              <img src="/Flag_of_the_Philippines.svg" alt="Philippines" style={{ height: '1rem', width: '1.6rem', objectFit: 'cover' }} />
-            </div>
+            <LocationBadge />
             
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-mono)' }}>
               {devName} <motion.div 
@@ -188,7 +171,7 @@ function App() {
               borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.05)'
             }}>
-              I'm a 22-year-old undergrad IT student specializing in backend development with Node.js, and a strong passion in cybersecurity and secure system design.
+              I’m a 3rd-year BSIT student specializing in backend development using the MERN and PERN stacks and also have experience with PHP (Laravel) and MySQL. I’m currently open to remote freelance projects.
             </p>
 
             <div className="contact-actions">
@@ -215,9 +198,7 @@ function App() {
           <h2>About Me</h2>
           <div className="about-grid">
             <div>
-              <p>
-                I’m a 3rd-year BSIT student specializing in Cybersecurity at the University of Pangasinan in Dagupan, focused on backend development using the MERN and PERN stacks. I build secure and scalable RESTful API's and database design, and also have experience with PHP (Laravel) and MySQL. I’m currently open to remote freelance projects.
-              </p>
+              {/* TODO */}
             </div>
           </div>
         </div>
@@ -268,11 +249,11 @@ function App() {
               <div className="project-image-container">
                   <ProjectCarousel 
                     images={[
+                      { src: '/roomfinder/mobile1.png', type: 'mobile' },
+                      { src: '/roomfinder/mobile2.png', type: 'mobile' },
                       '/roomfinder/ss1.png',
                       '/roomfinder/ss2.png',
                       '/roomfinder/ss3.png',
-                      { src: '/roomfinder/mobile1.png', type: 'mobile' },
-                      { src: '/roomfinder/mobile2.png', type: 'mobile' }
                     ]} 
                     alt="RoomFinder Screenshot" 
                   />
@@ -338,26 +319,25 @@ function App() {
         </div>
       </section>
 
-
           {/* Contact Section */}
-          <section id="contact" style={{ background: 'var(--card-bg)', padding: '40px 0 20px 0', marginTop: '0', backdropFilter: 'blur(10px)' }}>
-            <div className="container" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: 14, fontSize: '1.1rem', fontWeight: 500 }}>
+          <section id="contact" style={{ background: 'var(--card-bg)', padding: '25px 0', marginTop: '0', backdropFilter: 'blur(10px)' }}>
+            <div className="container" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: 500, margin: 0 }}>
                 Want to connect, collaborate, or just say hi? Reach out below!
               </p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.6rem', marginBottom: 16 }}>
-                <a href="mailto:smitholiver106@gmail.com" aria-label="Gmail" style={{ color: 'var(--text-primary)' }}><FaEnvelope /></a>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.5rem' }}>
+                <a href="mailto:smitholiver106@gmail.com" aria-label="Gmail" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
                 <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-primary)' }}><FaGithub /></a>
                 <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--text-primary)' }}><FaLinkedin /></a>
               </div>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', opacity: 0.8 }}>
                 <FaMapMarkerAlt style={{ marginRight: 6 }} /> Pangasinan, Philippines
               </div>
             </div>
           </section>
 
           {/* Footer */}
-          <footer style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', textAlign: 'center', padding: '18px 0', fontSize: '1rem', letterSpacing: 1, marginTop: 0 }}>
+          <footer style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', textAlign: 'center', padding: '10px 0', fontSize: '1rem', letterSpacing: 1, marginTop: 0 }}>
             <div className="container">
               &copy; {new Date().getFullYear()} Oliver. All rights reserved.
             </div>

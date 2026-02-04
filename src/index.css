@@ -446,27 +446,6 @@ nav {
   transition: transform 0.2s;
 }
 
-/* Flag Wave Animation */
-.flag-wave {
-  transform-origin: left center;
-  display: inline-block;
-  transition: transform 0.5s ease-out;
-}
-
-.flag-wave:hover {
-  animation: wave-flag-3d 1.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-}
-
-@keyframes wave-flag-3d {
-  0% { transform: perspective(600px) rotateY(0deg) skewY(0deg); }
-  25% { transform: perspective(600px) rotateY(-20deg) skewY(2deg); }
-  50% { transform: perspective(600px) rotateY(0deg) skewY(0deg); }
-  75% { transform: perspective(600px) rotateY(20deg) skewY(-2deg); }
-  100% { transform: perspective(600px) rotateY(0deg) skewY(0deg); }
-}
-
-
-
 /* Contact Section Styles */
 .contact-actions {
   display: flex;

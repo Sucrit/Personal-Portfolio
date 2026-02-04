@@ -88,6 +88,38 @@
   z-index: 2;
 }
 
+/* Phone SVG sizing */
+.nav-phone-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  /* Match the default color of other icons (#94a3b8) */
+  filter: invert(66%) sepia(13%) saturate(452%) hue-rotate(180deg) brightness(91%) contrast(87%);
+  transition: all 0s;
+}
+
+/* Match the active color of other icons (white #fff) */
+.nav-link.active .nav-phone-icon {
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255,255,255,0.5));
+}
+
+/* Phone SVG styling */
+.nav-phone-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Invert black SVG to white when active */
+.nav-link.active .nav-phone-icon {
+  filter: invert(1) brightness(2) saturate(0.9);
+}
+
+/* Slight scale on active to match the ringing animation */
+.nav-link.active .nav-phone-icon {
+  transform: scale(1.05);
+}
 /* Active indicator hidden to remove yellow highlight when scrolling/selection */
 .active-indicator {
   display: none;

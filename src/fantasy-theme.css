@@ -58,7 +58,7 @@ h1, h2, h3 {
 
 h2 {
   font-size: 2.5rem;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
   text-align: center;
   font-family: var(--font-mono);
   text-transform: uppercase;
@@ -69,6 +69,10 @@ h2 {
   margin-right: auto;
   border-bottom: 2px solid var(--accent-color);
   padding-bottom: 0.5rem;
+}
+
+#about h2 {
+  margin-bottom: 1rem;
 }
 
 /* Fantasy Card Style */
@@ -100,6 +104,19 @@ h2 {
   box-shadow: 
     0 10px 30px -10px rgba(0, 0, 0, 0.5),
     0 0 20px -5px var(--accent-glow) inset;
+}
+
+/* About Section */
+.about-grid {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-grid p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.8;
 }
 
 /* Skills Grid */
@@ -159,7 +176,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 3.5rem;
-  padding: 1.5rem;
+  padding: 0 1.5rem 1.5rem 1.5rem;
   max-width: 1300px;
   margin: 0 auto;
 }

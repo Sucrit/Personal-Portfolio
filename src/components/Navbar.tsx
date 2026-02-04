@@ -1,7 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaUser, FaCode, FaFolderOpen, FaPhoneAlt, FaHome } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUser, FaFolder, FaFolderOpen, FaHome } from 'react-icons/fa';
 import './Navbar.css';
+
+const CodeIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polyline points="16 18 22 12 16 6" />
+    <polyline points="8 6 2 12 8 18" />
+    <motion.line
+      x1="14" y1="4" x2="10" y2="20"
+      initial={{ pathLength: 0, opacity: 0 }}
+      animate={{ pathLength: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
+      transition={{ duration: 0.25 }} // Quick slash
+    />
+  </svg>
+);
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,12 +63,52 @@ const Navbar: React.FC = () => {
   }, []);
 
   const links = [
-    { name: 'Home', href: '#hero', id: 'hero', icon: <FaHome size={20} /> },
-    { name: 'About', href: '#about', id: 'about', icon: <FaUser size={18} /> },
-    { name: 'Skills', href: '#skills', id: 'skills', icon: <FaCode size={20} /> },
-    { name: 'Projects', href: '#projects', id: 'projects', icon: <FaFolderOpen size={18} /> },
-    { name: 'Contact', href: '#contact', id: 'contact', icon: <FaPhoneAlt size={18} /> },
+    { name: 'Home', href: '#hero', id: 'hero' },
+    { name: 'About', href: '#about', id: 'about' },
+    { name: 'Skills', href: '#skills', id: 'skills' },
+    { name: 'Projects', href: '#projects', id: 'projects' },
+    { name: 'Contact', href: '#contact', id: 'contact' },
   ];
+
+  const getIcon = (id: string, isActive: boolean) => {
+    switch (id) {
+      case 'hero': 
+        return <FaHome size={20} />;
+      case 'about': 
+        return <FaUser size={18} />;
+      case 'skills': 
+        return <CodeIcon isActive={isActive} />;
+      case 'projects': 
+        return (
+          <motion.div
+            initial={false}
+            animate={isActive ? { scale: [1, 1.1, 1] } : {}}
+            transition={{ duration: 0.3 }}
+          >
+            {isActive ? <FaFolderOpen size={18} /> : <FaFolder size={18} />}
+          </motion.div>
+        );
+      case 'contact': 
+        return (
+          <motion.div
+            animate={isActive ? { 
+              rotate: [0, -3, 3, -3, 3, 0],
+              x: [0, -1, 1, -1, 1, 0], /* Subtle shake */
+            } : { rotate: 0, x: 0 }}
+            transition={{ 
+              duration: 0.3, 
+              repeat: isActive ? Infinity : 0,
+              repeatDelay: 1.5,
+              ease: "linear"
+            }}
+            style={{ display: 'inline-block', transformOrigin: 'center' }}
+          >
+            <img src="/phonecall.svg" alt="Phone" className="nav-phone-icon" />
+          </motion.div>
+        );
+      default: return null;
+    }
+  };
 
   return (
     <motion.nav
@@ -67,7 +129,7 @@ const Navbar: React.FC = () => {
               title={link.name}
             >
               <div className="icon-wrapper">
-                 {link.icon}
+                 {getIcon(link.id, activeSection === link.id)}
               </div>
             </a>
           ))}
@@ -99,7 +161,7 @@ const Navbar: React.FC = () => {
                   className="nav-link-mobile"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {link.icon}
+                  {getIcon(link.id, activeSection === link.id)}
                   <span style={{marginLeft: '10px'}}>{link.name}</span>
                 </a>
               ))}
