@@ -1,6 +1,6 @@
-// import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload, FaUniversity, FaLaptopCode, FaShieldAlt, FaServer, FaUserGraduate, FaHourglassHalf, FaScroll, FaUserSecret } from 'react-icons/fa';
+import { useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, useVelocity, useMotionValue, useMotionValueEvent, animate, useSpring } from 'framer-motion';
+import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload } from 'react-icons/fa';
 import FantasyBackground from './components/FantasyBackground';
 import Navbar from './components/Navbar';
 import LocationBadge from './components/LocationBadge';
@@ -20,7 +20,7 @@ const skills = [
   },
   {    name: 'MongoDB',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-    color: '#25ff29',
+    color: '#25ff29bb',
     description: 'The NoSQL Goat',
   },
   {
@@ -44,7 +44,7 @@ const skills = [
   {
     name: 'Node.js',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-    color: '#36dc31',
+    color: '#37dc31b5',
     description: 'Server-side JavaScript',
   },
   {
@@ -80,7 +80,7 @@ const skills = [
   {
     name: 'Ghidra',
     icon: '/ghidra.svg', 
-    color: '#ff5500',
+    color: '#ff5500b0',
     description: 'Reverse Engineering',
   },
   {
@@ -92,7 +92,7 @@ const skills = [
   {
     name: 'GitHub',
     icon: '/github-white-icon.svg',
-    color: '#ffffffd9', 
+    color: '#ffffffa3', 
     description: 'Version Control',
   },
   {
@@ -110,6 +110,150 @@ const skills = [
 ];
 
 function App() {
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const highSchoolRef = useRef<HTMLDivElement>(null);
+  const collegeRef = useRef<HTMLDivElement>(null);
+  const hsConnectorRef = useRef<HTMLDivElement>(null);
+  const collegeConnectorRef = useRef<HTMLDivElement>(null);
+  
+  // Store snap points as refs so they update without re-render issues
+  const snapPointsRef = useRef({ hs: 23, college: 87 });
+  
+  // Motion values we control manually for true responsiveness
+  const lightTopValue = useMotionValue("0%");
+  const hsGlowValue = useMotionValue("0px 0px 0px rgba(255, 222, 33, 0)");
+  const hsBorderValue = useMotionValue("rgba(255,255,255,0.05)");
+  const collegeGlowValue = useMotionValue("0px 0px 0px rgba(255, 222, 33, 0)");
+  const collegeBorderValue = useMotionValue("rgba(255,255,255,0.05)");
+
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start center", "end center"]
+  });
+
+  // Recalculate snap points on resize/layout changes
+  useEffect(() => {
+    const calculateSnapPoints = () => {
+      if (timelineRef.current && hsConnectorRef.current && collegeConnectorRef.current) {
+        const timelineRect = timelineRef.current.getBoundingClientRect();
+        const hsRect = hsConnectorRef.current.getBoundingClientRect();
+        const collegeRect = collegeConnectorRef.current.getBoundingClientRect();
+
+        const hsTop = hsRect.top + hsRect.height / 2 - timelineRect.top;
+        const collegeTop = collegeRect.top + collegeRect.height / 2 - timelineRect.top;
+
+        const hsPercent = Math.max(5, Math.min(95, (hsTop / timelineRect.height) * 100));
+        const collegePercent = Math.max(5, Math.min(95, (collegeTop / timelineRect.height) * 100));
+
+        snapPointsRef.current = { hs: hsPercent, college: collegePercent };
+      }
+    };
+
+    calculateSnapPoints();
+
+    const resizeObserver = new ResizeObserver(() => {
+      calculateSnapPoints();
+    });
+
+    if (timelineRef.current) {
+      resizeObserver.observe(timelineRef.current);
+    }
+    
+    window.addEventListener('resize', calculateSnapPoints);
+    // Also recalculate after fonts/images load
+    window.addEventListener('load', calculateSnapPoints);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', calculateSnapPoints);
+      window.removeEventListener('load', calculateSnapPoints);
+    };
+  }, []);
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 25,
+    restDelta: 0.001
+  });
+
+  // Interpolation helper
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+  // Update motion values reactively based on scroll + current snap points
+  useMotionValueEvent(smoothProgress, "change", (progress) => {
+    const { hs, college } = snapPointsRef.current;
+    const hsP = hs / 100;
+    const colP = college / 100;
+    
+    // Calculate light position with magnetic snapping
+    let lightPercent: number;
+    const snapRange = 0.08; // Increased range to make snapping feel more "magnetic"
+    
+    if (progress < hsP - snapRange) {
+      // Before hs snap zone - interpolate from 0 to hs
+      const t = progress / (hsP - snapRange);
+      lightPercent = lerp(0, hs, t);
+    } else if (progress < hsP + snapRange) {
+      // In hs snap zone - lock to hs
+      lightPercent = hs;
+    } else if (progress < colP - snapRange) {
+      // Between hs and college - interpolate
+      const t = (progress - (hsP + snapRange)) / ((colP - snapRange) - (hsP + snapRange));
+      lightPercent = lerp(hs, college, t);
+    } else if (progress < colP + snapRange) {
+      // In college snap zone - lock to college
+      lightPercent = college;
+    } else {
+      // After college snap zone - interpolate to 100
+      const t = (progress - (colP + snapRange)) / (1 - (colP + snapRange));
+      lightPercent = lerp(college, 100, t);
+    }
+    
+    lightTopValue.set(`${lightPercent}%`);
+    
+    // HS glow effect
+    const hsDistance = Math.abs(progress - hsP);
+    const hsGlowRange = 0.15;
+    if (hsDistance < hsGlowRange) {
+      const intensity = hsDistance < snapRange ? 1 : 1 - ((hsDistance - snapRange) / (hsGlowRange - snapRange));
+      const glowSize = Math.round(30 * intensity);
+      const glowAlpha = (0.4 * intensity).toFixed(2);
+      hsGlowValue.set(`0px 0px ${glowSize}px rgba(255, 222, 33, ${glowAlpha})`);
+      hsBorderValue.set(intensity > 0.5 ? "var(--accent-color)" : "rgba(255,255,255,0.05)");
+    } else {
+      hsGlowValue.set("0px 0px 0px rgba(255, 222, 33, 0)");
+      hsBorderValue.set("rgba(255,255,255,0.05)");
+    }
+    
+    // College glow effect
+    const collegeDistance = Math.abs(progress - colP);
+    const collegeGlowRange = 0.15;
+    if (collegeDistance < collegeGlowRange) {
+      const intensity = collegeDistance < snapRange ? 1 : 1 - ((collegeDistance - snapRange) / (collegeGlowRange - snapRange));
+      const glowSize = Math.round(30 * intensity);
+      const glowAlpha = (0.4 * intensity).toFixed(2);
+      collegeGlowValue.set(`0px 0px ${glowSize}px rgba(255, 222, 33, ${glowAlpha})`);
+      collegeBorderValue.set(intensity > 0.5 ? "var(--accent-color)" : "rgba(255,255,255,0.05)");
+    } else {
+      collegeGlowValue.set("0px 0px 0px rgba(255, 222, 33, 0)");
+      collegeBorderValue.set("rgba(255,255,255,0.05)");
+    }
+  });
+  
+  const scrollVelocity = useVelocity(smoothProgress);
+  const scaleY = useMotionValue(1);
+
+  useMotionValueEvent(scrollVelocity, "change", (latest) => {
+    if (latest > 0 && scaleY.get() !== 1) {
+      animate(scaleY, 1, { duration: 0.15 });
+    } else if (latest < 0 && scaleY.get() !== -1) {
+      animate(scaleY, -1, { duration: 0.15 });
+    }
+  });
+  
+  // Keep light visible throughout the active scrolling phase in the center
+  const lightOpacity = useTransform(smoothProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
+
   const devName = ("Hi, Oliver here");
 
   const findSkillIcon = (name: string) => {
@@ -204,15 +348,11 @@ function App() {
         <div style={{ position: 'absolute', top: '20%', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
         
         <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <div
             style={{ textAlign: 'center', marginBottom: '4rem' }}
           >
             <h2 style={{ fontSize: '3rem', marginBottom: '1rem', textShadow: '0 0 20px rgba(255, 222, 33, 0.2)' }}>About Me</h2>
-          </motion.div>
+          </div>
 
           <div style={{ 
             display: 'grid', 
@@ -225,22 +365,14 @@ function App() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
               
               {/* Lore Section */}
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                   <h3 style={{ fontSize: '1.8rem', color: '#fff', margin: 0 }}>Who Am I?</h3>
-                </div>
+              <div>
                 <div style={{ 
-                  background: 'linear-gradient(180deg, rgba(20, 20, 30, 0.6) 0%, rgba(20, 20, 30, 0.3) 100%)', 
-                  padding: '1.5rem', 
-                  borderRadius: '16px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  background: 'rgba(0,0,0,0.2)', 
+                  padding: '1rem', 
+                  borderRadius: '12px',
+                  border: '1px solid rgba(255,255,255,0.05)',
                   backdropFilter: 'blur(4px)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+                  boxShadow: 'none'
                 }}>
                   <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#e2e8f0', marginBottom: '1.5rem' }}>
                     My journey began in the quiet town of Bugallon, where I discovered my affinity for logic and systems. Unlike those drawn to surface-level aesthetics, I found my calling in the <strong style={{color: 'var(--accent-color)'}}>engine room</strong> of the web—the backend.
@@ -249,28 +381,28 @@ function App() {
                     Now, as I advance through my 3rd year at university, I'm forging a path in <strong style={{color: 'var(--accent-color)'}}>Cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>Backend Engineering</strong>. I don't just write code; I architect secure fortresses and efficient data pipelines utilizing the PERN and MERN stacks.
                   </p>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Educational Background - Timeline Layout */}
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
+              <div>
                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
-                   <FaUserGraduate size={28} style={{ color: 'var(--accent-color)' }} />
                    <h3 style={{ fontSize: '1.8rem', color: '#fff', margin: 0 }}>Educational Background</h3>
                 </div>
 
                 {/* Timeline Container */}
-                <div style={{ 
-                  position: 'relative', 
-                  minHeight: '400px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center'
-                }}>
+                <div 
+                  ref={timelineRef}
+                  className="timeline-scroll-container"
+                  style={{ 
+                    position: 'relative', 
+                    minHeight: '600px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '4rem'
+                  }}
+                >
                   
                   {/* Central Vertical Progress Bar */}
                   <div style={{
@@ -279,40 +411,81 @@ function App() {
                     top: 0,
                     bottom: 0,
                     width: '4px',
-                    background: 'linear-gradient(180deg, #475569 0%, var(--accent-color) 100%)',
+                    background: 'rgba(148,163,184,0.35)',
                     transform: 'translateX(-50%)',
                     borderRadius: '4px',
-                    boxShadow: '0 0 20px rgba(255, 222, 33, 0.15)'
+                    boxShadow: 'none'
                   }} />
 
+                  {/* Moving Yellow Light */}
+                  <motion.div 
+                    style={{
+                      position: 'absolute',
+                      left: '50%',
+                      top: lightTopValue,
+                      x: '-50%',
+                      y: '-50%',
+                      width: '16px',
+                      height: '16px',
+                      background: 'radial-gradient(circle, #fff 0%, var(--accent-color) 50%, transparent 100%)',
+                      borderRadius: '50%',
+                      boxShadow: '0 0 12px 4px var(--accent-color), 0 0 30px 10px rgba(255, 222, 33, 0.5), 0 0 60px 20px rgba(255, 222, 33, 0.2)',
+                      zIndex: 10,
+                      opacity: lightOpacity
+                    }} 
+                    transition={{ type: 'spring', stiffness: 50, damping: 20 }}
+                  />
+                  
+                  {/* Light Trail Effect */}
+                  <motion.div 
+                    style={{
+                      position: 'absolute',
+                      left: '50%',
+                      top: lightTopValue,
+                      x: '-50%',
+                      y: '-100%',
+                      width: '6px',
+                      height: '40px',
+                      background: 'linear-gradient(to top, var(--accent-color) 0%, transparent 100%)',
+                      borderRadius: '4px',
+                      zIndex: 9,
+                      opacity: lightOpacity,
+                      scaleY,
+                      originY: 1
+                    }} 
+                    transition={{ type: 'spring', stiffness: 50, damping: 20 }}
+                  />
+
                   {/* High School - Top Left */}
-                  <div style={{ 
-                    display: 'flex', 
-                    width: '100%', 
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                    marginBottom: '3rem',
-                    position: 'relative'
-                  }}>
-                    {/* High School Card */}
+                  <div 
+                    ref={highSchoolRef}
+                    className="timeline-snap-item"
+                    style={{ 
+                      display: 'flex', 
+                      width: '100%', 
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      position: 'relative'
+                    }}
+                  >
+                    {/* High School Card (now matching College styles) */}
                     <motion.div 
-                      initial={{ x: -50, opacity: 0 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: 0.2 }}
-                      whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(0,0,0,0.3)' }}
                       style={{ 
                         width: 'calc(50% - 40px)',
-                        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%)',
-                        padding: '1.5rem',
-                        borderRadius: '16px',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                        backdropFilter: 'blur(8px)'
+                        background: 'rgba(0,0,0,0.2)',
+                        padding: '1rem',
+                        borderRadius: '12px',
+                        border: '1px solid',
+                        borderColor: hsBorderValue,
+                        backdropFilter: 'blur(4px)',
+                        boxShadow: hsGlowValue
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                        <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0', margin: 0, fontWeight: '600' }}>High School in Bugallon</h4>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <img src="/BIS_Logo.png" alt="High School logo" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 6 }} />
+                          <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0', margin: 0, fontWeight: '600' }}>Bugallon Integrated School</h4>
+                        </div>
                         <span style={{ 
                           fontSize: '0.7rem', 
                           padding: '4px 12px', 
@@ -331,24 +504,26 @@ function App() {
                       </div>
                     </motion.div>
 
-                    {/* Horizontal Connector Line - Right */}
+                    {/* Horizontal Connector Line - Right (muted) */}
                     <div style={{
                       width: '40px',
                       height: '3px',
-                      background: '#475569',
-                      position: 'relative'
+                      background: 'rgba(148,163,184,0.45)',
+                      position: 'relative',
+                      boxShadow: 'none'
                     }}>
                       {/* Node Point */}
-                      <div style={{
+                      <div ref={hsConnectorRef} style={{
                         position: 'absolute',
                         right: '-8px',
                         top: '50%',
                         transform: 'translateY(-50%)',
                         width: '16px',
                         height: '16px',
-                        background: '#1e293b',
-                        border: '3px solid #475569',
-                        borderRadius: '50%'
+                        background: '#94a3b8',
+                        border: '3px solid #0f172a',
+                        borderRadius: '50%',
+                        boxShadow: 'none'
                       }} />
                     </div>
 
@@ -357,58 +532,61 @@ function App() {
                   </div>
 
                   {/* College - Bottom Right */}
-                  <div style={{ 
-                    display: 'flex', 
-                    width: '100%', 
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                    position: 'relative'
-                  }}>
+                  <div 
+                    ref={collegeRef}
+                    className="timeline-snap-item"
+                    style={{ 
+                      display: 'flex', 
+                      width: '100%', 
+                      justifyContent: 'flex-end',
+                      alignItems: 'center',
+                      position: 'relative'
+                    }}
+                  >
                     {/* Spacer for left side */}
                     <div style={{ width: 'calc(50% - 40px)' }} />
 
-                    {/* Horizontal Connector Line - Left */}
+                    {/* Horizontal Connector Line - Left (muted) */}
                     <div style={{
                       width: '40px',
                       height: '3px',
-                      background: 'var(--accent-color)',
+                      background: 'rgba(148,163,184,0.45)',
                       position: 'relative',
-                      boxShadow: '0 0 10px rgba(255, 222, 33, 0.3)'
+                      boxShadow: 'none'
                     }}>
                       {/* Node Point */}
-                      <div style={{
+                      <div ref={collegeConnectorRef} style={{
                         position: 'absolute',
                         left: '-8px',
                         top: '50%',
                         transform: 'translateY(-50%)',
                         width: '16px',
                         height: '16px',
-                        background: 'var(--accent-color)',
+                        background: '#94a3b8',
                         border: '3px solid #0f172a',
                         borderRadius: '50%',
-                        boxShadow: '0 0 15px rgba(255, 222, 33, 0.5)'
+                        boxShadow: 'none'
                       }} />
                     </div>
 
                     {/* College Card */}
                     <motion.div 
-                      initial={{ x: 50, opacity: 0 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: 0.4 }}
-                      whileHover={{ scale: 1.02, boxShadow: '0 8px 30px rgba(255, 222, 33, 0.15)' }}
                       style={{ 
                         width: 'calc(50% - 40px)',
-                        background: 'linear-gradient(135deg, rgba(255, 222, 33, 0.08) 0%, rgba(15, 23, 42, 0.9) 100%)',
-                        padding: '1.5rem',
-                        borderRadius: '16px',
-                        border: '1px solid rgba(255, 222, 33, 0.15)',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.2), 0 0 30px rgba(255, 222, 33, 0.05)',
-                        backdropFilter: 'blur(8px)'
+                        background: 'rgba(0,0,0,0.2)',
+                        padding: '1rem',
+                        borderRadius: '12px',
+                        border: '1px solid',
+                        borderColor: collegeBorderValue,
+                        backdropFilter: 'blur(4px)',
+                        boxShadow: collegeGlowValue
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                        <h4 style={{ fontSize: '1.25rem', color: '#fff', margin: 0, fontWeight: '700' }}>University of Pangasinan</h4>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <img src="/UPANG_Logo.png" alt="University logo" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 6 }} />
+                          <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0', margin: 0, fontWeight: '700' }}>University of Pangasinan</h4>
+                        </div>
                         <span style={{ 
                           fontSize: '0.7rem', 
                           padding: '5px 14px', 
@@ -423,7 +601,7 @@ function App() {
                       </div>
                       <p style={{ color: '#f1f5f9', fontSize: '1.05rem', marginBottom: '0.5rem', fontWeight: '500' }}>Bachelor of Science in Information Technology</p>
                       <p style={{ color: '#cbd5e1', fontSize: '0.9rem', margin: 0 }}>2022 - Present</p>
-                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255, 222, 33, 0.1)' }}>
+                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                         <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                           <span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Specializing in Backend Systems
                         </p>
@@ -435,7 +613,7 @@ function App() {
                   </div>
 
                 </div>
-              </motion.div>
+              </div>
 
             </div>
 
