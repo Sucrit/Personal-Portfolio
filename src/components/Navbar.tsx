@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaUser, FaFolder, FaFolderOpen, FaHome, FaLaptopCode, FaUserSecret } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUser, FaFolder, FaFolderOpen, FaHome, FaUserSecret } from 'react-icons/fa';
 import './Navbar.css';
 
 const CodeIcon = ({ isActive }: { isActive: boolean }) => (
