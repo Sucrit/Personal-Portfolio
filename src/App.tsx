@@ -1,10 +1,11 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, useScroll, useTransform, useVelocity, useMotionValue, useMotionValueEvent, animate, useSpring } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload } from 'react-icons/fa';
 import FantasyBackground from './components/FantasyBackground';
 import Navbar from './components/Navbar';
 import LocationBadge from './components/LocationBadge';
 import ProjectCarousel from './components/ProjectCarousel';
+import LoadingScreen from './components/LoadingScreen';
 
 const skills = [
   {
@@ -110,93 +111,8 @@ const skills = [
 ];
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Preload crucial assets + fonts and wait for window 'load' (with timeout fallback)
-  useEffect(() => {
-    const preloadImages = async () => {
-      const imageUrls = [
-        // Skills
-        ...skills.map(s => s.icon),
-        // Featured Projects
-        '/roomfinder/mobile1.png',
-        '/roomfinder/mobile2.png',
-        '/roomfinder/ss1.png',
-        '/roomfinder/ss2.png',
-        '/roomfinder/ss3.png',
-        '/roomfinder/roomfinder_logo.png',
-        '/evacudesk/adl.png',
-        '/evacudesk/evacudesk.png',
-        '/evacudesk/web1.png',
-        '/evacudesk/ss2.png',
-        '/evacudesk/ss3.png',
-        '/evacudesk/evacudesk_logo.png',
-        // General Assets
-        '/png1.png',
-        '/BIS_Logo.png',
-        '/UPANG_Logo.png',
-        '/Flag_of_the_Philippines.svg'
-      ];
-
-      // Helper: add <link rel="preload"> hints for images and preconnect for external hosts
-      const addPreloadHint = (src: string) => {
-        try {
-          if (!document.querySelector(`link[rel=\"preload\"][href=\"${src}\"]`)) {
-            const link = document.createElement('link');
-            link.rel = 'preload';
-            link.as = 'image';
-            link.href = src;
-            if (/^https?:\/\//.test(src)) link.crossOrigin = 'anonymous';
-            document.head.appendChild(link);
-          }
-
-          const m = src.match(/^https?:\/\/(.[^/]+)/);
-          if (m && !document.querySelector(`link[rel=\"preconnect\"][href=\"https://${m[1]}\"]`)) {
-            const pre = document.createElement('link');
-            pre.rel = 'preconnect';
-            pre.href = `https://${m[1]}`;
-            pre.crossOrigin = 'anonymous';
-            document.head.appendChild(pre);
-          }
-        } catch (e) {
-          // Ignore DOM exceptions in non-browser contexts
-        }
-      };
-
-      const imagePromises = imageUrls.map((src) => {
-        addPreloadHint(src);
-        return new Promise<void>((resolve) => {
-          const img = new Image();
-          img.src = src;
-          img.onload = () => resolve();
-          img.onerror = () => resolve(); // don't reject; we want to proceed even if an asset fails
-        });
-      });
-
-      const imagesSettled = Promise.all(imagePromises);
-
-      // Wait for fonts to be ready where supported
-      const fontsReady: Promise<void> = (document as any).fonts && (document as any).fonts.ready ? (document as any).fonts.ready : Promise.resolve();
-
-      // Wait for window load (optional) so that all resources registered by the browser are finished
-      const windowLoad = new Promise<void>((resolve) => {
-        if (document.readyState === 'complete') return resolve();
-        window.addEventListener('load', () => resolve(), { once: true });
-      });
-
-      // Failsafe: don't block for more than 7s
-      const timeout = new Promise<void>((resolve) => setTimeout(resolve, 7000));
-
-      await Promise.race([
-        Promise.all([imagesSettled, fontsReady, windowLoad]),
-        timeout
-      ]);
-
-      setIsLoading(false);
-    };
-
-    preloadImages();
-  }, []);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const handleLoadComplete = useCallback(() => setIsLoaded(true), []);
 
   const timelineRef = useRef<HTMLDivElement>(null);
   const highSchoolRef = useRef<HTMLDivElement>(null);
@@ -364,49 +280,12 @@ function App() {
     );
   };
 
-  if (isLoading) {
-    return (
-      <div style={{ 
-        height: '100vh', 
-        width: '100vw', 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        background: '#0b1026', 
-        color: '#fff',
-        flexDirection: 'column',
-        gap: '1rem',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 9999
-      }}>
-        <div className="loader" style={{
-           width: '48px',
-           height: '48px',
-           border: '5px solid #FFF',
-           borderBottomColor: 'var(--accent-color)',
-           borderRadius: '50%',
-           animation: 'rotation 1s linear infinite'
-        }}></div>
-        <style>{`
-          @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          } 
-        `}</style>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', marginTop: '10px' }}>
-           Initializing Portfolio
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
+      {!isLoaded && <LoadingScreen onLoadComplete={handleLoadComplete} />}
       <FantasyBackground />
       <Navbar />
-      <main style={{ position: 'relative', zIndex: 1, width: '100%' }}>
+      <main style={{ position: 'relative', zIndex: 1, width: '100%', visibility: isLoaded ? 'visible' : 'hidden' }}>
 
       <section id="hero" style={{ paddingTop: '160px', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
         <div className="container hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
