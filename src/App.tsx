@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useVelocity, useMotionValue, useMotionValueEvent, animate, useSpring } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaFileDownload } from 'react-icons/fa';
 import FantasyBackground from './components/FantasyBackground';
@@ -110,6 +110,50 @@ const skills = [
 ];
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Preload crucial assets
+  useEffect(() => {
+    const preloadImages = async () => {
+      const imageUrls = [
+         // Skills
+         ...skills.map(s => s.icon),
+         // Featured Projects
+         '/roomfinder/mobile1.png',
+         '/roomfinder/mobile2.png',
+         '/roomfinder/ss1.png',
+         '/roomfinder/ss2.png',
+         '/roomfinder/ss3.png',
+         '/roomfinder/roomfinder_logo.png',
+         '/evacudesk/adl.png',
+         '/evacudesk/evacudesk.png',
+         '/evacudesk/web1.png',
+         '/evacudesk/ss2.png',
+         '/evacudesk/ss3.png',
+         '/evacudesk/evacudesk_logo.png',
+         // General Assets
+         '/png1.png',
+         '/BIS_Logo.png',
+         '/UPANG_Logo.png',
+         '/Flag_of_the_Philippines.svg'
+      ];
+
+      const promises = imageUrls.map((src) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = resolve;
+          img.onerror = resolve; // Don't block if one fails
+        });
+      });
+
+      await Promise.all(promises);
+      setIsLoading(false);
+    };
+
+    preloadImages();
+  }, []);
+
   const timelineRef = useRef<HTMLDivElement>(null);
   const highSchoolRef = useRef<HTMLDivElement>(null);
   const collegeRef = useRef<HTMLDivElement>(null);
@@ -275,6 +319,44 @@ function App() {
       </span>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div style={{ 
+        height: '100vh', 
+        width: '100vw', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        background: '#0b1026', 
+        color: '#fff',
+        flexDirection: 'column',
+        gap: '1rem',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 9999
+      }}>
+        <div className="loader" style={{
+           width: '48px',
+           height: '48px',
+           border: '5px solid #FFF',
+           borderBottomColor: 'var(--accent-color)',
+           borderRadius: '50%',
+           animation: 'rotation 1s linear infinite'
+        }}></div>
+        <style>{`
+          @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          } 
+        `}</style>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', marginTop: '10px' }}>
+           Initializing Portfolio
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

@@ -161,8 +161,10 @@
 }
 
 .shootingStarContainer {
-  animation: shootingStar 2.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation: shootingStar 2.8s cubic-bezier(0.25, 0.1, 0.25, 1) 8s forwards;
+  opacity: 0;
   will-change: transform, opacity;
+  transform: translateZ(0);
 }
 
 .shootingStarTail {

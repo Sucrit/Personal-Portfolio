@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect, useState } from 'react';
+import React, { useMemo, useRef, useEffect } from 'react';
 import { motion, useScroll, useMotionValue, useAnimationFrame, useTransform } from 'framer-motion';
 import './FantasyBackground.css';
 
@@ -8,15 +8,6 @@ const FantasyBackground: React.FC = () => {
   const starX = useMotionValue(0);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const [showShootingStar, setShowShootingStar] = useState(false);
-
-  // shooting star after 6 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowShootingStar(true);
-    }, 8000);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -483,7 +474,7 @@ const FantasyBackground: React.FC = () => {
      const angle = Math.atan2(dy, dx);
      const perpAngle = angle + Math.PI / 2;
      
-     const geometryDist = dist * 1.6;
+     const geometryDist = dist * 1.05;
      
      const endX = lhCx + Math.cos(angle) * geometryDist;
      const endY = lhCy + Math.sin(angle) * geometryDist;
@@ -529,15 +520,6 @@ const FantasyBackground: React.FC = () => {
   const outerBeamPath = useTransform(beamValues, v => v.outer);
   const innerBeamPath = useTransform(beamValues, v => v.inner);
   const coreBeamPath = useTransform(beamValues, v => v.core);
-
-  // Dynamic radius for the fade mask so it always matches cursor distance
-  const maskRadius = useTransform([mouseX, mouseY], ([mx, my]) => {
-     if (!lhCx || !lhCy) return 0;
-     const dx = (mx as number) - lhCx;
-     const dy = (my as number) - lhCy;
-     const dist = Math.sqrt(dx*dx + dy*dy);
-     return dist; 
-  });
 
   // Splash Opacity - Fades out if cursor is too far (Range Limit)
   const splashOpacity = useTransform([mouseX, mouseY], ([mx, my]) => {
@@ -605,23 +587,7 @@ const FantasyBackground: React.FC = () => {
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </radialGradient>
 
-          {/* Dynamic Mask to ensure fade out happens exactly at cursor distance */}
-          <mask id="beam-fade-mask">
-             <radialGradient id="fade-gradient-mask">
-                <stop offset="0%" stopColor="white" stopOpacity="1" />
-                <stop offset="70%" stopColor="white" stopOpacity="1" />
-                <stop offset="100%" stopColor="black" stopOpacity="1" />
-             </radialGradient>
-             <motion.circle cx={lhCx} cy={lhCy} r={maskRadius} fill="url(#fade-gradient-mask)" />
-          </mask>
-
-          {/* Blur Filters for Beam */}
-          <filter id="beam-blur-heavy">
-             <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
-          </filter>
-          <filter id="beam-blur-medium">
-             <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
-          </filter>
+          {/* CSS blur is GPU-accelerated; SVG filters + mask removed for performance */}
 
           {/* Static Light Beam Gradient */}
           <linearGradient id="static-beam-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
@@ -660,92 +626,76 @@ const FantasyBackground: React.FC = () => {
           ))}
         </motion.g>
 
-        {/* Shooting Star - Rendered before mountains so it goes behind them */}
-        {showShootingStar && (
-          <g className="shootingStarContainer">
-            <defs>
-              {/* Main tail gradient - long fade */}
-              <linearGradient id="shooting-star-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-                <stop offset="30%" stopColor="#cfe8ff" stopOpacity="0.05" />
-                <stop offset="60%" stopColor="#a5d8ff" stopOpacity="0.15" />
-                <stop offset="85%" stopColor="#dbeeff" stopOpacity="0.5" />
-                <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
-              </linearGradient>
-              {/* Inner hot-core gradient */}
-              <linearGradient id="shooting-star-core" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-                <stop offset="70%" stopColor="#ffffff" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
-              </linearGradient>
-              {/* Head radial glow */}
-              <radialGradient id="shooting-star-head-glow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                <stop offset="40%" stopColor="#ffe8b0" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#a5d8ff" stopOpacity="0" />
-              </radialGradient>
-              <filter id="shooting-star-glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-              <filter id="shooting-star-soft" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="4" result="softBlur"/>
-                <feMerge>
-                  <feMergeNode in="softBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
+        {/* Shooting Star - always in DOM, CSS handles 8s delay + animation */}
+        <g className="shootingStarContainer">
+          <defs>
+            {/* Main tail gradient - long fade */}
+            <linearGradient id="shooting-star-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+              <stop offset="30%" stopColor="#cfe8ff" stopOpacity="0.05" />
+              <stop offset="60%" stopColor="#a5d8ff" stopOpacity="0.15" />
+              <stop offset="85%" stopColor="#dbeeff" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
+            </linearGradient>
+            {/* Inner hot-core gradient */}
+            <linearGradient id="shooting-star-core" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+              <stop offset="70%" stopColor="#ffffff" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+            </linearGradient>
+            {/* Head radial glow */}
+            <radialGradient id="shooting-star-head-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+              <stop offset="40%" stopColor="#ffe8b0" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#a5d8ff" stopOpacity="0" />
+            </radialGradient>
+          </defs>
 
-            {/* Outer diffuse tail (wide, faint glow) */}
-            <path
-              className="shootingStarTail"
-              d="M0,0 Q60,-3 120,-2 Q160,-1 200,0 Q160,1 120,2 Q60,3 0,0 Z"
-              fill="url(#shooting-star-gradient)"
-              opacity="0.4"
-              filter="url(#shooting-star-soft)"
-            />
+          {/* Outer diffuse tail (wide, faint glow) */}
+          <path
+            className="shootingStarTail"
+            d="M0,0 Q60,-3 120,-2 Q160,-1 200,0 Q160,1 120,2 Q60,3 0,0 Z"
+            fill="url(#shooting-star-gradient)"
+            opacity="0.4"
+            style={{ filter: 'blur(3px)' }}
+          />
 
-            {/* Inner bright core tail (thin, sharp) */}
-            <path
-              d="M60,0 Q120,-0.8 180,-0.5 L200,0 Q180,0.5 120,0.8 Q60,0 60,0 Z"
-              fill="url(#shooting-star-core)"
-              opacity="0.9"
-              filter="url(#shooting-star-glow)"
-            />
+          {/* Inner bright core tail (thin, sharp) */}
+          <path
+            d="M60,0 Q120,-0.8 180,-0.5 L200,0 Q180,0.5 120,0.8 Q60,0 60,0 Z"
+            fill="url(#shooting-star-core)"
+            opacity="0.9"
+            style={{ filter: 'blur(1.5px)' }}
+          />
 
-            {/* Micro debris particles trailing behind */}
-            <circle className="shootingDebris debris1" cx="40" cy="-2" r="0.6" fill="#ffffff" opacity="0.5" />
-            <circle className="shootingDebris debris2" cx="70" cy="3" r="0.4" fill="#cfe8ff" opacity="0.4" />
-            <circle className="shootingDebris debris3" cx="95" cy="-3.5" r="0.5" fill="#ffffff" opacity="0.35" />
-            <circle className="shootingDebris debris4" cx="130" cy="2.5" r="0.35" fill="#a5d8ff" opacity="0.45" />
-            <circle className="shootingDebris debris5" cx="155" cy="-1.5" r="0.3" fill="#ffffff" opacity="0.3" />
+          {/* Micro debris particles trailing behind */}
+          <circle className="shootingDebris debris1" cx="40" cy="-2" r="0.6" fill="#ffffff" opacity="0.5" />
+          <circle className="shootingDebris debris2" cx="70" cy="3" r="0.4" fill="#cfe8ff" opacity="0.4" />
+          <circle className="shootingDebris debris3" cx="95" cy="-3.5" r="0.5" fill="#ffffff" opacity="0.35" />
+          <circle className="shootingDebris debris4" cx="130" cy="2.5" r="0.35" fill="#a5d8ff" opacity="0.45" />
+          <circle className="shootingDebris debris5" cx="155" cy="-1.5" r="0.3" fill="#ffffff" opacity="0.3" />
 
-            {/* Bright head glow (soft, warm) */}
-            <circle
-              className="shootingStarHead"
-              cx="200"
-              cy="0"
-              r="6"
-              fill="url(#shooting-star-head-glow)"
-              filter="url(#shooting-star-soft)"
-              opacity="0.6"
-            />
+          {/* Bright head glow (soft, warm) */}
+          <circle
+            className="shootingStarHead"
+            cx="200"
+            cy="0"
+            r="6"
+            fill="url(#shooting-star-head-glow)"
+            style={{ filter: 'blur(3px)' }}
+            opacity="0.6"
+          />
 
-            {/* Hot white core of the head */}
-            <circle
-              cx="200"
-              cy="0"
-              r="2"
-              fill="#ffffff"
-              filter="url(#shooting-star-glow)"
-              opacity="1"
-            />
-          </g>
-        )}
+          {/* Hot white core of the head */}
+          <circle
+            cx="200"
+            cy="0"
+            r="2"
+            fill="#ffffff"
+            style={{ filter: 'blur(1.5px)' }}
+            opacity="1"
+          />
+        </g>
 
         {/* Crescent Moon */}
         <g className="moon" transform="translate(1500, 350)">
@@ -820,7 +770,7 @@ const FantasyBackground: React.FC = () => {
                       rx={80}
                       ry={40}
                       fill="url(#lighthouse-glow)"
-                      style={{ filter: 'blur(15px)', pointerEvents: 'none' }}
+                      style={{ filter: 'blur(10px)', pointerEvents: 'none', willChange: 'cx, cy' }}
                    />
                    {/* Intense impact point */}
                    <motion.ellipse
@@ -829,7 +779,7 @@ const FantasyBackground: React.FC = () => {
                       rx={30}
                       ry={15}
                       fill="#fff"
-                      style={{ filter: 'blur(5px)', pointerEvents: 'none' }}
+                      style={{ filter: 'blur(4px)', pointerEvents: 'none', willChange: 'cx, cy' }}
                    />
                 </motion.g>
 
@@ -837,8 +787,7 @@ const FantasyBackground: React.FC = () => {
                   className="beamLayer"
                   d={outerBeamPath}
                   fill="url(#volumetric-beam-gradient)"
-                  mask="url(#beam-fade-mask)"
-                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'url(#beam-blur-heavy)' }}
+                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(12px)', willChange: 'd' }}
                   opacity={0.4}
                 />
                 {/* 2. Inner Main Beam (Defined but soft edges) */}
@@ -846,8 +795,7 @@ const FantasyBackground: React.FC = () => {
                   className="beamLayer"
                   d={innerBeamPath}
                   fill="url(#volumetric-beam-gradient)"
-                  mask="url(#beam-fade-mask)"
-                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'url(#beam-blur-medium)' }}
+                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(4px)', willChange: 'd' }}
                   opacity={0.7}
                 />
                 {/* 3. Core Beam (Bright, sharp center) */}
@@ -855,9 +803,8 @@ const FantasyBackground: React.FC = () => {
                   className="beamLayer"
                   d={coreBeamPath}
                   fill="url(#core-beam-gradient)"
-                  mask="url(#beam-fade-mask)" 
                   fillOpacity={0.8}
-                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(2px)' }}
+                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(2px)', willChange: 'd' }}
                 />
                 
                 {/* 2. Outer atmospheric halo - Static, realistic haze (reduced brightness) */}
