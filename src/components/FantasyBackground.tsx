@@ -664,42 +664,85 @@ const FantasyBackground: React.FC = () => {
         {showShootingStar && (
           <g className="shootingStarContainer">
             <defs>
+              {/* Main tail gradient - long fade */}
               <linearGradient id="shooting-star-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-                <stop offset="40%" stopColor="#a5d8ff" stopOpacity="0.4" />
+                <stop offset="30%" stopColor="#cfe8ff" stopOpacity="0.05" />
+                <stop offset="60%" stopColor="#a5d8ff" stopOpacity="0.15" />
+                <stop offset="85%" stopColor="#dbeeff" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
+              </linearGradient>
+              {/* Inner hot-core gradient */}
+              <linearGradient id="shooting-star-core" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                <stop offset="70%" stopColor="#ffffff" stopOpacity="0.3" />
                 <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
               </linearGradient>
+              {/* Head radial glow */}
+              <radialGradient id="shooting-star-head-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                <stop offset="40%" stopColor="#ffe8b0" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#a5d8ff" stopOpacity="0" />
+              </radialGradient>
               <filter id="shooting-star-glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
                 <feMerge>
                   <feMergeNode in="coloredBlur"/>
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
+              <filter id="shooting-star-soft" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="softBlur"/>
+                <feMerge>
+                  <feMergeNode in="softBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
             </defs>
-            {/* Shooting star tail - Tapered path for speed look */}
+
+            {/* Outer diffuse tail (wide, faint glow) */}
             <path
               className="shootingStarTail"
-              d="M0,0 L140,-1.5 L150,0 L140,1.5 Z"
+              d="M0,0 Q60,-3 120,-2 Q160,-1 200,0 Q160,1 120,2 Q60,3 0,0 Z"
               fill="url(#shooting-star-gradient)"
+              opacity="0.4"
+              filter="url(#shooting-star-soft)"
+            />
+
+            {/* Inner bright core tail (thin, sharp) */}
+            <path
+              d="M60,0 Q120,-0.8 180,-0.5 L200,0 Q180,0.5 120,0.8 Q60,0 60,0 Z"
+              fill="url(#shooting-star-core)"
+              opacity="0.9"
               filter="url(#shooting-star-glow)"
             />
-            {/* Bright head of the shooting star */}
+
+            {/* Micro debris particles trailing behind */}
+            <circle className="shootingDebris debris1" cx="40" cy="-2" r="0.6" fill="#ffffff" opacity="0.5" />
+            <circle className="shootingDebris debris2" cx="70" cy="3" r="0.4" fill="#cfe8ff" opacity="0.4" />
+            <circle className="shootingDebris debris3" cx="95" cy="-3.5" r="0.5" fill="#ffffff" opacity="0.35" />
+            <circle className="shootingDebris debris4" cx="130" cy="2.5" r="0.35" fill="#a5d8ff" opacity="0.45" />
+            <circle className="shootingDebris debris5" cx="155" cy="-1.5" r="0.3" fill="#ffffff" opacity="0.3" />
+
+            {/* Bright head glow (soft, warm) */}
             <circle
               className="shootingStarHead"
-              cx="150"
+              cx="200"
               cy="0"
-              r="3.5"
+              r="6"
+              fill="url(#shooting-star-head-glow)"
+              filter="url(#shooting-star-soft)"
+              opacity="0.6"
+            />
+
+            {/* Hot white core of the head */}
+            <circle
+              cx="200"
+              cy="0"
+              r="2"
               fill="#ffffff"
               filter="url(#shooting-star-glow)"
-            />
-            {/* Cross flare for magical feel */}
-            <path
-              d="M142,0 L158,0 M150,-8 L150,8"
-              stroke="#ffffff"
-              strokeWidth="0.8"
-              opacity="0.8"
-              filter="url(#shooting-star-glow)"
+              opacity="1"
             />
           </g>
         )}

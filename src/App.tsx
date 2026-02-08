@@ -13,7 +13,7 @@ const skills = [
     color: '#0051ff',
     description: 'Relational Database',
   },
-  {    name: 'PostgreSQL',
+  { name: 'PostgreSQL',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
     color: '#336791',
     description: 'SQL Powerhouse',
@@ -21,7 +21,7 @@ const skills = [
   {    name: 'MongoDB',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     color: '#25ff29bb',
-    description: 'The NoSQL Goat',
+    description: 'NoSQL Goat',
   },
   {
     name: 'Rust',
@@ -45,7 +45,7 @@ const skills = [
     name: 'Node.js',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
     color: '#37dc31b5',
-    description: 'Server-side JavaScript',
+    description: 'Server magician',
   },
   {
     name: 'Express',
@@ -59,12 +59,12 @@ const skills = [
     color: '#3843debb',
     description: 'Old but Gold',
   },
-    {
-    name: 'FTK Imager',
-    icon: '/ftk.png',
-    color: '#0e5aac',
-    description: 'Data Forensics',
-  },
+  //   {
+  //   name: 'FTK Imager',
+  //   icon: '/ftk.png',
+  //   color: '#0e5aac',
+  //   description: 'Data Forensics',
+  // },
   {
     name: 'Laravel',
     icon: '/Laravel.svg',
@@ -77,18 +77,12 @@ const skills = [
     color: '#0091ff',
     description: 'Containerization',
   },
-  {
-    name: 'Ghidra',
-    icon: '/ghidra.svg', 
-    color: '#ff5500b0',
-    description: 'Reverse Engineering',
-  },
-  {
-    name: 'Linux',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
-    color: '#968b0d',
-    description: 'Operating System',
-  },
+  // {
+  //   name: 'Ghidra',
+  //   icon: '/ghidra.svg', 
+  //   color: '#ff5500',
+  //   description: 'Reverse Engineering',
+  // },
   {
     name: 'GitHub',
     icon: '/github-white-icon.svg',
@@ -96,11 +90,17 @@ const skills = [
     description: 'Version Control',
   },
   {
-    name: 'Volatility',
-    icon: '/volatility.png',
-    color: '#d6d3d3',
-    description: 'Memory Forensics',
+    name: 'Linux',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+    color: '#968b0d',
+    description: 'Operating System',
   },
+  // {
+  //   name: 'Volatility',
+  //   icon: '/volatility.png',
+  //   color: '#d6d3d3',
+  //   description: 'Memory Forensics',
+  // },
   {
     name: 'Python',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
@@ -121,9 +121,9 @@ function App() {
   
   // Motion values we control manually for true responsiveness
   const lightTopValue = useMotionValue("0%");
-  const hsGlowValue = useMotionValue("0px 0px 0px rgba(255, 222, 33, 0)");
+  const hsGlowValue = useMotionValue("0px 0px 0px rgba(255,255,255,0)");
   const hsBorderValue = useMotionValue("rgba(255,255,255,0.05)");
-  const collegeGlowValue = useMotionValue("0px 0px 0px rgba(255, 222, 33, 0)");
+  const collegeGlowValue = useMotionValue("0px 0px 0px rgba(255,255,255,0)");
   const collegeBorderValue = useMotionValue("rgba(255,255,255,0.05)");
 
   const { scrollYProgress } = useScroll({
@@ -187,7 +187,7 @@ function App() {
     
     // Calculate light position with magnetic snapping
     let lightPercent: number;
-    const snapRange = 0.08; // Increased range to make snapping feel more "magnetic"
+    const snapRange = 0.15; 
     
     if (progress < hsP - snapRange) {
       // Before hs snap zone - interpolate from 0 to hs
@@ -218,8 +218,8 @@ function App() {
       const intensity = hsDistance < snapRange ? 1 : 1 - ((hsDistance - snapRange) / (hsGlowRange - snapRange));
       const glowSize = Math.round(30 * intensity);
       const glowAlpha = (0.4 * intensity).toFixed(2);
-      hsGlowValue.set(`0px 0px ${glowSize}px rgba(255, 222, 33, ${glowAlpha})`);
-      hsBorderValue.set(intensity > 0.5 ? "var(--accent-color)" : "rgba(255,255,255,0.05)");
+      hsGlowValue.set(`0px 0px ${glowSize}px rgba(255,255,255, ${glowAlpha})`);
+      hsBorderValue.set(intensity > 0.5 ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.05)");
     } else {
       hsGlowValue.set("0px 0px 0px rgba(255, 222, 33, 0)");
       hsBorderValue.set("rgba(255,255,255,0.05)");
@@ -232,8 +232,8 @@ function App() {
       const intensity = collegeDistance < snapRange ? 1 : 1 - ((collegeDistance - snapRange) / (collegeGlowRange - snapRange));
       const glowSize = Math.round(30 * intensity);
       const glowAlpha = (0.4 * intensity).toFixed(2);
-      collegeGlowValue.set(`0px 0px ${glowSize}px rgba(255, 222, 33, ${glowAlpha})`);
-      collegeBorderValue.set(intensity > 0.5 ? "var(--accent-color)" : "rgba(255,255,255,0.05)");
+      collegeGlowValue.set(`0px 0px ${glowSize}px rgba(255,255,255, ${glowAlpha})`);
+      collegeBorderValue.set(intensity > 0.5 ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.05)");
     } else {
       collegeGlowValue.set("0px 0px 0px rgba(255, 222, 33, 0)");
       collegeBorderValue.set("rgba(255,255,255,0.05)");
@@ -253,6 +253,10 @@ function App() {
   
   // Keep light visible throughout the active scrolling phase in the center
   const lightOpacity = useTransform(smoothProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
+  
+  // Trail opacity based on velocity - only visible when moving
+  const rawTrailOpacity = useTransform(scrollVelocity, [-0.05, -0.01, 0.01, 0.05], [0.8, 0, 0, 0.8]);
+  const trailOpacity = useSpring(rawTrailOpacity, { stiffness: 60, damping: 15 });
 
   const devName = ("Hi, Oliver here");
 
@@ -321,20 +325,20 @@ function App() {
               borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.05)'
             }}>
-              I’m a 3rd-year BSIT student specialized in backend development using MERN and PERN stacks and also have experience with PHP (Laravel) and MySQL. I’m currently open to remote freelance projects.
+              I'm a 3rd-year BSIT student specialized in <strong style={{color: 'var(--accent-color)'}}>cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>backend</strong> development using <strong style={{color: 'var(--accent-color)'}}>MERN</strong> stack and also have experience with <strong style={{color: 'var(--accent-color)'}}>PHP</strong> and <strong style={{color: 'var(--accent-color)'}}>MySQL</strong>.
             </p>
 
             <div className="contact-actions">
-              <a href="mailto:smitholiver106@gmail.com" className="contact-btn" title="Email" aria-label="Email">
+              <a href="https://mail.google.com/mail/?view=cm&to=smitholiver106@gmail.com" className="contact-btn" title="Compose Email" aria-label="Compose Email" target="_blank" rel="noopener noreferrer">
                 <FaEnvelope />
               </a>
-              <a href="https://github.com/Sucrit" className="contact-btn" title="GitHub" aria-label="GitHub">
+              <a href="https://github.com/Sucrit" className="contact-btn" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
                 <FaGithub />
               </a>
-              <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" className="contact-btn" title="LinkedIn" aria-label="LinkedIn">
+              <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" className="contact-btn" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                 <FaLinkedin />
               </a>
-              <a href="/resume.pdf" className="resume-btn" title="Download Resume" download aria-label="Download Resume">
+              <a href="/Oliver_Ondoy_Resume.pdf" className="resume-btn" title="Download Resume" download aria-label="Download Resume" target="_blank" rel="noopener noreferrer">
                 <FaFileDownload />
                 <span>Download Resume</span>
               </a>
@@ -374,16 +378,32 @@ function App() {
                   backdropFilter: 'blur(4px)',
                   boxShadow: 'none'
                 }}>
-                  <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#e2e8f0', marginBottom: '1.5rem' }}>
-                    My journey began in the quiet town of Bugallon, where I discovered my affinity for logic and systems. Unlike those drawn to surface-level aesthetics, I found my calling in the <strong style={{color: 'var(--accent-color)'}}>engine room</strong> of the web—the backend.
-                  </p>
-                  <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#e2e8f0', margin: 0 }}>
-                    Now, as I advance through my 3rd year at university, I'm forging a path in <strong style={{color: 'var(--accent-color)'}}>Cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>Backend Engineering</strong>. I don't just write code; I architect secure fortresses and efficient data pipelines utilizing the PERN and MERN stacks.
-                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: '#e2e8f0', fontSize: '1.05rem', lineHeight: '1.6' }}>
+                    <div>
+                      <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>Who am I:</strong>
+                      <span>A <strong style = {{color: '#fff'}}>22</strong> years old <strong style = {{color: '#fff'}}>3rd year student</strong> at the <strong style = {{color: '#fff'}}>University of Pangasinan</strong> who likes messing around with technology.</span>
+                    </div>
+                    <div>
+                      <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>What I do:</strong>
+                      <span>Build secure, scalable backend systems with <strong style = {{color: '#fff'}}>MERN</strong>, <strong style = {{color: '#fff'}}>Laravel</strong>, <strong style = {{color: '#fff'}}>MySQL</strong>, <strong style = {{color: '#fff'}}>RESTful APIs</strong>. I also perform <strong style = {{color: '#fff'}}>Data Recovery</strong> and <strong style = {{color: '#fff'}}>Computer Forensics</strong> as well as run my homelab for <strong style = {{color: '#fff'}}>threat analysis</strong> and <strong style = {{color: '#fff'}}>detection</strong>.</span>
+                    </div>
+                    <div>
+                      <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>What I'm currently learning:</strong>
+                      <span>CI/CD Pipelines, Postgres, and Redis.</span>
+                    </div>
+                    <div>
+                      <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>My goal:</strong>
+                      <span>Climb my way up as a <strong style={{color: '#fff'}}>Cybersecurity expert</strong> and <strong style={{color: '#fff'}}>Backend Engineer</strong> as well as work with law enforcements and security agencies in combating cyber threats.</span>
+                    </div>
+                    <div>
+                      <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>My hobbies:</strong>
+                      <span>Listening to music, watching crime documentaries, interrogations, mysteries and gaming.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Educational Background - Timeline Layout */}
+              {/* Educational Background */}
               <div>
                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
                    <h3 style={{ fontSize: '1.8rem', color: '#fff', margin: 0 }}>Educational Background</h3>
@@ -411,12 +431,12 @@ function App() {
                     top: 0,
                     bottom: 0,
                     width: '4px',
-                    background: 'rgba(148,163,184,0.35)',
+                    background: 'rgba(255, 255, 255, 0.27)',
                     transform: 'translateX(-50%)',
                     borderRadius: '4px',
                     boxShadow: 'none'
                   }} />
-
+  
                   {/* Moving Yellow Light */}
                   <motion.div 
                     style={{
@@ -449,7 +469,7 @@ function App() {
                       background: 'linear-gradient(to top, var(--accent-color) 0%, transparent 100%)',
                       borderRadius: '4px',
                       zIndex: 9,
-                      opacity: lightOpacity,
+                      opacity: trailOpacity,
                       scaleY,
                       originY: 1
                     }} 
@@ -468,7 +488,7 @@ function App() {
                       position: 'relative'
                     }}
                   >
-                    {/* High School Card (now matching College styles) */}
+                    {/* High School Card */}
                     <motion.div 
                       style={{ 
                         width: 'calc(50% - 40px)',
@@ -497,33 +517,34 @@ function App() {
                           letterSpacing: '0.05em'
                         }}>Completed</span>
                       </div>
-                      <p style={{ color: '#94a3b8', fontSize: '1rem', marginBottom: '0.5rem', fontWeight: '500' }}>Secondary Education</p>
-                      <p style={{ color: '#64748b', fontSize: '0.9rem', margin: 0 }}>2018 - 2022</p>
-                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                        <p style={{ color: '#64748b', fontSize: '0.85rem', fontStyle: 'italic', margin: 0 }}>Where the foundations were laid.</p>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', marginBottom: '0.5rem', fontWeight: '600' }}>Junior & Senior High School</p>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0, fontWeight: '500' }}>2016 - 2022</p>
+                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255, 255, 255, 0.48)' }}>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: 0 }}><span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Honor Student, 2016-2022</p>
                       </div>
                     </motion.div>
 
-                    {/* Horizontal Connector Line - Right (muted) */}
+                    {/* Horizontal Connector Line - Right (White) */}
                     <div style={{
                       width: '40px',
-                      height: '3px',
-                      background: 'rgba(148,163,184,0.45)',
+                      height: '2px',
+                      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.95) 100%)',
                       position: 'relative',
-                      boxShadow: 'none'
+                      boxShadow: '0 0 8px rgba(255,255,255,0.12)',
+                      opacity: 1
                     }}>
                       {/* Node Point */}
                       <div ref={hsConnectorRef} style={{
                         position: 'absolute',
-                        right: '-8px',
+                        right: '-6px',
                         top: '50%',
                         transform: 'translateY(-50%)',
-                        width: '16px',
-                        height: '16px',
-                        background: '#94a3b8',
-                        border: '3px solid #0f172a',
+                        width: '12px',
+                        height: '12px',
+                        background: '#0f172a',
+                        border: '2px solid rgba(255,255,255,0.95)',
                         borderRadius: '50%',
-                        boxShadow: 'none'
+                        boxShadow: '0 0 10px rgba(255,255,255,0.15), inset 0 0 4px rgba(255,255,255,0.08)'
                       }} />
                     </div>
 
@@ -546,26 +567,27 @@ function App() {
                     {/* Spacer for left side */}
                     <div style={{ width: 'calc(50% - 40px)' }} />
 
-                    {/* Horizontal Connector Line - Left (muted) */}
+                    {/* Horizontal Connector Line - Left (White) */}
                     <div style={{
                       width: '40px',
-                      height: '3px',
-                      background: 'rgba(148,163,184,0.45)',
+                      height: '2px',
+                      background: 'linear-gradient(90deg, rgba(255,255,255,0.95) 0%, transparent 100%)',
                       position: 'relative',
-                      boxShadow: 'none'
+                      boxShadow: '0 0 8px rgba(255,255,255,0.12)',
+                      opacity: 1
                     }}>
                       {/* Node Point */}
                       <div ref={collegeConnectorRef} style={{
                         position: 'absolute',
-                        left: '-8px',
+                        left: '-6px',
                         top: '50%',
                         transform: 'translateY(-50%)',
-                        width: '16px',
-                        height: '16px',
-                        background: '#94a3b8',
-                        border: '3px solid #0f172a',
+                        width: '12px',
+                        height: '12px',
+                        background: '#0f172a', 
+                        border: '2px solid rgba(255,255,255,0.95)',
                         borderRadius: '50%',
-                        boxShadow: 'none'
+                        boxShadow: '0 0 10px rgba(255,255,255,0.15), inset 0 0 4px rgba(255,255,255,0.08)'
                       }} />
                     </div>
 
@@ -599,14 +621,17 @@ function App() {
                           boxShadow: '0 0 15px rgba(255, 222, 33, 0.4)'
                         }}>Current</span>
                       </div>
-                      <p style={{ color: '#f1f5f9', fontSize: '1.05rem', marginBottom: '0.5rem', fontWeight: '500' }}>Bachelor of Science in Information Technology</p>
-                      <p style={{ color: '#cbd5e1', fontSize: '0.9rem', margin: 0 }}>2022 - Present</p>
-                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Specializing in Backend Systems
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', marginBottom: '0.5rem', fontWeight: '600' }}>Bachelor of Science in Information Technology</p>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0, fontWeight: '500' }}>2024 - 2027 </p>
+                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255, 255, 255, 0.48)' }}>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600' }}>
+                          <span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Backend Development
                         </p>
-                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Focus on Cybersecurity
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: '0.5rem 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600' }}>
+                          <span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Computer Forensics & Data Recovery
+                        </p>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '600' }}>
+                          <span style={{ color: 'var(--accent-color)', fontSize: '1rem' }}>◆</span> Ethical Hacking
                         </p>
                       </div>
                     </motion.div>
@@ -691,7 +716,7 @@ function App() {
                   <TechTag name="MySQL" />
                 </div>
                 <div className="project-links">
-                  <a href="https://github.com/Sucrit/RoomFinder_API" className="project-link-btn">
+                  <a href="https://github.com/Sucrit/RoomFinder_API" className="project-link-btn" target="_blank" rel="noopener noreferrer">
                     View Code &rarr;
                   </a>
                 </div>
@@ -726,7 +751,7 @@ function App() {
                   <TechTag name="MongoDB" />
                 </div>
                 <div className="project-links">
-                  <a href="https://github.com/endevium/EvacuDesk/tree/backend/UpdatedAPI2" className="project-link-btn">
+                  <a href="https://github.com/endevium/EvacuDesk/tree/backend/UpdatedAPI2" className="project-link-btn" target="_blank" rel="noopener noreferrer">
                     View Code &rarr;
                   </a>
                 </div>
@@ -740,10 +765,10 @@ function App() {
           <section id="contact" style={{ background: 'var(--card-bg)', padding: '25px 0', marginTop: '0', backdropFilter: 'blur(10px)' }}>
             <div className="container" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: 500, margin: 0 }}>
-                Want to connect, collaborate, or just say hi? Reach out below!
+                I’m currently open to remote freelance projects. Reach out below!😄 
               </p>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.5rem' }}>
-                <a href="mailto:smitholiver106@gmail.com" aria-label="Gmail" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
+                <a href="https://mail.google.com/mail/?view=cm&to=smitholiver106@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Compose Email" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
                 <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-primary)' }}><FaGithub /></a>
                 <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--text-primary)' }}><FaLinkedin /></a>
               </div>

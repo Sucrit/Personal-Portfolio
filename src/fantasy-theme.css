@@ -396,13 +396,24 @@ h2 {
 }
 
 .contact-btn:hover, .resume-btn:hover {
-  /* Hover disabled for contact icons and resume button */
-  background: rgba(255, 255, 255, 0.03); /* same as default */
+  background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow: none;
   transform: none;
   color: var(--text-primary);
   cursor: default;
+}
+
+/* Only change icon color and resume text to accent on hover (no other hover effects) */
+.contact-actions .contact-btn:hover svg,
+.contact-actions .resume-btn:hover svg {
+  color: var(--accent-color);
+  fill: var(--accent-color);
+}
+
+/* Also color the "Download Resume" label to the accent color on hover */
+.contact-actions .resume-btn:hover span {
+  color: var(--accent-color);
 }
 
 /* Animation */

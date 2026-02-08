@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaUser, FaFolder, FaFolderOpen, FaHome } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUser, FaFolder, FaFolderOpen, FaHome, FaLaptopCode, FaUserSecret } from 'react-icons/fa';
 import './Navbar.css';
 
 const CodeIcon = ({ isActive }: { isActive: boolean }) => (
@@ -23,6 +23,19 @@ const CodeIcon = ({ isActive }: { isActive: boolean }) => (
       transition={{ duration: 0.25 }} // Quick slash
     />
   </svg>
+);
+
+const AboutIcon = ({ isActive }: { isActive: boolean }) => (
+  <div style={{ position: 'relative', width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <motion.div
+      initial={false}
+      /* Simple scale effect when active */
+      animate={{ scale: isActive ? 1.1 : 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      {isActive ? <FaUserSecret size={20} /> : <FaUser size={18} />}
+    </motion.div>
+  </div>
 );
 
 const Navbar: React.FC = () => {
@@ -73,16 +86,24 @@ const Navbar: React.FC = () => {
   const getIcon = (id: string, isActive: boolean) => {
     switch (id) {
       case 'hero': 
-        return <FaHome size={20} />;
+        return (
+          <motion.div initial={false} animate={{ scale: isActive ? 1.1 : 1 }} transition={{ duration: 0.3 }}>
+            <FaHome size={20} />
+          </motion.div>
+        );
       case 'about': 
-        return <FaUser size={18} />;
+        return <AboutIcon isActive={isActive} />;
       case 'skills': 
-        return <CodeIcon isActive={isActive} />;
+        return (
+          <motion.div initial={false} animate={{ scale: isActive ? 1.1 : 1 }} transition={{ duration: 0.3 }}>
+            <CodeIcon isActive={isActive} />
+          </motion.div>
+        );
       case 'projects': 
         return (
           <motion.div
             initial={false}
-            animate={isActive ? { scale: [1, 1.1, 1] } : {}}
+            animate={{ scale: isActive ? 1.1 : 1 }}
             transition={{ duration: 0.3 }}
           >
             {isActive ? <FaFolderOpen size={18} /> : <FaFolder size={18} />}
@@ -95,7 +116,7 @@ const Navbar: React.FC = () => {
               rotate: [0, -6, 6, -6, 6, 0],
               x: [0, -1.5, 1.5, -1.5, 1.5, 0],  
               y: [0, -0.5, 0.5, -0.5, 0.5, 0],  
-              scale: [1, 1.03, 1],  
+              scale: isActive ? 1.1 : 1
             } : { rotate: 0, x: 0, y: 0, scale: 1 }}
             transition={{ 
               duration: 0.36, 
