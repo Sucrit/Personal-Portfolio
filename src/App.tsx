@@ -282,13 +282,11 @@ function App() {
 
   return (
     <>
-      {!isLoaded && <LoadingScreen onLoadComplete={handleLoadComplete} />}
       <FantasyBackground />
       <Navbar />
       <main style={{ position: 'relative', zIndex: 1, width: '100%', visibility: isLoaded ? 'visible' : 'hidden' }}>
-
-      <section id="hero" style={{ paddingTop: '160px', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-        <div className="container hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+        <section id="hero" style={{ paddingTop: '160px', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+          <div className="container hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <motion.div 
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -790,6 +788,7 @@ function App() {
             </div>
           </footer>
       </main>
+      {!isLoaded && <LoadingScreen onLoadComplete={handleLoadComplete} />}
     </>
   )
 }

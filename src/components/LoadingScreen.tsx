@@ -117,8 +117,25 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
     startLoading();
   }, [startLoading]);
 
+  // Inline styles as backup for critical layout properties to ensure visibility even if CSS loads late
+  const backupStyles: React.CSSProperties = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    zIndex: 9999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#0b1026',
+    transition: 'opacity 0.5s ease-out',
+    opacity: fadeOut ? 0 : 1,
+    pointerEvents: fadeOut ? 'none' : 'auto'
+  };
+
   return (
-    <div className={`loading-screen ${fadeOut ? 'loading-screen--fade-out' : ''}`}>
+    <div className={`loading-screen ${fadeOut ? 'loading-screen--fade-out' : ''}`} style={backupStyles}>
       <div className="loading-content">
         <div className="loading-name">Oliver</div>
         <div className="loading-bar-track">
