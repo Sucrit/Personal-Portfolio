@@ -37,6 +37,8 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({ images, alt }) => {
              src={src}
              alt={`${alt} ${currentIndex + 1}`}
              className="phone-screen"
+             loading="eager"
+             fetchPriority="high"
            />
         </div>
       ) : (
@@ -44,6 +46,8 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({ images, alt }) => {
           src={src}
           alt={`${alt} ${currentIndex + 1}`}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          loading="eager"
+          fetchPriority="high"
         />
       )}
 
