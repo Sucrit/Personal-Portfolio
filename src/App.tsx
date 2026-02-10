@@ -426,7 +426,7 @@ function App() {
                   <div className="about-lore-text" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: '#e2e8f0', fontSize: '1.05rem', lineHeight: '1.6' }}>
                     <div>
                       <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>Who am I:</strong>
-                      <span>A <strong style = {{color: '#fff'}}>22</strong> years old <strong style = {{color: '#fff'}}>3rd year BSIT student</strong> at the <strong style = {{color: '#fff'}}>University of Pangasinan</strong> who likes messing around with technology.</span>
+                      <span>A <strong style = {{color: '#fff'}}>22</strong> years old 3rd year <strong style = {{color: '#fff'}}>BSIT</strong> student at the <strong style = {{color: '#fff'}}>University of Pangasinan</strong> who likes messing around with technology.</span>
                     </div>
                     <div>
                       <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>What I do:</strong>

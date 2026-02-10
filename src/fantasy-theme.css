@@ -29,13 +29,17 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   position: relative;
+  min-height: 100vh;
 }
 
 html {
   overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
+  background-color: var(--bg-color);
 }
 
 a {
