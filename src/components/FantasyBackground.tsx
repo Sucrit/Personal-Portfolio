@@ -517,9 +517,18 @@ const FantasyBackground: React.FC = () => {
      return { outer: outerPath, inner: innerPath, core: corePath };
   });
 
-  const outerBeamPath = useTransform(beamValues, v => v.outer);
   const innerBeamPath = useTransform(beamValues, v => v.inner);
   const coreBeamPath = useTransform(beamValues, v => v.core);
+
+  // Dynamic beam length for gradients with max range clamping
+  const beamLength = useTransform([mouseX, mouseY], ([mx, my]) => {
+     if (!lhCx || !lhCy) return 0;
+     const dx = (mx as number) - lhCx;
+     const dy = (my as number) - lhCy;
+     const dist = Math.sqrt(dx*dx + dy*dy);
+     
+     return Math.min(dist * 1.05, 1050); 
+  });
 
   // Splash Opacity - Fades out if cursor is too far (Range Limit)
   const splashOpacity = useTransform([mouseX, mouseY], ([mx, my]) => {
@@ -529,8 +538,8 @@ const FantasyBackground: React.FC = () => {
      const dist = Math.sqrt(dx*dx + dy*dy);
 
     // Define max effective range
-    const maxRange = 1300; 
-    const fadeRange = 400;
+    const maxRange = 1220; 
+    const fadeRange = 300;
      
      if (dist > maxRange) return 0;
      
@@ -554,7 +563,8 @@ const FantasyBackground: React.FC = () => {
         style={{ display: 'block' }}
       >
         <defs>
-          <radialGradient id="lighthouse-glow" cx="50%" cy="50%" r="50%">
+          <radialGradient 
+              id="lighthouse-glow" cx="50%" cy="50%" r="50%">
             {/* Hot white core (lens intensity) */}
             <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
             {/* Warm transition */}
@@ -564,30 +574,35 @@ const FantasyBackground: React.FC = () => {
             <stop offset="100%" stopColor="#ffaa00" stopOpacity="0" />
           </radialGradient>
 
-          {/* Volumetric Beam Gradient (Radial to fade out with distance) */}
-          <radialGradient 
+          {/* Volumetric Beam Gradient - Uses dynamic radius to fade at tip */}
+          <motion.radialGradient 
               id="volumetric-beam-gradient" 
-              cx={lhCx} cy={lhCy} r="1000" 
+              cx={lhCx} cy={lhCy} r={beamLength} 
               gradientUnits="userSpaceOnUse"
           >
             <stop offset="0%" stopColor="#fff" stopOpacity="0.8" />
-            <stop offset="15%" stopColor="#fff8db" stopOpacity="0.5" />
-            <stop offset="60%" stopColor="#ffaa44" stopOpacity="0.1" />
+            <stop offset="20%" stopColor="#fff8db" stopOpacity="0.5" />
+            <stop offset="70%" stopColor="#ffde8a" stopOpacity="0.1" />
             <stop offset="100%" stopColor="#000" stopOpacity="0" />
-          </radialGradient>
+          </motion.radialGradient>
 
-          {/* Core Beam Gradient - Stays white longer but fades out matching the geometry */}
-          <radialGradient 
+          {/* Core Beam Gradient - Concentrated center, fades at tip */}
+          <motion.radialGradient 
               id="core-beam-gradient" 
-              cx={lhCx} cy={lhCy} r="1000" 
+              cx={lhCx} cy={lhCy} r={beamLength} 
               gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-            <stop offset="60%" stopColor="#ffffff" stopOpacity="0.8" />
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+            <stop offset="80%" stopColor="#ffffff" stopOpacity="0.7" />
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-          </radialGradient>
+          </motion.radialGradient>
 
-          {/* CSS blur is GPU-accelerated; SVG filters + mask removed for performance */}
+          {/* Atmospheric Noise & Blur Filter for realistically scattering light */}
+          <filter id="foggy-beam" x="-50%" y="-50%" width="200%" height="200%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.004" numOctaves="4" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" result="displaced" />
+            <feGaussianBlur in="displaced" stdDeviation="12" result="blurred" />
+          </filter>
 
           {/* Static Light Beam Gradient */}
           <linearGradient id="static-beam-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
@@ -783,28 +798,21 @@ const FantasyBackground: React.FC = () => {
                    />
                 </motion.g>
 
-                <motion.path
-                  className="beamLayer"
-                  d={outerBeamPath}
-                  fill="url(#volumetric-beam-gradient)"
-                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(12px)', willChange: 'd' }}
-                  opacity={0.4}
-                />
-                {/* 2. Inner Main Beam (Defined but soft edges) */}
+                {/* 1. Main Beam - Soft but directional */}
                 <motion.path
                   className="beamLayer"
                   d={innerBeamPath}
                   fill="url(#volumetric-beam-gradient)"
-                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(4px)', willChange: 'd' }}
-                  opacity={0.7}
+                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(6px)', willChange: 'd' }}
+                  opacity={0.8}
                 />
-                {/* 3. Core Beam (Bright, sharp center) */}
+                {/* 3. Core Beam - Intense center */}
                 <motion.path
                   className="beamLayer"
                   d={coreBeamPath}
                   fill="url(#core-beam-gradient)"
-                  fillOpacity={0.8}
-                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(2px)', willChange: 'd' }}
+                  fillOpacity={0.9}
+                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(3px)', willChange: 'd' }}
                 />
                 
                 {/* 2. Outer atmospheric halo - Static, realistic haze (reduced brightness) */}

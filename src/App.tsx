@@ -333,7 +333,7 @@ function App() {
             </p>
 
             <div className="contact-actions">
-              <a href="https://mail.google.com/mail/?view=cm&to=smitholiver106@gmail.com" className="contact-btn" title="Compose Email" aria-label="Compose Email" target="_blank" rel="noopener noreferrer">
+              <a href="https://mail.google.com/mail/?view=cm&to=smitholiver106@gmail.com" className="contact-btn" title="Gmail" aria-label="Compose Email" target="_blank" rel="noopener noreferrer">
                 <FaEnvelope />
               </a>
               <a href="https://github.com/Sucrit" className="contact-btn" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
@@ -357,7 +357,7 @@ function App() {
         
         <div className="container">
           <div
-            style={{ textAlign: 'center', marginBottom: '4rem' }}
+            style={{ textAlign: 'center', marginBottom: '1.5rem' }}
           >
             <h2 style={{ fontSize: '3rem', marginBottom: '1rem', textShadow: '0 0 20px rgba(255, 222, 33, 0.2)' }}>About Me</h2>
           </div>
@@ -385,7 +385,7 @@ function App() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: '#e2e8f0', fontSize: '1.05rem', lineHeight: '1.6' }}>
                     <div>
                       <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>Who am I:</strong>
-                      <span>A <strong style = {{color: '#fff'}}>22</strong> years old <strong style = {{color: '#fff'}}>3rd year student</strong> at the <strong style = {{color: '#fff'}}>University of Pangasinan</strong> who likes messing around with technology.</span>
+                      <span>A <strong style = {{color: '#fff'}}>22</strong> years old <strong style = {{color: '#fff'}}>3rd year BSIT student</strong> at the <strong style = {{color: '#fff'}}>University of Pangasinan</strong> who likes messing around with technology.</span>
                     </div>
                     <div>
                       <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>What I do:</strong>
@@ -398,10 +398,6 @@ function App() {
                     <div>
                       <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>My goal:</strong>
                       <span>Climb my way up as a <strong style={{color: '#fff'}}>Cybersecurity expert</strong> and <strong style={{color: '#fff'}}>Backend Engineer</strong> as well as work with law enforcements and security agencies in combating cyber threats.</span>
-                    </div>
-                    <div>
-                      <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>My hobbies:</strong>
-                      <span>Listening to music, watching crime documentaries, interrogations, mysteries and gaming.</span>
                     </div>
                   </div>
                 </div>
