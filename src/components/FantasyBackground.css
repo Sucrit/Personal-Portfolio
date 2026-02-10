@@ -10,8 +10,9 @@
   background: linear-gradient(to bottom, 
     #0b1026 0%, 
     #181c55 35%, 
-    #2b32b2 65%, 
-    #4a6fa5 85%,
+    #2b32b2 55%, 
+    #4a6fa5 70%,
+    #0b1026 85%,
     #0b1026 100%
   );
   z-index: 0;
