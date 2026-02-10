@@ -7,13 +7,6 @@
 
 /* Hero Section */
 @media (max-width: 480px) {
-  /* Fix Mobile Background Jitter due to browser bars resizing */
-  .fantasyContainer {
-    height: 100vh !important;
-    bottom: auto !important;
-    transform: translateZ(0); /* Hardware accelerate to prevent repaint glitches */
-  }
-
   #hero {
     padding-top: 100px !important;
     min-height: 100dvh !important;
