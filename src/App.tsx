@@ -289,14 +289,34 @@ function App() {
       <section id="hero" style={{ paddingTop: '160px', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
         <div className="container hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial="hidden"
+            animate={isLoaded ? "visible" : "hidden"}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.2,
+                  delayChildren: 0.1
+                }
+              }
+            }}
             style={{ maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
           >
-            <LocationBadge />
+            <motion.div variants={{
+              hidden: { opacity: 0, y: -20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+            }}>
+              <LocationBadge />
+            </motion.div>
             
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-mono)' }}>
+            <motion.h1 
+              variants={{
+                hidden: { opacity: 0, scale: 0.9 },
+                visible: { opacity: 1, scale: 1, transition: { type: "spring", bounce: 0.4 } }
+              }}
+              style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '800', fontFamily: 'var(--font-mono)' }}
+            >
               {devName} <motion.div 
                 style={{ display: 'inline-block', originX: 0.7, originY: 0.7 }}
                 whileHover={{ rotate: 18, scale: 1.1 }}
@@ -304,35 +324,54 @@ function App() {
               >
                 <img src="/png1.png" alt="Wave" style={{ height: '0.8em' }} />
               </motion.div>
-            </h1>
+            </motion.h1>
             
-            <div className="tagline" style={{ 
-              fontSize: '1.5rem', 
-              color: '#f8fafc',
-              textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-              marginBottom: '2rem',
-              fontFamily: 'var(--font-mono)' 
-            }}>
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              className="tagline" 
+              style={{ 
+                fontSize: '1.5rem', 
+                color: '#f8fafc',
+                textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                marginBottom: '2rem',
+                fontFamily: 'var(--font-mono)' 
+              }}
+            >
               Backend Dev | Cybersecurity
-            </div>
+            </motion.div>
             
-            <p style={{ 
-              fontSize: '1.1rem', 
-              marginBottom: '.2rem', 
-              maxWidth: '600px', 
-              lineHeight: '1.8', 
-              color: '#f1f5f9',
-              textShadow: '0 2px 4px rgba(0,0,0,0.8)',
-              background: 'rgba(0,0,0,0.2)',
-              backdropFilter: 'blur(4px)',
-              padding: '1rem',
-              borderRadius: '12px',
-              border: '1px solid rgba(255,255,255,0.05)'
-            }}>
+            <motion.p 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              style={{ 
+                fontSize: '1.1rem', 
+                marginBottom: '.2rem', 
+                maxWidth: '600px', 
+                lineHeight: '1.8', 
+                color: '#f1f5f9',
+                textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                background: 'rgba(0,0,0,0.2)',
+                backdropFilter: 'blur(4px)',
+                padding: '1rem',
+                borderRadius: '12px',
+                border: '1px solid rgba(255,255,255,0.05)'
+              }}
+            >
               I'm a 3rd-year BSIT student specialized in <strong style={{color: 'var(--accent-color)'}}>cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>backend</strong> development using <strong style={{color: 'var(--accent-color)'}}>MERN</strong> stack and also have experience with <strong style={{color: 'var(--accent-color)'}}>PHP</strong> and <strong style={{color: 'var(--accent-color)'}}>MySQL</strong>.
-            </p>
+            </motion.p>
 
-            <div className="contact-actions">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              className="contact-actions"
+            >
               <a href="https://mail.google.com/mail/?view=cm&to=smitholiver106@gmail.com" className="contact-btn" title="Gmail" aria-label="Compose Email" target="_blank" rel="noopener noreferrer">
                 <FaEnvelope />
               </a>
@@ -346,7 +385,7 @@ function App() {
                 <FaFileDownload />
                 <span>Download Resume</span>
               </a>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>

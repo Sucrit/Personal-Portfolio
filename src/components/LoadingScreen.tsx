@@ -14,9 +14,21 @@ const CRITICAL_IMAGES = [
   '/Flag_of_the_Philippines.svg',
   '/roomfinder/roomfinder_logo.png',
   '/evacudesk/evacudesk_logo.png',
-  // First image of each project carousel (Critical for initial render)
+  
+  // RoomFinder Carousel Images (All must be preloaded)
   '/roomfinder/mobile1.png',
+  '/roomfinder/mobile2.png',
+  '/roomfinder/ss1.png',
+  '/roomfinder/ss2.png',
+  '/roomfinder/ss3.png',
+
+  // EvacuDesk Carousel Images (All must be preloaded)
   '/evacudesk/adl.png',
+  '/evacudesk/evacudesk.png',
+  '/evacudesk/web1.png',
+  '/evacudesk/ss2.png',
+  '/evacudesk/ss3.png',
+
   // CDN skill icons
   'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
   'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
@@ -66,9 +78,32 @@ interface LoadingScreenProps {
   onLoadComplete: () => void;
 }
 
+const LoadingPhrases = [
+  "Aligning the stars...",
+  "Polishing the moon...",
+  "Summoning pixels...",
+  "Calibrating the lighthouse...",
+  "Gathering stardust...",
+  "Constructing the horizon...",
+  "Building the lighthouse...",
+  "Brewing coffee..."
+];
+
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
   const [progress, setProgress] = useState(0);
   const [fadeOut, setFadeOut] = useState(false);
+  const [currentPhrase, setCurrentPhrase] = useState(LoadingPhrases[0]);
+
+  useEffect(() => {
+    // Pick a random start phrase
+    setCurrentPhrase(LoadingPhrases[Math.floor(Math.random() * LoadingPhrases.length)]);
+    
+    // Cycle phrases every 800ms for a lively feel
+    const interval = setInterval(() => {
+        setCurrentPhrase(LoadingPhrases[Math.floor(Math.random() * LoadingPhrases.length)]);
+    }, 800);
+    return () => clearInterval(interval);
+  }, []);
 
   const startLoading = useCallback(async () => {
     // 1. Minimum display time (2s) to prevent flashing
@@ -137,13 +172,18 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
   return (
     <div className={`loading-screen ${fadeOut ? 'loading-screen--fade-out' : ''}`} style={backupStyles}>
       <div className="loading-content">
-        <div className="loading-name">Oliver</div>
-        <div className="loading-bar-track">
-          <div
-            className="loading-bar-fill"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="loading-star-icon">✦</div>
+        <div className="loading-text">{currentPhrase}</div>
+        
+        <div className="loading-bar-container">
+            <div className="loading-bar-track">
+            <div
+                className="loading-bar-fill"
+                style={{ width: `${progress}%` }}
+            />
+            </div>
         </div>
+        
         <div className="loading-percent">{progress}%</div>
       </div>
     </div>
