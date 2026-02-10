@@ -35,9 +35,7 @@ const FantasyBackground: React.FC = () => {
   useAnimationFrame((_t, delta) => {
     idleRef.current += delta * 0.003; 
     
-    // On mobile, disable scroll-based parallax to prevent background movement
-    const isMobile = window.innerWidth <= 768;
-    const scrollOffset = isMobile ? 0 : scrollY.get() * 0.08; 
+    const scrollOffset = scrollY.get() * 0.08; 
     const x = (idleRef.current + scrollOffset) % 1920;
     starX.set(x);
   });
@@ -560,7 +558,7 @@ const FantasyBackground: React.FC = () => {
         width="100%"
         height="100%"
         viewBox="0 0 1920 1080"
-        preserveAspectRatio="xMidYMax slice"
+        preserveAspectRatio="xMidYMid slice"
         xmlns="http://www.w3.org/2000/svg"
         style={{ display: 'block' }}
       >

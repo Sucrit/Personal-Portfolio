@@ -10,13 +10,16 @@
   background: linear-gradient(to bottom, 
     #0b1026 0%, 
     #181c55 35%, 
-    #2b32b2 55%, 
-    #4a6fa5 70%,
-    #0b1026 85%,
-    #0b1026 100%
+    #2b32b2 65%, 
+    #4a6fa5 100%
   );
   z-index: 0;
   pointer-events: none;
+  /* Ensure full coverage on mobile browsers where 100vh can be
+     smaller than the actual visible area */
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100%;
 }
 
 .fantasyContainer svg {
