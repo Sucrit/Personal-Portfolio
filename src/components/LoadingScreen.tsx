@@ -62,7 +62,7 @@ function preloadImage(src: string): Promise<void> {
       handleLoad();
     } else {
       img.onload = handleLoad;
-      img.onerror = () => resolve(); // Don't block on failures
+      img.onerror = () => resolve();
     }
   });
 }
@@ -95,29 +95,25 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
   const [currentPhrase, setCurrentPhrase] = useState(LoadingPhrases[0]);
 
   useEffect(() => {
-    // Pick a random start phrase
     setCurrentPhrase(LoadingPhrases[Math.floor(Math.random() * LoadingPhrases.length)]);
     
-    // Cycle phrases every 800ms for a lively feel
+    // phases cycle 
     const interval = setInterval(() => {
         setCurrentPhrase(LoadingPhrases[Math.floor(Math.random() * LoadingPhrases.length)]);
-    }, 800);
+    }, 900);
     return () => clearInterval(interval);
   }, []);
 
   const startLoading = useCallback(async () => {
-    // 1. Minimum display time (2s) to prevent flashing
     const minTimePromise = new Promise(resolve => setTimeout(resolve, 2000));
     const fontPromise = waitForFonts();
 
-    // 2. Preload all images
     let loaded = 0;
-    const total = CRITICAL_IMAGES.length + 1; // +1 for fonts
+    const total = CRITICAL_IMAGES.length + 1;
 
     // Helper to update progress smoothly
     const updateProgress = () => {
       loaded++;
-      // We cap the visual progress at 95% until minimum time is met
       const rawPercent = Math.round((loaded / total) * 100);
       setProgress(Math.min(rawPercent, 95));
     };
@@ -126,23 +122,18 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
       preloadImage(src).then(updateProgress)
     );
 
-    // 3. Wait for fonts
     fontPromise.then(updateProgress);
 
-    // Wait for everything: Assets AND Minimum Time
     await Promise.all([
       Promise.all([...imagePromises, fontPromise]),
       minTimePromise
     ]);
 
-    // Force 100% and wait a tick for visual completion
     setProgress(100);
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Trigger fade-out
     setFadeOut(true);
 
-    // Wait for fade-out transition
     setTimeout(() => {
       onLoadComplete();
     }, 800);
@@ -152,7 +143,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
     startLoading();
   }, [startLoading]);
 
-  // Inline styles as backup for critical layout properties to ensure visibility even if CSS loads late
   const backupStyles: React.CSSProperties = {
     position: 'fixed',
     top: 0,

@@ -38,7 +38,6 @@
   transition: transform 0.5s ease-out;
 }
 
-/* Subtle glow at the horizon */
 .glow {
   position: absolute;
   bottom: 0;
