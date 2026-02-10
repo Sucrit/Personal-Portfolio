@@ -538,7 +538,7 @@ const FantasyBackground: React.FC = () => {
      const dist = Math.sqrt(dx*dx + dy*dy);
 
     // Define max effective range
-    const maxRange = 1220; 
+    const maxRange = 1050; 
     const fadeRange = 300;
      
      if (dist > maxRange) return 0;
@@ -558,7 +558,7 @@ const FantasyBackground: React.FC = () => {
         width="100%"
         height="100%"
         viewBox="0 0 1920 1080"
-        preserveAspectRatio="xMidYMax slice"
+        preserveAspectRatio="xMidYMid slice"
         xmlns="http://www.w3.org/2000/svg"
         style={{ display: 'block' }}
       >
