@@ -558,7 +558,7 @@ const FantasyBackground: React.FC = () => {
         width="100%"
         height="100%"
         viewBox="0 0 1920 1080"
-        preserveAspectRatio="xMidYMid slice"
+        preserveAspectRatio="xMidYMax slice"
         xmlns="http://www.w3.org/2000/svg"
         style={{ display: 'block' }}
       >

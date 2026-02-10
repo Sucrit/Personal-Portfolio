@@ -15,11 +15,6 @@
   );
   z-index: 0;
   pointer-events: none;
-  /* Ensure full coverage on mobile browsers where 100vh can be
-     smaller than the actual visible area */
-  min-height: 100vh;
-  min-height: 100dvh;
-  height: 100%;
 }
 
 .fantasyContainer svg {

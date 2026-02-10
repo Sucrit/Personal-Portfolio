@@ -173,7 +173,6 @@
   /* Contact section */
   #contact {
     padding: 20px 0 !important;
-    margin-bottom: 0 !important;
   }
 
   .contact-container {
@@ -198,8 +197,6 @@
   footer {
     font-size: 0.85rem !important;
     padding: 8px 0 !important;
-    margin-bottom: 0 !important;
-    background: var(--bg-secondary, #0b1026) !important;
   }
 
   /* Wave hand / emoji in hero */
