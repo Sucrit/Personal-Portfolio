@@ -803,7 +803,7 @@ function App() {
           <section id="contact" style={{ background: 'var(--card-bg)', padding: '25px 0', marginTop: '0', backdropFilter: 'blur(10px)' }}>
             <div className="container contact-container" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: 500, margin: 0 }}>
-                I’m currently open to remote freelance projects. Reach out below!😄 
+                If you have any questions or just wanna say hi, reach out below!😄 
               </p>
               <div className="contact-icons" style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.5rem' }}>
                 <a href="https://mail.google.com/mail/?view=cm&to=oliverondoy@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Compose Email" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
