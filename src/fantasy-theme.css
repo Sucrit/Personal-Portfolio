@@ -668,18 +668,6 @@ h2 {
   margin-top: 10px; 
 }
 
-.phone-mockup .phone-notch {
-  /* Force perfect circle and consistent rendering inside the mockup */
-  width: 10px !important;
-  height: 10px !important;
-  aspect-ratio: 1 / 1 !important;
-  border-radius: 999px !important;
-  display: block !important;
-  overflow: visible !important;
-  box-shadow: 0 0 8px rgba(255, 235, 128, 0.18) !important;
-  transform: translateX(-50%) !important;
-}
-
 .phone-screen {
   width: 100%;
   height: 100%;
@@ -716,11 +704,13 @@ h2 {
 }
 
 .phone-notch {
+  /* Modern single-dot notch (default/mobile) */
   position: absolute;
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  height: 1px;
+  width: 10px;
+  height: 10px;
   background: radial-gradient(circle at 30% 30%, #fff 0%, #ffec99 20%, rgba(255,255,255,0.05) 100%);
   border-radius: 50%;
   box-shadow: 0 0 8px rgba(255, 235, 128, 0.18), 0 1px 0 rgba(255,255,255,0.03) inset;
