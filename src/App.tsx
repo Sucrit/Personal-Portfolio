@@ -565,8 +565,8 @@ function App() {
                     </motion.div>
 
                     {/* Horizontal Connector Line - Right (White) */}
-                    <div style={{
-                      widclassName="timeline-connector" th: '40px',
+                    <div className="timeline-connector" style={{
+                      width: '40px',
                       height: '2px',
                       background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.95) 100%)',
                       position: 'relative',
@@ -574,8 +574,8 @@ function App() {
                       opacity: 1
                     }}>
                       {/* Node Point */}
-                      <div ref={hsConnectorRef} style={{
-                        position: 'absolute',className="timeline-node" 
+                      <div ref={hsConnectorRef} className="timeline-node" style={{
+                        position: 'absolute',
                         right: '-6px',
                         top: '50%',
                         transform: 'translateY(-50%)',
@@ -645,8 +645,8 @@ function App() {
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                          <img src="/UPANG_Logo.png" alt="University logo" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 6 }} />
-                          <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0className="timeline-school-logo" ', margin: 0, fontWeight: '700' }}>University of Pangasinan</h4>
+                          <img src="/UPANG_Logo.png" alt="University logo" className="timeline-school-logo" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 6 }} />
+                          <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0', margin: 0, fontWeight: '700' }}>University of Pangasinan</h4>
                         </div>
                         <span className="timeline-status-badge" style={{ 
                           fontSize: '0.7rem', 
