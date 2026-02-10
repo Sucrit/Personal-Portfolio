@@ -194,3 +194,24 @@
     display: block;
   }
 }
+
+/* Smaller phones — tighter placement */
+@media (max-width: 380px) {
+  .navbar-container {
+    right: 12px;
+    top: 12px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+  }
+
+  .mobile-menu {
+    width: 220px;
+    padding: 1.5rem;
+  }
+
+  .nav-link-mobile {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+}

@@ -48,11 +48,10 @@ function preloadImage(src: string): Promise<void> {
     img.src = src;
     
     const handleLoad = () => {
-      // Try to decode if supported to ensure it's ready for GPU
       if ('decode' in img) {
         img.decode()
           .then(() => resolve())
-          .catch(() => resolve()); // Fallback if decode fails
+          .catch(() => resolve()); 
       } else {
         resolve();
       }
@@ -79,14 +78,13 @@ interface LoadingScreenProps {
 }
 
 const LoadingPhrases = [
-  "Aligning the stars...",
-  "Polishing the moon...",
-  "Summoning pixels...",
-  "Calibrating the lighthouse...",
-  "Gathering stardust...",
-  "Constructing the horizon...",
+  "Gathering the stars...", 
+  "Building pixels...",
+  "Summoning the moon...",
   "Building the lighthouse...",
-  "Brewing coffee..."
+  "Constructing the horizon...",
+  "Planting the trees...",
+  "Brewing your coffee...",
 ];
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {

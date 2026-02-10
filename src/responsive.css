@@ -249,47 +249,80 @@
   }
 }
 
-/* Very small phones (320px, iPhone SE, etc.) */
-@media (max-width: 340px) {
+/* Very small phones (360px and below) */
+@media (max-width: 360px) {
   .hero-content h1 {
     font-size: 1.6rem !important;
   }
-
+  
+  /* Skills: 2 columns to prevent overflow */
   .skills-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 0.5rem !important;
   }
 
   .skill-item {
-    padding: 0.3rem !important;
+    padding: 0.4rem !important;
   }
 
+  /* Timeline: extremely compact */
   .timeline-snap-item {
-    padding-left: 36px !important;
+    padding-left: 28px !important;
   }
 
   .timeline-center-bar {
-    left: 14px !important;
+    left: 10px !important;
   }
 
   .timeline-light {
-    left: 14px !important;
+    left: 10px !important;
+    width: 10px !important;
+    height: 10px !important;
   }
 
   .timeline-light-trail {
-    left: 14px !important;
+    left: 10px !important;
+    width: 3px !important;
   }
 
   .timeline-node {
-    left: -26px !important;
+    left: -22px !important;
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .timeline-card {
+    padding: 0.75rem !important;
+  }
+
+  .timeline-card h4 {
+    font-size: 0.9rem !important;
   }
 
   .project-content {
-    padding: 1rem !important;
+    padding: 0.75rem !important;
   }
 
   .phone-mockup {
-    width: 100px !important;
-    height: 200px !important;
+    width: 90px !important;
+    height: 180px !important;
+  }
+  
+  .contact-icons {
+    gap: 1rem !important;
+  }
+  
+  .contact-btn {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .about-lore-text {
+    font-size: 0.85rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
   }
 }

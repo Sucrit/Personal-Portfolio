@@ -712,3 +712,26 @@ h2 {
   border-bottom-right-radius: 8px;
   z-index: 2;
 }
+
+/* Small Phone Optimizations */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+  
+  /* Ensure project cards don't overflow */
+  .project-content {
+      padding: 1rem !important;
+  }
+  
+  .project-tech {
+      flex-wrap: wrap;
+      gap: 0.25rem;
+  }
+}
