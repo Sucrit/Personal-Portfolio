@@ -1,0 +1,295 @@
+/* =============================================
+   App.tsx Inline-Style Responsive Overrides
+   
+   These classes are added to elements in App.tsx
+   that use inline styles needing mobile adaptation.
+   ============================================= */
+
+/* Hero Section */
+@media (max-width: 480px) {
+  #hero {
+    padding-top: 100px !important;
+    min-height: 100dvh !important;
+  }
+
+  .hero-content {
+    padding: 0 0.5rem;
+  }
+
+  /* About Section */
+  #about {
+    padding: 60px 0 !important;
+  }
+
+  /* About inner grid — force single column and reduce gap */
+  .about-inner-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  .about-lore-card {
+    padding: 0.75rem !important;
+    border-radius: 10px !important;
+  }
+
+  .about-lore-text {
+    font-size: 0.92rem !important;
+    gap: 1rem !important;
+  }
+
+  .about-lore-text strong {
+    font-size: 1rem !important;
+  }
+
+  /* Educational Background */
+  .edu-heading {
+    font-size: 1.4rem !important;
+  }
+
+  /* Timeline - CRITICAL for mobile */
+  .timeline-scroll-container {
+    min-height: auto !important;
+    gap: 2rem !important;
+    padding: 1rem 0 !important;
+  }
+
+  /* Central vertical bar — shift to left edge for mobile timeline */
+  .timeline-center-bar {
+    left: 20px !important;
+    transform: none !important;
+  }
+
+  /* Moving light on timeline */
+  .timeline-light {
+    left: 20px !important;
+    transform: translateX(-50%) translateY(-50%) !important;
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .timeline-light-trail {
+    left: 20px !important;
+    transform: translateX(-50%) translateY(-100%) !important;
+    width: 4px !important;
+    height: 30px !important;
+  }
+
+  /* Timeline items — stack vertically, full-width cards */
+  .timeline-snap-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding-left: 44px !important;
+    width: 100% !important;
+  }
+
+  /* Hide spacers on mobile */
+  .timeline-spacer {
+    display: none !important;
+  }
+
+  /* Timeline cards — full width */
+  .timeline-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .timeline-card h4 {
+    font-size: 1rem !important;
+  }
+
+  .timeline-card p {
+    font-size: 0.85rem !important;
+  }
+
+  /* Timeline horizontal connector lines */
+  .timeline-connector {
+    display: none !important;
+  }
+
+  /* Timeline node points — reposition to left bar */
+  .timeline-node {
+    position: absolute !important;
+    left: -30px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+
+  /* Status badges */
+  .timeline-status-badge {
+    font-size: 0.6rem !important;
+    padding: 3px 8px !important;
+  }
+
+  /* School logos */
+  .timeline-school-logo {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  /* Skills section */
+  #skills {
+    padding: 60px 0 !important;
+  }
+
+  /* Projects section */
+  #projects {
+    padding: 60px 0 !important;
+  }
+
+  /* Contact section */
+  #contact {
+    padding: 20px 0 !important;
+  }
+
+  .contact-container {
+    max-width: 100% !important;
+    padding: 0 1rem;
+  }
+
+  .contact-container p {
+    font-size: 0.95rem !important;
+  }
+
+  .contact-icons {
+    font-size: 1.3rem !important;
+    gap: 1rem !important;
+  }
+
+  .contact-location {
+    font-size: 0.8rem !important;
+  }
+
+  /* Footer */
+  footer {
+    font-size: 0.85rem !important;
+    padding: 8px 0 !important;
+  }
+
+  /* Wave hand / emoji in hero */
+  .hero-wave-img {
+    height: 0.7em !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  #hero {
+    padding-top: 120px !important;
+  }
+
+  #about {
+    padding: 80px 0 !important;
+  }
+
+  .about-inner-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .timeline-scroll-container {
+    min-height: auto !important;
+    gap: 2.5rem !important;
+  }
+
+  .timeline-center-bar {
+    left: 24px !important;
+    transform: none !important;
+  }
+
+  .timeline-light {
+    left: 24px !important;
+    transform: translateX(-50%) translateY(-50%) !important;
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  .timeline-light-trail {
+    left: 24px !important;
+    transform: translateX(-50%) translateY(-100%) !important;
+  }
+
+  .timeline-snap-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding-left: 52px !important;
+    width: 100% !important;
+  }
+
+  .timeline-spacer {
+    display: none !important;
+  }
+
+  .timeline-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .timeline-connector {
+    display: none !important;
+  }
+
+  .timeline-node {
+    position: absolute !important;
+    left: -34px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+}
+
+/* Landscape orientation on phones */
+@media (max-height: 500px) and (orientation: landscape) {
+  #hero {
+    padding-top: 80px !important;
+    min-height: auto !important;
+  }
+
+  section {
+    padding: 3rem 0 !important;
+  }
+}
+
+/* Very small phones (320px, iPhone SE, etc.) */
+@media (max-width: 340px) {
+  .hero-content h1 {
+    font-size: 1.6rem !important;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  .skill-item {
+    padding: 0.3rem !important;
+  }
+
+  .timeline-snap-item {
+    padding-left: 36px !important;
+  }
+
+  .timeline-center-bar {
+    left: 14px !important;
+  }
+
+  .timeline-light {
+    left: 14px !important;
+  }
+
+  .timeline-light-trail {
+    left: 14px !important;
+  }
+
+  .timeline-node {
+    left: -26px !important;
+  }
+
+  .project-content {
+    padding: 1rem !important;
+  }
+
+  .phone-mockup {
+    width: 100px !important;
+    height: 200px !important;
+  }
+}

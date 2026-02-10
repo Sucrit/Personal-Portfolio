@@ -401,7 +401,9 @@ function App() {
             <h2 style={{ fontSize: '3rem', marginBottom: '1rem', textShadow: '0 0 20px rgba(255, 222, 33, 0.2)' }}>About Me</h2>
           </div>
 
-          <div style={{ 
+          <div 
+          className="about-inner-grid"
+          style={{ 
             display: 'grid', 
             gridTemplateColumns: '1fr', 
             gap: '2.5rem',
@@ -413,7 +415,7 @@ function App() {
               
               {/* Lore Section */}
               <div>
-                <div style={{ 
+                <div className="about-lore-card" style={{ 
                   background: 'rgba(0,0,0,0.2)', 
                   padding: '1rem', 
                   borderRadius: '12px',
@@ -421,7 +423,7 @@ function App() {
                   backdropFilter: 'blur(4px)',
                   boxShadow: 'none'
                 }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: '#e2e8f0', fontSize: '1.05rem', lineHeight: '1.6' }}>
+                  <div className="about-lore-text" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: '#e2e8f0', fontSize: '1.05rem', lineHeight: '1.6' }}>
                     <div>
                       <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>Who am I:</strong>
                       <span>A <strong style = {{color: '#fff'}}>22</strong> years old <strong style = {{color: '#fff'}}>3rd year BSIT student</strong> at the <strong style = {{color: '#fff'}}>University of Pangasinan</strong> who likes messing around with technology.</span>
@@ -445,7 +447,7 @@ function App() {
               {/* Educational Background */}
               <div>
                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
-                   <h3 style={{ fontSize: '1.8rem', color: '#fff', margin: 0 }}>Educational Background</h3>
+                   <h3 className="edu-heading" style={{ fontSize: '1.8rem', color: '#fff', margin: 0 }}>Educational Background</h3>
                 </div>
 
                 {/* Timeline Container */}
@@ -464,7 +466,7 @@ function App() {
                 >
                   
                   {/* Central Vertical Progress Bar */}
-                  <div style={{
+                  <div className="timeline-center-bar" style={{
                     position: 'absolute',
                     left: '50%',
                     top: 0,
@@ -477,7 +479,7 @@ function App() {
                   }} />
   
                   {/* Moving Yellow Light */}
-                  <motion.div 
+                  <motion.div className="timeline-light"
                     style={{
                       position: 'absolute',
                       left: '50%',
@@ -496,7 +498,7 @@ function App() {
                   />
                   
                   {/* Light Trail Effect */}
-                  <motion.div 
+                  <motion.div className="timeline-light-trail"
                     style={{
                       position: 'absolute',
                       left: '50%',
@@ -528,8 +530,7 @@ function App() {
                     }}
                   >
                     {/* High School Card */}
-                    <motion.div 
-                      style={{ 
+                    <motion.div                       className="timeline-card"                      style={{ 
                         width: 'calc(50% - 40px)',
                         background: 'rgba(0,0,0,0.2)',
                         padding: '1rem',
@@ -542,7 +543,7 @@ function App() {
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                          <img src="/BIS_Logo.png" alt="High School logo" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 6 }} />
+                          <img src="/BIS_Logo.png" alt="High School logo" className="timeline-school-logo" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 6 }} />
                           <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0', margin: 0, fontWeight: '600' }}>Bugallon Integrated School</h4>
                         </div>
                         <span style={{ 
@@ -565,7 +566,7 @@ function App() {
 
                     {/* Horizontal Connector Line - Right (White) */}
                     <div style={{
-                      width: '40px',
+                      widclassName="timeline-connector" th: '40px',
                       height: '2px',
                       background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.95) 100%)',
                       position: 'relative',
@@ -574,7 +575,7 @@ function App() {
                     }}>
                       {/* Node Point */}
                       <div ref={hsConnectorRef} style={{
-                        position: 'absolute',
+                        position: 'absolute',className="timeline-node" 
                         right: '-6px',
                         top: '50%',
                         transform: 'translateY(-50%)',
@@ -588,7 +589,7 @@ function App() {
                     </div>
 
                     {/* Spacer for right side */}
-                    <div style={{ width: 'calc(50% - 40px)' }} />
+                    <div className="timeline-spacer" style={{ width: 'calc(50% - 40px)' }} />
                   </div>
 
                   {/* College - Bottom Right */}
@@ -604,10 +605,10 @@ function App() {
                     }}
                   >
                     {/* Spacer for left side */}
-                    <div style={{ width: 'calc(50% - 40px)' }} />
+                    <div className="timeline-spacer" style={{ width: 'calc(50% - 40px)' }} />
 
                     {/* Horizontal Connector Line - Left (White) */}
-                    <div style={{
+                    <div className="timeline-connector" style={{
                       width: '40px',
                       height: '2px',
                       background: 'linear-gradient(90deg, rgba(255,255,255,0.95) 0%, transparent 100%)',
@@ -616,7 +617,7 @@ function App() {
                       opacity: 1
                     }}>
                       {/* Node Point */}
-                      <div ref={collegeConnectorRef} style={{
+                      <div ref={collegeConnectorRef} className="timeline-node" style={{
                         position: 'absolute',
                         left: '-6px',
                         top: '50%',
@@ -631,8 +632,7 @@ function App() {
                     </div>
 
                     {/* College Card */}
-                    <motion.div 
-                      style={{ 
+                    <motion.div                       className="timeline-card"                      style={{ 
                         width: 'calc(50% - 40px)',
                         background: 'rgba(0,0,0,0.2)',
                         padding: '1rem',
@@ -646,9 +646,9 @@ function App() {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                           <img src="/UPANG_Logo.png" alt="University logo" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 6 }} />
-                          <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0', margin: 0, fontWeight: '700' }}>University of Pangasinan</h4>
+                          <h4 style={{ fontSize: '1.25rem', color: '#e2e8f0className="timeline-school-logo" ', margin: 0, fontWeight: '700' }}>University of Pangasinan</h4>
                         </div>
-                        <span style={{ 
+                        <span className="timeline-status-badge" style={{ 
                           fontSize: '0.7rem', 
                           padding: '5px 14px', 
                           background: 'var(--accent-color)', 
@@ -802,16 +802,16 @@ function App() {
 
           {/* Contact Section */}
           <section id="contact" style={{ background: 'var(--card-bg)', padding: '25px 0', marginTop: '0', backdropFilter: 'blur(10px)' }}>
-            <div className="container" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="container contact-container" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: 500, margin: 0 }}>
                 I’m currently open to remote freelance projects. Reach out below!😄 
               </p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.5rem' }}>
+              <div className="contact-icons" style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.5rem' }}>
                 <a href="https://mail.google.com/mail/?view=cm&to=smitholiver106@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Compose Email" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
                 <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-primary)' }}><FaGithub /></a>
                 <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--text-primary)' }}><FaLinkedin /></a>
               </div>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', opacity: 0.8 }}>
+              <div className="contact-location" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', opacity: 0.8 }}>
                 <FaMapMarkerAlt style={{ marginRight: 6 }} /> Pangasinan, Philippines
               </div>
             </div>
