@@ -1,5 +1,5 @@
 # DEPLOYED
-View my small personal website portfolio at sample.com
+View my small personal website portfolio at https://sucrit-github-89lnv7crq-sucrits-projects.vercel.app/
 
 ## DEVELOPMENT
 Developed using React, Vite, TypeScript, and Framer Motion.
