@@ -29,11 +29,10 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: visible;
   width: 100%;
   position: relative;
   min-height: 100vh;
-  overscroll-behavior-y: none; /* Prevent bounce/rubber-banding to hide background gaps */
 }
 
 html {
