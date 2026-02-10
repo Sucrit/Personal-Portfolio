@@ -129,7 +129,7 @@
   /* Timeline node points — Centered on the vertical bar */
   .timeline-node {
     position: absolute !important;
-    left: 0 !important; /* Matches strict center of connector */
+    left: 0 !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
     width: 14px !important;

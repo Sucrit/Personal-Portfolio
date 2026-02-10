@@ -14,11 +14,11 @@ const skills = [
     color: '#0051ff',
     description: 'Relational Database',
   },
-  { name: 'PostgreSQL',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-    color: '#336791',
-    description: 'SQL Powerhouse',
-  },
+  // { name: 'PostgreSQL',
+  //   icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+  //   color: '#336791',
+  //   description: 'SQL Powerhouse',
+  // },
   {    name: 'MongoDB',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     color: '#25ff29bb',
@@ -28,7 +28,7 @@ const skills = [
     name: 'Rust',
     icon: '/Rust.png',
     color: '#dea584',
-    description: 'C++ Bff',
+    description: 'C++ doppelganger',
   },
   {
     name: 'JavaScript',
@@ -40,13 +40,13 @@ const skills = [
     name: 'TypeScript',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
     color: '#3178C6',
-    description: 'JavaScript but Better',
+    description: 'JavaScript Plus',
   },
   {
     name: 'Node.js',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
     color: '#37dc31b5',
-    description: 'Server magician',
+    description: 'JavaScript Runtime',
   },
   {
     name: 'Express',
@@ -102,12 +102,12 @@ const skills = [
   //   color: '#d6d3d3',
   //   description: 'Memory Forensics',
   // },
-  {
-    name: 'Python',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-    color: '#3776AB',
-    description: 'All-rounder Language',
-  },
+  // {
+  //   name: 'Python',
+  //   icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+  //   color: '#3776AB',
+  //   description: 'All-rounder Language',
+  // },
 ];
 
 function App() {
@@ -120,7 +120,6 @@ function App() {
   const hsConnectorRef = useRef<HTMLDivElement>(null);
   const collegeConnectorRef = useRef<HTMLDivElement>(null);
   
-  // Store snap points as refs so they update without re-render issues
   const snapPointsRef = useRef({ hs: 23, college: 87 });
   
   // Motion values we control manually for true responsiveness
@@ -372,7 +371,7 @@ function App() {
               }}
               className="contact-actions"
             >
-              <a href="https://mail.google.com/mail/?view=cm&to=smitholiver106@gmail.com" className="contact-btn" title="Gmail" aria-label="Compose Email" target="_blank" rel="noopener noreferrer">
+              <a href="https://mail.google.com/mail/?view=cm&to=oliverondoy@gmail.com" className="contact-btn" title="Gmail" aria-label="Compose Email" target="_blank" rel="noopener noreferrer">
                 <FaEnvelope />
               </a>
               <a href="https://github.com/Sucrit" className="contact-btn" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
@@ -807,7 +806,7 @@ function App() {
                 I’m currently open to remote freelance projects. Reach out below!😄 
               </p>
               <div className="contact-icons" style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.5rem' }}>
-                <a href="https://mail.google.com/mail/?view=cm&to=smitholiver106@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Compose Email" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
+                <a href="https://mail.google.com/mail/?view=cm&to=oliverondoy@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Compose Email" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
                 <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-primary)' }}><FaGithub /></a>
                 <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--text-primary)' }}><FaLinkedin /></a>
               </div>
