@@ -336,7 +336,7 @@ function App() {
               }}
               className="contact-actions"
             >
-              <a href="https://mail.google.com/mail/?view=cm&to=oliverondoy@gmail.com" className="contact-btn" title="Gmail" aria-label="Compose Email" target="_blank" rel="noopener noreferrer">
+              <a href="https://mail.google.com/mail/?view=cm&to=oliver9284928@gmail.com" className="contact-btn" title="Gmail" aria-label="Compose Email" target="_blank" rel="noopener noreferrer">
                 <FaEnvelope />
               </a>
               <a href="https://github.com/Sucrit" className="contact-btn" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
@@ -751,7 +751,7 @@ function App() {
                 If you have any questions or just wanna say hi, reach out below!😄 
               </p>
               <div className="contact-icons" style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', fontSize: '1.5rem' }}>
-                <a href="https://mail.google.com/mail/?view=cm&to=oliverondoy@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Compose Email" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
+                <a href="https://mail.google.com/mail/?view=cm&to=oliver9284928@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Compose Email" style={{ color: 'var(--text-primary)', transition: 'transform 0.2s' }}><FaEnvelope /></a>
                 <a href="https://github.com/Sucrit" target="_blank" rel="noopener noreferrer" aria-label="GitHub" style={{ color: 'var(--text-primary)' }}><FaGithub /></a>
                 <a href="https://ph.linkedin.com/in/oliver-ondoy-3206052a1" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style={{ color: 'var(--text-primary)' }}><FaLinkedin /></a>
               </div>
