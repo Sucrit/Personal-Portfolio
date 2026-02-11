@@ -361,7 +361,7 @@ function App() {
                 border: '1px solid rgba(255,255,255,0.05)'
               }}
             >
-              I'm a 3rd-year BSIT student specialized in <strong style={{color: 'var(--accent-color)'}}>cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>backend</strong> development using <strong style={{color: 'var(--accent-color)'}}>Node.js</strong>,<strong style={{color: 'var(--accent-color)'}}> Express</strong> and <strong style={{color: 'var(--accent-color)'}}>MongoDB</strong> stack and also have experience with <strong style={{color: 'var(--accent-color)'}}>PHP</strong> and <strong style={{color: 'var(--accent-color)'}}>MySQL</strong>.
+              I'm a 3rd-year BSIT student specialized in <strong style={{color: 'var(--accent-color)'}}>cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>backend</strong> development using <strong style={{color: 'var(--accent-color)'}}>Node.js</strong>,<strong style={{color: 'var(--accent-color)'}}> Express</strong> and <strong style={{color: 'var(--accent-color)'}}>MongoDB</strong> and also have experience with <strong style={{color: 'var(--accent-color)'}}>PHP</strong> and <strong style={{color: 'var(--accent-color)'}}>MySQL</strong>.
             </motion.p>
 
             <motion.div 
