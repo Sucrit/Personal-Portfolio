@@ -361,7 +361,7 @@ function App() {
                 border: '1px solid rgba(255,255,255,0.05)'
               }}
             >
-              I'm a 3rd-year BSIT student specialized in <strong style={{color: 'var(--accent-color)'}}>cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>backend</strong> development using <strong style={{color: 'var(--accent-color)'}}>MERN</strong> stack and also have experience with <strong style={{color: 'var(--accent-color)'}}>PHP</strong> and <strong style={{color: 'var(--accent-color)'}}>MySQL</strong>.
+              I'm a 3rd-year BSIT student specialized in <strong style={{color: 'var(--accent-color)'}}>cybersecurity</strong> and <strong style={{color: 'var(--accent-color)'}}>backend</strong> development using <strong style={{color: 'var(--accent-color)'}}>Node.js</strong>,<strong style={{color: 'var(--accent-color)'}}> Express</strong> and <strong style={{color: 'var(--accent-color)'}}>MongoDB</strong> stack and also have experience with <strong style={{color: 'var(--accent-color)'}}>PHP</strong> and <strong style={{color: 'var(--accent-color)'}}>MySQL</strong>.
             </motion.p>
 
             <motion.div 
@@ -429,7 +429,7 @@ function App() {
                     </div>
                     <div>
                       <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>What I do:</strong>
-                      <span>Build secure, scalable backend systems with <strong style = {{color: '#fff'}}>MERN</strong>, <strong style = {{color: '#fff'}}>Laravel</strong>, <strong style = {{color: '#fff'}}>MySQL</strong>, <strong style = {{color: '#fff'}}>RESTful APIs</strong>. I also perform <strong style = {{color: '#fff'}}>Data Recovery</strong> and <strong style = {{color: '#fff'}}>Computer Forensics</strong> as well as run my homelab for <strong style = {{color: '#fff'}}>threat analysis</strong> and <strong style = {{color: '#fff'}}>detection</strong>.</span>
+                      <span>Build secure, scalable backend systems with <strong style = {{color: '#fff'}}>Node.js</strong>,<strong style = {{color: '#fff'}}> Express</strong>,<strong style = {{color: '#fff'}}> MongoDB</strong>, <strong style = {{color: '#fff'}}>Laravel</strong>, <strong style = {{color: '#fff'}}>MySQL</strong>, <strong style = {{color: '#fff'}}>RESTful APIs</strong>. I also perform <strong style = {{color: '#fff'}}>Data Recovery</strong> and <strong style = {{color: '#fff'}}>Computer Forensics</strong> as well as run my homelab for <strong style = {{color: '#fff'}}>threat analysis</strong> and <strong style = {{color: '#fff'}}>detection</strong>.</span>
                     </div>
                     <div>
                       <strong style={{ color: 'var(--accent-color)', fontSize: '1.1rem', display: 'block', marginBottom: '0.4rem' }}>What I'm currently learning:</strong>
