@@ -1,11 +1,6 @@
-/* =============================================
-   App.tsx Inline-Style Responsive Overrides
-   
-   These classes are added to elements in App.tsx
-   that use inline styles needing mobile adaptation.
-   ============================================= */
+/* Responsive overrides */
 
-/* Hero Section */
+/* Hero */
 @media (max-width: 480px) {
   #hero {
     padding-top: 100px !important;
@@ -16,12 +11,10 @@
     padding: 0 0.5rem;
   }
 
-  /* About Section */
   #about {
     padding: 60px 0 !important;
   }
 
-  /* About inner grid — force single column and reduce gap */
   .about-inner-grid {
     grid-template-columns: 1fr !important;
     gap: 1.5rem !important;
@@ -41,26 +34,22 @@
     font-size: 1rem !important;
   }
 
-  /* Educational Background */
   .edu-heading {
     font-size: 1.4rem !important;
   }
 
-  /* Timeline - CRITICAL for mobile */
   .timeline-scroll-container {
     min-height: auto !important;
     gap: 2rem !important;
     padding: 1rem 0 !important;
   }
 
-  /* Central vertical bar — shift to left edge for mobile timeline */
   .timeline-center-bar {
     left: 20px !important;
     width: 4px !important;
     transform: translateX(-50%) !important;
   }
 
-  /* Moving light on timeline */
   .timeline-light {
     left: 20px !important;
     transform: translateX(-50%) translateY(-50%) !important;
@@ -75,7 +64,6 @@
     height: 30px !important;
   }
 
-  /* Timeline items — stack vertically, full-width cards */
   .timeline-snap-item {
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -86,12 +74,10 @@
     margin-bottom: 3rem !important; /* Proper spacing between items */
   }
 
-  /* Hide spacers on mobile */
   .timeline-spacer {
     display: none !important;
   }
 
-  /* Timeline cards — full width and better look */
   .timeline-card {
     width: 100% !important;
     max-width: 100% !important;
@@ -111,7 +97,6 @@
     font-size: 0.9rem !important;
   }
 
-  /* Timeline horizontal connector lines - Make visible for the node */
   .timeline-connector {
     display: block !important;
     position: absolute !important;
@@ -126,7 +111,6 @@
     right: auto !important; /* Reset right/left specificities */
   }
 
-  /* Timeline node points — Centered on the vertical bar */
   .timeline-node {
     position: absolute !important;
     left: 0 !important;
@@ -135,12 +119,10 @@
     width: 14px !important;
     height: 14px !important;
     background: #0b1026 !important;
-    /* border: 2px solid var(--accent-color) !important; */
     box-shadow: 0 0 10px var(--accent-glow) !important;
     right: auto !important;
   }
 
-  /* Status badges repositioning */
   .timeline-status-badge {
     align-self: flex-start;
     margin-top: 0.5rem;
@@ -148,29 +130,24 @@
     letter-spacing: 0.05em;
   }
   
-  /* School logos */
   .timeline-school-logo {
     width: 32px !important;
     height: 32px !important;
   }
   
-  /* Force the connector to always be at the specific place regardless of DOM order */
   .timeline-snap-item > .timeline-connector {
      left: 20px !important;
      right: auto !important;
   }
 
-  /* Skills section */
   #skills {
     padding: 60px 0 !important;
   }
 
-  /* Projects section */
   #projects {
     padding: 60px 0 !important;
   }
 
-  /* Contact section */
   #contact {
     padding: 20px 0 !important;
   }
@@ -193,18 +170,15 @@
     font-size: 0.8rem !important;
   }
 
-  /* Footer */
   footer {
     font-size: 0.85rem !important;
     padding: 8px 0 !important;
   }
 
-  /* Wave hand / emoji in hero */
   .hero-wave-img {
     height: 0.7em !important;
   }
 
-  /* Unify Hero Buttons on Mobile */
   .resume-btn {
     width: 50px !important;
     padding: 0 !important;
@@ -220,7 +194,6 @@
     gap: 1.25rem;
   }
 
-  /* Hide Navbar on small mobile screens */
   .navbar-container {
     display: none !important;
     pointer-events: none !important;
@@ -295,7 +268,7 @@
   }
 }
 
-/* Landscape orientation on phones */
+/* Landscape phones */
 @media (max-height: 500px) and (orientation: landscape) {
   #hero {
     padding-top: 80px !important;
@@ -307,13 +280,12 @@
   }
 }
 
-/* Very small phones (360px and below) */
+/* Small phones */
 @media (max-width: 360px) {
   .hero-content h1 {
     font-size: 1.6rem !important;
   }
   
-  /* Skills: 2 columns to prevent overflow */
   .skills-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 0.5rem !important;
@@ -323,7 +295,6 @@
     padding: 0.4rem !important;
   }
 
-  /* Timeline: extremely compact */
   .timeline-snap-item {
     padding-left: 42px !important;
     margin-bottom: 2rem !important;
@@ -354,7 +325,6 @@
     transform: translate(-50%, -50%) !important;
   }
   
-  /* Connector handling for very small screens */
   .timeline-connector {
       width: 22px !important;
       left: 20px !important;

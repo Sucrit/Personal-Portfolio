@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import './LoadingScreen.css';
 
-// All critical assets that must load before the portfolio is shown
+// Preload assets
 const CRITICAL_IMAGES = [
-  // Local assets
   '/png1.png',
   '/BIS_Logo.png',
   '/UPANG_Logo.png',
@@ -14,22 +13,16 @@ const CRITICAL_IMAGES = [
   '/Flag_of_the_Philippines.svg',
   '/roomfinder/roomfinder_logo.png',
   '/evacudesk/evacudesk_logo.png',
-  
-  // RoomFinder Carousel Images (All must be preloaded)
   '/roomfinder/mobile1.png',
   '/roomfinder/mobile2.png',
   '/roomfinder/ss1.png',
   '/roomfinder/ss2.png',
   '/roomfinder/ss3.png',
-
-  // EvacuDesk Carousel Images (All must be preloaded)
   '/evacudesk/adl.png',
   '/evacudesk/evacudesk.png',
   '/evacudesk/web1.png',
   '/evacudesk/ss2.png',
   '/evacudesk/ss3.png',
-
-  // CDN skill icons
   'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
   'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
   'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
@@ -42,6 +35,7 @@ const CRITICAL_IMAGES = [
   'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
 ];
 
+// Preload helpers
 function preloadImage(src: string): Promise<void> {
   return new Promise((resolve) => {
     const img = new Image();
@@ -87,6 +81,7 @@ const LoadingPhrases = [
   "Brewing your coffee...",
 ];
 
+// Loading UI
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
   const [progress, setProgress] = useState(0);
   const [fadeOut, setFadeOut] = useState(false);
@@ -95,7 +90,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
   useEffect(() => {
     setCurrentPhrase(LoadingPhrases[Math.floor(Math.random() * LoadingPhrases.length)]);
     
-    // phases cycle 
     const interval = setInterval(() => {
         setCurrentPhrase(LoadingPhrases[Math.floor(Math.random() * LoadingPhrases.length)]);
     }, 900);
@@ -109,7 +103,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadComplete }) => {
     let loaded = 0;
     const total = CRITICAL_IMAGES.length + 1;
 
-    // Helper to update progress smoothly
     const updateProgress = () => {
       loaded++;
       const rawPercent = Math.round((loaded / total) * 100);

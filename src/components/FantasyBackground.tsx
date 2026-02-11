@@ -51,7 +51,7 @@ const FantasyBackground: React.FC = () => {
     }));
   }, []);
 
-  // Generate mountain layers
+  // Mountain generation
   const mountainLayers = useMemo(() => {
     const layers = [];
     let seed = 12345;
@@ -80,70 +80,52 @@ const FantasyBackground: React.FC = () => {
       let lighthouseGlow: { cx: number, cy: number, rx: number, ry: number } | null = null;
       let cabinAnimCount = 0; 
       
-      // Move slightly off-screen to ensure full coverage
       while (x <= 1930) {
         let currentAmp = amplitude;
         if (flattenStart && x < 600) {
            currentAmp = amplitude * (x / 600);
         }
 
-        // Create the base mountain curve using multiple sine waves for more natural variance
         const globalShape = Math.sin(x * frequency) * currentAmp 
                           + Math.cos(x * frequency * 2.3) * (currentAmp * 0.4)
                           + Math.sin(x * frequency * 5.7) * (currentAmp * 0.15);
         
-        // Add roughness for jagged rocks
         const noise = (random() - 0.5) * roughness;
         
         const y = baseY + globalShape + noise;
         
-        // CITY LOGIC: Independent of mountain shape
         if (hasCity) {
-           // Right-side Lighthouse Placement Logic
-           // Only 1 lighthouse, on the actual highest peak (calculated at x=1680)
-           // Right-side Lighthouse Placement Logic
-           // Only 1 lighthouse, on the actual highest peak (calculated at x=1680)
            if (!lighthouseBuilt && x >= 1660) {
                 lighthouseBuilt = true;
                 
-                // Dimensions (scaled down ~30%)
                 const lhW = 18; 
                 const lhH = 70;
                 const lhY = y + 5;
 
-                // 1. Foundation / Base (Solid block)
                 let lhPath = `M${x},${lhY} V${lhY-10} H${x+lhW} V${lhY} Z`;
 
-                // 2. Tower Body (Tapered)
                 const towerBaseY = lhY - 10;
                 const towerTopY = lhY - lhH;
                 const insetBot = 2;
                 const insetTop = 5;
                 lhPath += ` M${x+insetBot},${towerBaseY} L${x+insetTop},${towerTopY} H${x+lhW-insetTop} L${x+lhW-insetBot},${towerBaseY} Z`;
 
-                // 3. Gallery (Balcony Platform)
                 const galleryY = towerTopY;
                 const galleryH = 3.5;
                 lhPath += ` M${x+insetTop-1.5},${galleryY} V${galleryY-galleryH} H${x+lhW-insetTop+1.5} V${galleryY} Z`;
 
-                // 4. Lantern Room
                 const lanternW = 8.5;
                 const lanternH = 9.5;
                 const lanternX = x + (lhW - lanternW) / 2;
                 const lanternY = galleryY - galleryH;
                 lhPath += ` M${lanternX},${lanternY} V${lanternY-lanternH} H${lanternX+lanternW} V${lanternY} Z`;
 
-                // 5. Cupola / Roof + Spire
                 const roofY = lanternY - lanternH;
                 lhPath += ` M${lanternX-0.7},${roofY} L${x+lhW/2},${roofY-7} L${lanternX+lanternW+0.7},${roofY} Z`;
                 lhPath += ` M${x+lhW/2},${roofY-7} V${roofY-10} H${x+lhW/2+0.7} V${roofY-7} Z`;
 
-                // Add to buildings array
                 buildings.push({ d: lhPath });
 
-                // --- LIGHTS / WINDOWS ---
-
-                // 1. Entrance Door (Warm glow at base)
                 const doorW = 4.2;
                 const doorH = 7;
                 windows.push({
@@ -151,7 +133,6 @@ const FantasyBackground: React.FC = () => {
                    animationType: 'none', isOn: true, delay: 0, duration: 0
                 });
 
-                // 2. Tower Windows (Ascending)
                 const winW = 2.8;
                 const winH = 3.5;
                 const winX = x + (lhW - winW) / 2;
@@ -164,29 +145,23 @@ const FantasyBackground: React.FC = () => {
                   });
                 });
 
-                // 3. Main Lantern Light (The big one)
                 windows.push({
                    x: lanternX + 0.7, y: lanternY - lanternH + 0.7, w: lanternW - 1.4, h: lanternH - 1.4,
                    animationType: 'none', isOn: true, delay: 0, duration: 0, color: "#fffeb0"
                 });
-                // Store glow info for this lighthouse
                 lighthouseGlow = { cx: x + lhW/2, cy: lanternY - lanternH/2, rx: 40, ry: 40 };
            }
 
-           // Village Lights / Cabins at the bottom of the lighthouse mountain
            if (x > 1500 && x < 1850 && Math.abs(x - 1670) > 40) {
                if (random() > 0.4) {
                    const yOffset = 15 + random() * 50; 
                    
-                   // Spawn 1 to 3 small windows (cabin cluster)
                    const count = Math.floor(1 + random() * 2.5);
                    for(let k=0; k<count; k++) {
                        const spacing = k * (3 + random() * 3);
                        const wSize = 1.8 + random() * 1.5;  
                        
-                       // Determine animation: Only allow 2 to blink slowly
                        let animType: 'none' | 'slowBlink' = 'none';
-                       // Use random chance, but capping at 2 per layer generation
                        if (cabinAnimCount < 2 && random() > 0.85) {
                            animType = 'slowBlink';
                            cabinAnimCount++;
@@ -208,9 +183,7 @@ const FantasyBackground: React.FC = () => {
                }
            }
 
-           // Left-side City Logic
            if (x < 850) {
-           // Very high chance (95%) to place a building
            if (random() > 0.05) {
                const buildingW = 12 + random() * 18; 
                const buildingH = 20 + random() * 45;
@@ -219,18 +192,15 @@ const FantasyBackground: React.FC = () => {
                let buildingPath = "";
                const buildType = random();  
 
-               // Helper to add window with animation data
                const pushWindow = (wx: number, wy: number, ww: number, wh: number) => {
                   const rand = random();
-                  // 50% chance to be completely off (dark)
                   const isOn = rand > 0.5;
                   
-                  // If ON, chance to animate
                   let animationType: 'none' | 'toggle' | 'flicker' = 'none';
                   if (isOn) {
                       const animRand = random();
-                      if (animRand > 0.7) animationType = 'flicker'; // Increased to 30% flickering
-                      else if (animRand > 0.4) animationType = 'toggle'; // ~30% breathing
+                          if (animRand > 0.7) animationType = 'flicker';
+                          else if (animRand > 0.4) animationType = 'toggle';
                   }
 
                         windows.push({
@@ -242,16 +212,13 @@ const FantasyBackground: React.FC = () => {
                         });
                };
 
-               // Style 1: Stepped Skyscraper (0.0 - 0.3)
                if (buildType < 0.3 && buildingH > 30) {
                    const stepH = buildingH * 0.4;
                    const topW = buildingW * 0.6;
                    const margin = (buildingW - topW) / 2;
                    
-                   // Base rect
                    buildingPath += `M${x},${groundY} V${groundY - (buildingH - stepH)} H${x + margin} V${groundY - buildingH} H${x + buildingW - margin} V${groundY - (buildingH - stepH)} H${x + buildingW} V${groundY} Z`;
                    
-                   // Windows (100% fill)
                    const rows = Math.floor((buildingH - stepH)/5);
                    const cols = Math.floor(buildingW/4);
                    for(let r=0; r<rows; r++) {
@@ -260,13 +227,10 @@ const FantasyBackground: React.FC = () => {
                        }
                    }
                }
-               // Style 2: Spire / Antenna (0.3 - 0.5)
                else if (buildType < 0.5) {
                    const antennaH = 10 + random() * 10;
-                   // Body + thin line on top
                    buildingPath += `M${x},${groundY} V${groundY - buildingH} H${x + buildingW/2 - 1} V${groundY - buildingH - antennaH} H${x + buildingW/2 + 1} V${groundY - buildingH} H${x+buildingW} V${groundY} Z`;
                    
-                   // Windows (100% fill)
                    const rows = Math.floor(buildingH/5);
                    const cols = Math.floor(buildingW/4);
                    for(let r=0; r<rows; r++) {
@@ -275,19 +239,14 @@ const FantasyBackground: React.FC = () => {
                        }
                    }
                }
-               // Style 3: Slanted Roof (0.5 - 0.7)
                else if (buildType < 0.7) {
                    const shortH = buildingH * 0.8;
-                   // L-R slant or R-L slant
                    if (random() > 0.5) {
-                       // Left higher
                        buildingPath += `M${x},${groundY} V${groundY - buildingH} L${x + buildingW},${groundY - shortH} V${groundY} Z`;
                    } else {
-                       // Right higher
                        buildingPath += `M${x},${groundY} V${groundY - shortH} L${x + buildingW},${groundY - buildingH} V${groundY} Z`;
                    }
                    
-                   // Windows (100% fill)
                    const rows = Math.floor(shortH/5);
                    const cols = Math.floor(buildingW/4);
                    for(let r=0; r<rows; r++) {
@@ -296,11 +255,9 @@ const FantasyBackground: React.FC = () => {
                        }
                    }
                }
-               // Style 4: Standard Box (Default)
                else {
                    buildingPath += `M${x},${groundY} V${groundY - buildingH} H${x + buildingW} V${groundY} Z`;
                    
-                   // Windows (100% fill)
                    const rows = Math.floor(buildingH/6);
                    const cols = Math.floor(buildingW/5);
                    for(let r=0; r<rows; r++) {
@@ -310,20 +267,16 @@ const FantasyBackground: React.FC = () => {
                    }
                }
                
-               // Add the path object
                buildings.push({ d: buildingPath });
            }
         }
       }
 
       let effectiveTreeH = treeHeight;
-        
-        // small, detailed forest to the lighthouse mountain (Layer 2)
         if (hasCity && x > 850) {
            effectiveTreeH = 6; 
         }
 
-        // Add trees if this layer has them (or if we forced them above)
         if (effectiveTreeH > 0) {
           const baseW = effectiveTreeH * (0.6 + random() * 0.5);
           const treeW = Math.max(3, baseW);
@@ -333,10 +286,8 @@ const FantasyBackground: React.FC = () => {
           
           const segments = Math.floor(treeH / 2.5) + 3;
           
-          // Start at base left corner
           d += ` L${x},${y}`; 
           
-          // Left side (climbing up)
           for (let i = 0; i < segments; i++) {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
@@ -344,24 +295,17 @@ const FantasyBackground: React.FC = () => {
             const currentY = y - treeH * ratio;
             const nextY = y - treeH * nextRatio;
             
-            // Curved taper for spruce/pine look (Power curve)
             const currentHalfW = (treeW / 2) * Math.pow(1 - ratio, 1.15);
             const nextHalfW = (treeW / 2) * Math.pow(1 - nextRatio, 1.15);
 
-            // Jitter for organic unevenness
             const jitter = (random() - 0.5) * 1.5; 
             
-            // Next Tip (Branch End)
             const nextTipX = centerX - (nextHalfW + jitter);
 
-            // "Notch" - the indent between branch layers
             if (i === 0) {
-              // FIX: Skip inward notch for the base segment to avoid "floating" look.
-              // Connect strictly to the next tip.
               d += ` L${nextTipX},${nextY}`;
             } else {
               const notchY = currentY - (currentY - nextY) * (0.35 + random() * 0.2);
-              // Indent is relative to the width at that height
               const indentFactor = 0.5 + random() * 0.25; 
               const notchX = centerX - (currentHalfW * indentFactor + jitter); 
               
@@ -370,10 +314,8 @@ const FantasyBackground: React.FC = () => {
             }
           }
           
-          // Apex / Top Point
           d += ` L${centerX},${y - treeH}`;
 
-          // Right side (climbing down)
           for (let i = segments - 1; i >= 0; i--) {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
@@ -387,9 +329,7 @@ const FantasyBackground: React.FC = () => {
             
             const bottomTipX = centerX + (currentHalfW + jitter);
 
-            // Notch logic mirrored
             if (i === 0) {
-               // Skip inward notch at base
                d += ` L${bottomTipX},${currentY}`;
             } else {
                const notchY = currentY - (currentY - nextY) * (0.35 + random() * 0.2);
@@ -403,7 +343,6 @@ const FantasyBackground: React.FC = () => {
 
           x += treeW * density; 
         } else {
-          // CITY TWEAK: Smaller steps in city area = more buildings
           const step = (hasCity && x < 850) ? 8 : 20;
           x += step;
           d += ` L${x},${y}`;
@@ -414,7 +353,6 @@ const FantasyBackground: React.FC = () => {
       return { d, windows, buildings, lighthouseGlow };
     };
 
-    // Layer 2: Distant Ridges - Smoother with City
     const l2 = createPath(790, 110, 4, 0, 0.0025, 1.0, true, true);
     layers.push({
       d: l2.d,
@@ -425,7 +363,6 @@ const FantasyBackground: React.FC = () => {
       lighthouseGlow: l2.lighthouseGlow   
     });
 
-    // Layer 3: Mid-ground - Rolling hills with distant tiny trees
     layers.push({
       d: createPath(820, 70, 10, 20, 0.0035, 0.8).d,  
       windows: [],
@@ -434,7 +371,6 @@ const FantasyBackground: React.FC = () => {
       key: 'layer3'
     });
 
-    // Layer 4: Near Hills - Distinct forest silhouette
     layers.push({
       d: createPath(920, 50, 5, 45, 0.003, 0.7).d,  
       windows: [],
@@ -443,7 +379,6 @@ const FantasyBackground: React.FC = () => {
       key: 'layer4'
     });
 
-    // Layer 5: Foreground - Close up detailed trees
     layers.push({
       d: createPath(1020, 30, 5, 80, 0.004, 0.65).d,  
       windows: [],
@@ -455,21 +390,19 @@ const FantasyBackground: React.FC = () => {
     return layers;
   }, []);
 
-  // Calculate dynamic beam path based on mouse position
+  // Beam math
   const lhLayer = mountainLayers.find(l => l.lighthouseGlow);
   const lhCx = lhLayer?.lighthouseGlow?.cx || 0;
   const lhCy = lhLayer?.lighthouseGlow?.cy || 0;
 
-  // Calculate beam paths - Returns an object, so we need to split it for Framer Motion
-  const beamValues = useTransform([mouseX, mouseY], ([mx, my]) => {
-     if (!lhCx || !lhCy) return { outer: "", inner: "", core: "" };
+    const beamValues = useTransform([mouseX, mouseY], ([mx, my]) => {
+      if (!lhCx || !lhCy) return { inner: "", core: "" };
      
      const dx = (mx as number) - lhCx;
      const dy = (my as number) - lhCy;
      const dist = Math.sqrt(dx*dx + dy*dy);
      
-     // Beam shouldn't render if very close (avoids glitches)
-     if (dist < 5) return { outer: "", inner: "", core: "" };
+    if (dist < 5) return { inner: "", core: "" };
 
      const angle = Math.atan2(dy, dx);
      const perpAngle = angle + Math.PI / 2;
@@ -479,24 +412,20 @@ const FantasyBackground: React.FC = () => {
      const endX = lhCx + Math.cos(angle) * geometryDist;
      const endY = lhCy + Math.sin(angle) * geometryDist;
 
-     // Helper to build a cone path
      const getPath = (startW: number, endWBase: number) => { 
         const oxStart = Math.cos(perpAngle) * (startW / 2);
         const oyStart = Math.sin(perpAngle) * (startW / 2);
         
-        // Width also grows with distance
         const endW = endWBase * 1.4; 
         
         const oxEnd = Math.cos(perpAngle) * (endW / 2);
         const oyEnd = Math.sin(perpAngle) * (endW / 2);
 
-        // Start from lighthouse
         const pStart1x = lhCx + oxStart;
         const pStart1y = lhCy + oyStart;
         const pStart2x = lhCx - oxStart;
         const pStart2y = lhCy - oyStart;
 
-        // End point
         const pEnd1x = endX + oxEnd;
         const pEnd1y = endY + oyEnd;
         const pEnd2x = endX - oxEnd;
@@ -505,22 +434,17 @@ const FantasyBackground: React.FC = () => {
         return `M${pStart1x},${pStart1y} L${pEnd1x},${pEnd1y} L${pEnd2x},${pEnd2y} L${pStart2x},${pStart2y} Z`;
      };
 
-     // 1. Outer Haze (Wide, soft)
-     const outerPath = getPath(10, 150 + dist * 0.15);
-
-     // 2. Inner Beam (Brighter main body)
      const innerPath = getPath(6, 60 + dist * 0.08);
 
-     // 3. Core Hotline (Intense center)
      const corePath = getPath(2, 5 + dist * 0.01);
 
-     return { outer: outerPath, inner: innerPath, core: corePath };
+      return { inner: innerPath, core: corePath };
   });
 
   const innerBeamPath = useTransform(beamValues, v => v.inner);
   const coreBeamPath = useTransform(beamValues, v => v.core);
 
-  // 
+  // Beam length
   const beamLength = useTransform([mouseX, mouseY], ([mx, my]) => {
      if (!lhCx || !lhCy) return 0;
      const dx = (mx as number) - lhCx;
@@ -530,20 +454,18 @@ const FantasyBackground: React.FC = () => {
      return Math.min(dist * 1.05, 1050); 
   });
 
-  // Splash Opacity - Fades out if cursor is too far (Range Limit)
+  // Surface glow
   const splashOpacity = useTransform([mouseX, mouseY], ([mx, my]) => {
      if (!lhCx || !lhCy) return 0;
      const dx = (mx as number) - lhCx;
      const dy = (my as number) - lhCy;
      const dist = Math.sqrt(dx*dx + dy*dy);
 
-    // Define max effective range
     const maxRange = 1100; 
     const fadeRange = 300;
      
      if (dist > maxRange) return 0;
      
-     // Smooth fade out as it approaches the limit
      if (dist > maxRange - fadeRange) {
         return 0.9 * (1 - (dist - (maxRange - fadeRange)) / fadeRange);
      }
@@ -565,16 +487,12 @@ const FantasyBackground: React.FC = () => {
         <defs>
           <radialGradient 
               id="lighthouse-glow" cx="50%" cy="50%" r="50%">
-            {/* Hot white core (lens intensity) */}
             <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-            {/* Warm transition */}
             <stop offset="20%" stopColor="#fff4cc" stopOpacity="0.9" />
-            {/* Atmospheric scatter (haze) */}
             <stop offset="50%" stopColor="#ffdd44" stopOpacity="0.4" />
             <stop offset="100%" stopColor="#ffaa00" stopOpacity="0" />
           </radialGradient>
 
-          {/* Volumetric Beam Gradient - Uses dynamic radius to fade at tip */}
           <motion.radialGradient 
               id="volumetric-beam-gradient" 
               cx={lhCx} cy={lhCy} r={beamLength} 
@@ -586,7 +504,6 @@ const FantasyBackground: React.FC = () => {
             <stop offset="100%" stopColor="#000" stopOpacity="0" />
           </motion.radialGradient>
 
-          {/* Core Beam Gradient - Concentrated center, fades at tip */}
           <motion.radialGradient 
               id="core-beam-gradient" 
               cx={lhCx} cy={lhCy} r={beamLength} 
@@ -597,23 +514,9 @@ const FantasyBackground: React.FC = () => {
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </motion.radialGradient>
 
-          {/* Atmospheric Noise & Blur Filter for realistically scattering light */}
-          <filter id="foggy-beam" x="-50%" y="-50%" width="200%" height="200%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.004" numOctaves="4" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" result="displaced" />
-            <feGaussianBlur in="displaced" stdDeviation="12" result="blurred" />
-          </filter>
-
-          {/* Static Light Beam Gradient */}
-          <linearGradient id="static-beam-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
-            <stop offset="0%" stopColor="#fff" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#ffaa00" stopOpacity="0" />
-          </linearGradient>
         </defs>
 
-        {/* Stars Container - seamless loop */}
         <motion.g style={{ x: starX }}>
-          {/* Main set of stars */}
           {stars.map((star) => (
             <circle
               key={`star-${star.id}`}
@@ -626,7 +529,6 @@ const FantasyBackground: React.FC = () => {
               style={{ animationDelay: star.delay }}
             />
           ))}
-          {/* Duplicate set for looping (shifted left) */}
           {stars.map((star) => (
             <circle
               key={`star-clone-${star.id}`}
@@ -641,10 +543,8 @@ const FantasyBackground: React.FC = () => {
           ))}
         </motion.g>
 
-        {/* Shooting Star - always in DOM, CSS handles 8s delay + animation */}
         <g className="shootingStarContainer">
           <defs>
-            {/* Main tail gradient - long fade */}
             <linearGradient id="shooting-star-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
               <stop offset="30%" stopColor="#cfe8ff" stopOpacity="0.05" />
@@ -652,13 +552,11 @@ const FantasyBackground: React.FC = () => {
               <stop offset="85%" stopColor="#dbeeff" stopOpacity="0.5" />
               <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
             </linearGradient>
-            {/* Inner hot-core gradient */}
             <linearGradient id="shooting-star-core" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
               <stop offset="70%" stopColor="#ffffff" stopOpacity="0.3" />
               <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
             </linearGradient>
-            {/* Head radial glow */}
             <radialGradient id="shooting-star-head-glow" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
               <stop offset="40%" stopColor="#ffe8b0" stopOpacity="0.8" />
@@ -666,7 +564,6 @@ const FantasyBackground: React.FC = () => {
             </radialGradient>
           </defs>
 
-          {/* Outer diffuse tail (wide, faint glow) */}
           <path
             className="shootingStarTail"
             d="M0,0 Q60,-3 120,-2 Q160,-1 200,0 Q160,1 120,2 Q60,3 0,0 Z"
@@ -675,7 +572,6 @@ const FantasyBackground: React.FC = () => {
             style={{ filter: 'blur(3px)' }}
           />
 
-          {/* Inner bright core tail (thin, sharp) */}
           <path
             d="M60,0 Q120,-0.8 180,-0.5 L200,0 Q180,0.5 120,0.8 Q60,0 60,0 Z"
             fill="url(#shooting-star-core)"
@@ -683,14 +579,12 @@ const FantasyBackground: React.FC = () => {
             style={{ filter: 'blur(1.5px)' }}
           />
 
-          {/* Micro debris particles trailing behind */}
           <circle className="shootingDebris debris1" cx="40" cy="-2" r="0.6" fill="#ffffff" opacity="0.5" />
           <circle className="shootingDebris debris2" cx="70" cy="3" r="0.4" fill="#cfe8ff" opacity="0.4" />
           <circle className="shootingDebris debris3" cx="95" cy="-3.5" r="0.5" fill="#ffffff" opacity="0.35" />
           <circle className="shootingDebris debris4" cx="130" cy="2.5" r="0.35" fill="#a5d8ff" opacity="0.45" />
           <circle className="shootingDebris debris5" cx="155" cy="-1.5" r="0.3" fill="#ffffff" opacity="0.3" />
 
-          {/* Bright head glow (soft, warm) */}
           <circle
             className="shootingStarHead"
             cx="200"
@@ -701,7 +595,6 @@ const FantasyBackground: React.FC = () => {
             opacity="0.6"
           />
 
-          {/* Hot white core of the head */}
           <circle
             cx="200"
             cy="0"
@@ -712,15 +605,11 @@ const FantasyBackground: React.FC = () => {
           />
         </g>
 
-        {/* Crescent Moon */}
         <g className="moon" transform="translate(1500, 350)">
-          {/* Moon Color */}
           <circle cx="0" cy="0" r="80" fill="#feffdf" />
-          {/* Moon Shadow */}
           <circle cx="-25" cy="-25" r="70" fill="#0b1026" />
         </g>
 
-        {/* Render Generated Layers */}
         {mountainLayers.map((layer) => (
           <React.Fragment key={layer.key}>
             <path
@@ -728,7 +617,6 @@ const FantasyBackground: React.FC = () => {
               fill={layer.fill}
               className="landscapeLayer"
             />
-            {/* Render Buildings separately on top of mountain */}
             {(layer as any).buildings?.map((b: any, i: number) => (
                <path
                  key={`build-${layer.key}-${i}`}
@@ -737,7 +625,6 @@ const FantasyBackground: React.FC = () => {
                  className="landscapeLayer"
                />
             ))}
-            {/* Render Windows */}
             {(layer as any).windows?.map((w: any, i: number) => (
                <rect
                  key={`win-${layer.key}-${i}`}
@@ -745,7 +632,7 @@ const FantasyBackground: React.FC = () => {
                  y={w.y}
                  width={w.w}
                  height={w.h}
-                 rx={w.isCabin ? 0.5 : 0} // Soft corners for cabins
+                 rx={w.isCabin ? 0.5 : 0}
                  fill={w.isOn ? (w.color || "#fff6a9") : layer.fill} 
                  opacity={w.isOn ? (w.animationType !== 'none' ? undefined : 0.8) : 1}
                  className="cityWindow"
@@ -757,18 +644,15 @@ const FantasyBackground: React.FC = () => {
                      animationIterationCount: 'infinite',
                      animationFillMode: 'both',
                      willChange: 'opacity',
-                     filter: w.isCabin ? 'blur(0.4px)' : 'none' 
+                     filter: w.isCabin ? 'blur(0.4px)' : 'none'
                  } : {}}
                />
             ))}
-            {/* Lighthouse Glow (if present) */}
             {layer.lighthouseGlow && (
               <g className="lighthouseContainer">
-                {/* 0. Ground Splash Light (Terrain Illumination) */}
                 <defs>
                    <clipPath id={`clip-${layer.key}`}>
                        <path d={layer.d} />
-                       {/* Include buildings in the clip path so light hits them too */}
                        {(layer as any).buildings?.map((b: any, i: number) => (
                            <path key={`clip-build-${i}`} d={b.d} />
                        ))}
@@ -778,7 +662,6 @@ const FantasyBackground: React.FC = () => {
                     style={{ opacity: splashOpacity, mixBlendMode: 'overlay' }} 
                     clipPath={`url(#clip-${layer.key})`}
                 >
-                   {/* Wide soft glow on the surface */}
                    <motion.ellipse
                       cx={mouseX}
                       cy={mouseY}
@@ -787,7 +670,6 @@ const FantasyBackground: React.FC = () => {
                       fill="url(#lighthouse-glow)"
                       style={{ filter: 'blur(10px)', pointerEvents: 'none', willChange: 'cx, cy' }}
                    />
-                   {/* Intense impact point */}
                    <motion.ellipse
                       cx={mouseX}
                       cy={mouseY}
@@ -798,7 +680,6 @@ const FantasyBackground: React.FC = () => {
                    />
                 </motion.g>
 
-                {/* 1. Main Beam - Soft but directional */}
                 <motion.path
                   className="beamLayer"
                   d={innerBeamPath}
@@ -806,7 +687,6 @@ const FantasyBackground: React.FC = () => {
                   style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(6px)', willChange: 'd' }}
                   opacity={0.8}
                 />
-                {/* 3. Core Beam - Intense center */}
                 <motion.path
                   className="beamLayer"
                   d={coreBeamPath}
@@ -815,7 +695,6 @@ const FantasyBackground: React.FC = () => {
                   style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(3px)', willChange: 'd' }}
                 />
                 
-                {/* 2. Outer atmospheric halo - Static, realistic haze (reduced brightness) */}
                 <ellipse
                   cx={layer.lighthouseGlow.cx}
                   cy={layer.lighthouseGlow.cy}
@@ -824,7 +703,6 @@ const FantasyBackground: React.FC = () => {
                   fill="url(#lighthouse-glow)"
                   opacity={0.18}
                 />
-                {/* 3. Inner bright core - Lower intensity, smaller size */}
                 <ellipse
                   className="lighthouseCore"
                   cx={layer.lighthouseGlow.cx}

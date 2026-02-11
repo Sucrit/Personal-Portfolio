@@ -7,6 +7,7 @@ import LocationBadge from './components/LocationBadge';
 import ProjectCarousel from './components/ProjectCarousel';
 import LoadingScreen from './components/LoadingScreen';
 
+// Skills data
 const skills = [
   {
     name: 'MySQL',
@@ -14,12 +15,8 @@ const skills = [
     color: '#0051ff',
     description: 'Relational Database',
   },
-  // { name: 'PostgreSQL',
-  //   icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-  //   color: '#336791',
-  //   description: 'SQL Powerhouse',
-  // },
-  {    name: 'MongoDB',
+  {
+    name: 'MongoDB',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     color: '#25ff29bb',
     description: 'NoSQL Goat',
@@ -60,12 +57,6 @@ const skills = [
     color: '#3843debb',
     description: 'Old but Gold',
   },
-  //   {
-  //   name: 'FTK Imager',
-  //   icon: '/ftk.png',
-  //   color: '#0e5aac',
-  //   description: 'Data Forensics',
-  // },
   {
     name: 'Laravel',
     icon: '/Laravel.svg',
@@ -78,12 +69,6 @@ const skills = [
     color: '#0091ff',
     description: 'Containerization',
   },
-  // {
-  //   name: 'Ghidra',
-  //   icon: '/ghidra.svg', 
-  //   color: '#ff5500',
-  //   description: 'Reverse Engineering',
-  // },
   {
     name: 'GitHub',
     icon: '/github-white-icon.svg',
@@ -96,33 +81,22 @@ const skills = [
     color: '#968b0d',
     description: 'Operating System',
   },
-  // {
-  //   name: 'Volatility',
-  //   icon: '/volatility.png',
-  //   color: '#d6d3d3',
-  //   description: 'Memory Forensics',
-  // },
-  // {
-  //   name: 'Python',
-  //   icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-  //   color: '#3776AB',
-  //   description: 'All-rounder Language',
-  // },
 ];
 
 function App() {
+  // Load state
   const [isLoaded, setIsLoaded] = useState(false);
   const handleLoadComplete = useCallback(() => setIsLoaded(true), []);
-  
+
+  // Timeline refs
   const timelineRef = useRef<HTMLDivElement>(null);
-  const highSchoolRef = useRef<HTMLDivElement>(null);
-  const collegeRef = useRef<HTMLDivElement>(null);
   const hsConnectorRef = useRef<HTMLDivElement>(null);
   const collegeConnectorRef = useRef<HTMLDivElement>(null);
-  
+
+  // Timeline snap points
   const snapPointsRef = useRef({ hs: 23, college: 87 });
-  
-  // Motion values we control manually for true responsiveness
+
+  // Timeline motion values
   const lightTopValue = useMotionValue("0%");
   const hsGlowValue = useMotionValue("0px 0px 0px rgba(255,255,255,0)");
   const hsBorderValue = useMotionValue("rgba(255,255,255,0.05)");
@@ -134,7 +108,7 @@ function App() {
     offset: ["start center", "end center"]
   });
 
-  // Recalculate snap points on resize/layout changes
+  // Snap point calculation
   useEffect(() => {
     const calculateSnapPoints = () => {
       if (timelineRef.current && hsConnectorRef.current && collegeConnectorRef.current) {
@@ -163,7 +137,6 @@ function App() {
     }
     
     window.addEventListener('resize', calculateSnapPoints);
-    // Also recalculate after fonts/images load
     window.addEventListener('load', calculateSnapPoints);
 
     return () => {
@@ -182,39 +155,32 @@ function App() {
   // Interpolation helper
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-  // Update motion values reactively based on scroll + current snap points
+  // Timeline motion updates
   useMotionValueEvent(smoothProgress, "change", (progress) => {
     const { hs, college } = snapPointsRef.current;
     const hsP = hs / 100;
     const colP = college / 100;
     
-    // Calculate light position with magnetic snapping
     let lightPercent: number;
     const snapRange = 0.15; 
     
     if (progress < hsP - snapRange) {
-      // Before hs snap zone - interpolate from 0 to hs
       const t = progress / (hsP - snapRange);
       lightPercent = lerp(0, hs, t);
     } else if (progress < hsP + snapRange) {
-      // In hs snap zone - lock to hs
       lightPercent = hs;
     } else if (progress < colP - snapRange) {
-      // Between hs and college - interpolate
       const t = (progress - (hsP + snapRange)) / ((colP - snapRange) - (hsP + snapRange));
       lightPercent = lerp(hs, college, t);
     } else if (progress < colP + snapRange) {
-      // In college snap zone - lock to college
       lightPercent = college;
     } else {
-      // After college snap zone - interpolate to 100
       const t = (progress - (colP + snapRange)) / (1 - (colP + snapRange));
       lightPercent = lerp(college, 100, t);
     }
     
     lightTopValue.set(`${lightPercent}%`);
     
-    // HS glow effect
     const hsDistance = Math.abs(progress - hsP);
     const hsGlowRange = 0.15;
     if (hsDistance < hsGlowRange) {
@@ -228,7 +194,6 @@ function App() {
       hsBorderValue.set("rgba(255,255,255,0.05)");
     }
     
-    // College glow effect
     const collegeDistance = Math.abs(progress - colP);
     const collegeGlowRange = 0.15;
     if (collegeDistance < collegeGlowRange) {
@@ -254,10 +219,9 @@ function App() {
     }
   });
   
-  // Keep light visible throughout the active scrolling phase in the center
   const lightOpacity = useTransform(smoothProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
-  
-  // Trail opacity based on velocity - only visible when moving
+
+  // Timeline trail behavior
   const rawTrailOpacity = useTransform(scrollVelocity, [-0.05, -0.01, 0.01, 0.05], [0.8, 0, 0, 0.8]);
   const trailOpacity = useSpring(rawTrailOpacity, { stiffness: 60, damping: 15 });
 
@@ -281,10 +245,11 @@ function App() {
 
   return (
     <>
+      {/* Page background */}
       <FantasyBackground />
       <Navbar />
       <main style={{ position: 'relative', zIndex: 1, width: '100%', visibility: isLoaded ? 'visible' : 'hidden' }}>
-
+      {/* Hero */}
       <section id="hero" style={{ paddingTop: '160px', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
         <div className="container hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <motion.div 
@@ -389,8 +354,8 @@ function App() {
         </div>
       </section>
 
+      {/* About */}
       <section id="about" style={{ position: 'relative', overflow: 'hidden', padding: '100px 0' }}>
-        {/* Decorative background element for this section */}
         <div style={{ position: 'absolute', top: '20%', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
         
         <div className="container">
@@ -409,10 +374,7 @@ function App() {
             alignItems: 'start'
           }}>
             
-            {/* Right Column: Lore & Questline */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-              
-              {/* Lore Section */}
               <div>
                 <div className="about-lore-card" style={{ 
                   background: 'rgba(0,0,0,0.2)', 
@@ -443,13 +405,11 @@ function App() {
                 </div>
               </div>
 
-              {/* Educational Background */}
               <div>
                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
                    <h3 className="edu-heading" style={{ fontSize: '1.8rem', color: '#fff', margin: 0 }}>Educational Background</h3>
                 </div>
 
-                {/* Timeline Container */}
                 <div 
                   ref={timelineRef}
                   className="timeline-scroll-container"
@@ -464,7 +424,6 @@ function App() {
                   }}
                 >
                   
-                  {/* Central Vertical Progress Bar */}
                   <div className="timeline-center-bar" style={{
                     position: 'absolute',
                     left: '50%',
@@ -477,7 +436,6 @@ function App() {
                     boxShadow: 'none'
                   }} />
   
-                  {/* Moving Yellow Light */}
                   <motion.div className="timeline-light"
                     style={{
                       position: 'absolute',
@@ -496,7 +454,6 @@ function App() {
                     transition={{ type: 'spring', stiffness: 50, damping: 20 }}
                   />
                   
-                  {/* Light Trail Effect */}
                   <motion.div className="timeline-light-trail"
                     style={{
                       position: 'absolute',
@@ -516,9 +473,7 @@ function App() {
                     transition={{ type: 'spring', stiffness: 50, damping: 20 }}
                   />
 
-                  {/* High School - Top Left */}
                   <div 
-                    ref={highSchoolRef}
                     className="timeline-snap-item"
                     style={{ 
                       display: 'flex', 
@@ -528,7 +483,6 @@ function App() {
                       position: 'relative'
                     }}
                   >
-                    {/* High School Card */}
                     <motion.div                       className="timeline-card"                      style={{ 
                         width: 'calc(50% - 40px)',
                         background: 'rgba(0,0,0,0.2)',
@@ -563,7 +517,6 @@ function App() {
                       </div>
                     </motion.div>
 
-                    {/* Horizontal Connector Line - Right (White) */}
                     <div className="timeline-connector" style={{
                       width: '40px',
                       height: '2px',
@@ -572,7 +525,6 @@ function App() {
                       boxShadow: '0 0 8px rgba(255,255,255,0.12)',
                       opacity: 1
                     }}>
-                      {/* Node Point */}
                       <div ref={hsConnectorRef} className="timeline-node" style={{
                         position: 'absolute',
                         right: '-6px',
@@ -587,13 +539,10 @@ function App() {
                       }} />
                     </div>
 
-                    {/* Spacer for right side */}
                     <div className="timeline-spacer" style={{ width: 'calc(50% - 40px)' }} />
                   </div>
 
-                  {/* College - Bottom Right */}
                   <div 
-                    ref={collegeRef}
                     className="timeline-snap-item"
                     style={{ 
                       display: 'flex', 
@@ -603,10 +552,8 @@ function App() {
                       position: 'relative'
                     }}
                   >
-                    {/* Spacer for left side */}
                     <div className="timeline-spacer" style={{ width: 'calc(50% - 40px)' }} />
 
-                    {/* Horizontal Connector Line - Left (White) */}
                     <div className="timeline-connector" style={{
                       width: '40px',
                       height: '2px',
@@ -615,7 +562,6 @@ function App() {
                       boxShadow: '0 0 8px rgba(255,255,255,0.12)',
                       opacity: 1
                     }}>
-                      {/* Node Point */}
                       <div ref={collegeConnectorRef} className="timeline-node" style={{
                         position: 'absolute',
                         left: '-6px',
@@ -630,7 +576,6 @@ function App() {
                       }} />
                     </div>
 
-                    {/* College Card */}
                     <motion.div                       className="timeline-card"                      style={{ 
                         width: 'calc(50% - 40px)',
                         background: 'rgba(0,0,0,0.2)',
@@ -684,6 +629,7 @@ function App() {
         </div>
       </section>
 
+      {/* Skills */}
       <section id="skills">
         <div className="container">
           <h2>Technical Skills</h2>
@@ -719,8 +665,7 @@ function App() {
           </div>
         </div>
       </section>
-
-
+      {/* Projects */}
       <section id="projects">
         <div className="container">
           <h2>Featured Projects</h2>
@@ -799,7 +744,7 @@ function App() {
         </div>
       </section>
 
-          {/* Contact Section */}
+          {/* Contact */}
           <section id="contact" style={{ background: 'var(--card-bg)', padding: '25px 0', marginTop: '0', backdropFilter: 'blur(10px)' }}>
             <div className="container contact-container" style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: 500, margin: 0 }}>

@@ -1,3 +1,4 @@
+/* Container */
 .navbar-container {
   position: fixed;
   top: 50%;
@@ -9,23 +10,20 @@
   padding: 0.6rem 0.35rem 0.6rem 0.15rem; /* reduce left padding to bring icons closer to the edge */
   border-radius: 0 18px 18px 0; /* only round the right side so the left edge aligns with the page */
   
-  /* Persistent subtle glass effect — always slightly transparent and static */
   background: rgba(10, 15, 30, 0.25);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   
-  /* Gradient Border Trick */
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 
     0 4px 6px -1px rgba(0, 0, 0, 0.1), 
     0 2px 4px -1px rgba(0, 0, 0, 0.06),
     inset 0 0 8px rgba(255, 255, 255, 0.02);
     
-  transition: none; /* static */
+  transition: none;
 }
 
 .navbar-container.scrolled {
-  /* Scrolled state disabled — keep same appearance */
   background: rgba(10, 15, 30, 0.25);
   box-shadow: 
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -40,6 +38,7 @@
   justify-content: center;
 }
 
+/* Links */
 .nav-links {
   display: flex;
   flex-direction: column;
@@ -65,7 +64,6 @@
 }
 
 .nav-link:hover {
-  /* Hover disabled for nav icons */
   color: #94a3b8;
   background: transparent;
   transform: none;
@@ -88,39 +86,20 @@
   z-index: 2;
 }
 
-/* Phone SVG sizing */
+/* Phone icon */
 .nav-phone-icon {
   width: 18px;
   height: 18px;
   display: block;
-  /* Match the default color of other icons (#94a3b8) */
   filter: invert(66%) sepia(13%) saturate(452%) hue-rotate(180deg) brightness(91%) contrast(87%);
-  transition: all 0s;
-}
-
-/* Match the active color of other icons (white #fff) */
-.nav-link.active .nav-phone-icon {
-  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255,255,255,0.5));
-}
-
-/* Phone SVG styling */
-.nav-phone-icon {
-  width: 18px;
-  height: 18px;
-  display: block;
   transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
 }
 
-/* Invert black SVG to white when active */
 .nav-link.active .nav-phone-icon {
   filter: invert(1) brightness(2) saturate(0.9);
-}
-
-/* Slight scale on active to match the ringing animation */
-.nav-link.active .nav-phone-icon {
   transform: scale(1.05);
 }
-/* Active indicator hidden to remove yellow highlight when scrolling/selection */
+/* Active indicator */
 .active-indicator {
   display: none;
 }
@@ -136,7 +115,7 @@
   margin-left: 0;
 }
 
-/* Mobile Menu */
+/* Mobile menu */
 .mobile-menu {
   position: fixed;
   top: 0;
@@ -195,7 +174,7 @@
   }
 }
 
-/* Smaller phones — tighter placement */
+/* Small phones */
 @media (max-width: 380px) {
   .navbar-container {
     right: 12px;

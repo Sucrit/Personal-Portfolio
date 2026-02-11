@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaUser, FaFolder, FaFolderOpen, FaHome, FaUserSecret } from 'react-icons/fa';
 import './Navbar.css';
 
+// Icons
 const CodeIcon = ({ isActive }: { isActive: boolean }) => (
   <svg
     width="20"
@@ -20,7 +21,7 @@ const CodeIcon = ({ isActive }: { isActive: boolean }) => (
       x1="14" y1="4" x2="10" y2="20"
       initial={{ pathLength: 0, opacity: 0 }}
       animate={{ pathLength: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
-      transition={{ duration: 0.25 }} // Quick slash
+      transition={{ duration: 0.25 }}
     />
   </svg>
 );
@@ -38,6 +39,7 @@ const AboutIcon = ({ isActive }: { isActive: boolean }) => (
   </div>
 );
 
+// Navbar
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -47,7 +49,6 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      // Scroll Spy Logic
       const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
       let current = '';
 
@@ -55,14 +56,11 @@ const Navbar: React.FC = () => {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // If the top of the section is within the viewport (with some offset)
-          // Relaxed logic for vertical scrolling
           if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
              current = section;
           }
         }
       }
-      // If we're at (or very near) the bottom of the page, activate contact explicitly
       const scrolledToBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 8);
       if (scrolledToBottom) {
         current = 'contact';
@@ -141,8 +139,7 @@ const Navbar: React.FC = () => {
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       <div className="nav-content">
-
-        {/* Desktop Links (Icons Only Side Bar) */}
+        {/* Desktop links */}
         <div className="nav-links">
           {links.map((link) => (
             <a 
@@ -158,7 +155,7 @@ const Navbar: React.FC = () => {
           ))}
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile toggle */}
         <button 
           className="mobile-toggle" 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -167,7 +164,7 @@ const Navbar: React.FC = () => {
           {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
 
-        {/* Mobile Menu */}
+        {/* Mobile menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div

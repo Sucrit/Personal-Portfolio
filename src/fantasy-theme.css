@@ -5,7 +5,7 @@
   --card-border: rgba(100, 150, 255, 0.1);
   --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;
-  --accent-color: #FFDE21; /* Gold */
+  --accent-color: #FFDE21;
   --accent-hover: #FFE44D;
   --accent-glow: rgba(255, 222, 33, 0.2);
   --success-color: #22c55e;
@@ -16,7 +16,7 @@
   --container-width: 1200px;
 }
 
-/* Base Reset */
+/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -86,7 +86,7 @@ h2 {
   margin-bottom: 1rem;
 }
 
-/* Fantasy Card Style */
+/* Cards */
 .fantasy-card {
   background: var(--card-bg);
   backdrop-filter: blur(10px);
@@ -117,7 +117,7 @@ h2 {
     0 0 20px -5px var(--accent-glow) inset;
 }
 
-/* About Section */
+/* About */
 .about-grid {
   max-width: 800px;
   margin: 0 auto;
@@ -130,7 +130,7 @@ h2 {
   line-height: 1.8;
 }
 
-/* Skills Grid */
+/* Skills */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -182,7 +182,7 @@ h2 {
   margin: 0;
 }
 
-/* Projects Grid */
+/* Projects */
 .projects-grid {
   display: flex;
   flex-direction: column;
@@ -209,7 +209,6 @@ h2 {
   position: relative;
 }
 
-/* Hover effects removed to keep project cards static */
 .project-card:hover {
   transform: none;
   box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
@@ -223,7 +222,7 @@ h2 {
   overflow: hidden;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
-  height: 100%; /* fill the card height so images crop to the same size */
+  height: 100%;
 }
 
 .project-image-container::after {
@@ -274,7 +273,6 @@ h2 {
   margin-bottom: 1.5rem;
 }
 
-/* Project-specific tag style: neutral, no yellow */
 .project-tech .tech-tag {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.03);
@@ -288,7 +286,7 @@ h2 {
   width: 1.05rem;
   height: 1.05rem;
   opacity: 0.95;
-  filter: none; /* avoid accidental color changes */
+  filter: none;
 }
 
 .tech-tag {
@@ -320,21 +318,21 @@ h2 {
   object-fit: contain;
 }
 
-/* For invertion of black icons to white in dark mode */
 .tech-tag img.invert-icon {
   filter: brightness(0) invert(1);
 }
 
 .project-card p {
   color: #94a3b8;
-  font-size: 1.25rem; /* Increased for better readability */
+  font-size: 1.25rem;
   margin-bottom: 1.6rem;
   line-height: 1.75;
 }
 
+/* Responsive */
 @media (max-width: 700px) {
   .project-card p {
-    font-size: 1.05rem; /* fallback for small screens */
+    font-size: 1.05rem;
   }
 }
 
@@ -371,7 +369,7 @@ h2 {
   cursor: default;
 }
 
-/* Contact Styles */
+/* Contact */
 .contact-actions {
   display: flex;
   justify-content: center;
@@ -415,148 +413,21 @@ h2 {
   cursor: default;
 }
 
-/* Only change icon color and resume text to accent on hover (no other hover effects) */
+/* Contact hover */
 .contact-actions .contact-btn:hover svg,
 .contact-actions .resume-btn:hover svg {
   color: var(--accent-color);
   fill: var(--accent-color);
 }
 
-/* Also color the "Download Resume" label to the accent color on hover */
 .contact-actions .resume-btn:hover span {
   color: var(--accent-color);
-}
-
-/* Animation */
-.glass-panel {
-    /* Keep for back-compat if needed, though Navbar uses its own file */
 }
 
 /* Mobile */
 @media (max-width: 768px) {
   h2 { font-size: 2rem; }
   .projects-grid { grid-template-columns: 1fr; }
-}
-
-/* Project Modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.modal-content {
-  background: rgba(13, 17, 35, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  border-radius: 20px;
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-close-btn {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  z-index: 10;
-}
-
-.modal-close-btn:hover {
-  background: rgba(255, 222, 33, 0.2);
-  color: var(--accent-color);
-  transform: rotate(90deg);
-}
-
-.modal-image-container {
-  width: 100%;
-  height: 300px;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.modal-image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-}
-
-.modal-body {
-  padding: 2.5rem;
-}
-
-.modal-title {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  color: #fff;
-  font-family: var(--font-mono);
-}
-
-.modal-role {
-  color: var(--accent-color);
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  font-family: var(--font-mono);
-  display: inline-block;
-  border-bottom: 1px solid rgba(255, 222, 33, 0.3);
-  padding-bottom: 0.2rem;
-}
-
-.modal-description {
-  color: #b8c1d6;
-  font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 2rem;
-}
-
-.modal-tech-stack {
-  margin-top: auto;
-}
-
-.modal-footer {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  justify-content: flex-end;
-}
-
-@media (max-width: 768px) {
-  .modal-image-container {
-    height: 200px;
-  }
-  .modal-body {
-    padding: 1.5rem;
-  }
-  .modal-title {
-    font-size: 1.8rem;
-  }
 }
 
 .project-card {
@@ -577,13 +448,13 @@ h2 {
   }
 }
 
-/* Mobile override to ensure uniform card sizing on small screens */
+/* Project cards */
 @media (max-width: 900px) {
   .project-card { height: auto !important; }
   .project-image-container { height: auto !important; min-width: 0; max-width: 100%; }
 }
 
-/* Carousel Styles */
+/* Carousel */
 .project-image-carousel:hover .carousel-btn {
   opacity: 1;
 }
@@ -656,7 +527,7 @@ h2 {
     opacity: 1;
 }
 
-/* Phone Mockup */
+/* Phone mockup */
 .phone-mockup {
   width: 170px;
   height: 330px;
@@ -717,7 +588,7 @@ h2 {
   z-index: 2;
 }
 
-/* Small Phone Optimizations */
+/* Small phones */
 @media (max-width: 480px) {
   .container {
     padding: 0 1rem;
@@ -729,7 +600,6 @@ h2 {
     padding: 0 0.75rem;
   }
   
-  /* Ensure project cards don't overflow */
   .project-content {
       padding: 1rem !important;
   }
