@@ -520,7 +520,7 @@ const FantasyBackground: React.FC = () => {
   const innerBeamPath = useTransform(beamValues, v => v.inner);
   const coreBeamPath = useTransform(beamValues, v => v.core);
 
-  // Dynamic beam length for gradients with max range clamping
+  // 
   const beamLength = useTransform([mouseX, mouseY], ([mx, my]) => {
      if (!lhCx || !lhCy) return 0;
      const dx = (mx as number) - lhCx;
@@ -538,7 +538,7 @@ const FantasyBackground: React.FC = () => {
      const dist = Math.sqrt(dx*dx + dy*dy);
 
     // Define max effective range
-    const maxRange = 1050; 
+    const maxRange = 1100; 
     const fadeRange = 300;
      
      if (dist > maxRange) return 0;
@@ -714,9 +714,9 @@ const FantasyBackground: React.FC = () => {
 
         {/* Crescent Moon */}
         <g className="moon" transform="translate(1500, 350)">
-          {/* Main glowing circle */}
+          {/* Moon Color */}
           <circle cx="0" cy="0" r="80" fill="#feffdf" />
-          {/* Shadow circle to create crescent shape */}
+          {/* Moon Shadow */}
           <circle cx="-25" cy="-25" r="70" fill="#0b1026" />
         </g>
 
@@ -757,7 +757,7 @@ const FantasyBackground: React.FC = () => {
                      animationIterationCount: 'infinite',
                      animationFillMode: 'both',
                      willChange: 'opacity',
-                     filter: w.isCabin ? 'blur(0.4px)' : 'none' // Slight blur for realism without expensive svg filters
+                     filter: w.isCabin ? 'blur(0.4px)' : 'none' 
                  } : {}}
                />
             ))}
