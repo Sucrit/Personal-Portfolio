@@ -16,6 +16,9 @@ dist-ssr
 .vscode
 !.vscode/extensions.json
 .idea
+FantasyBackground.tsx
+FantasyBackground.css
+fantasy-theme.css
 .DS_Store
 *.suo
 *.ntvs*
