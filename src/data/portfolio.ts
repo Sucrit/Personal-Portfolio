@@ -38,11 +38,13 @@ export type ContactLink = {
 export const skills: Skill[] = [
   { name: 'MySQL', icon: '/assets/skills/mysql.svg', color: '#0051ff', description: 'Relational Database' },
   { name: 'MongoDB', icon: '/assets/icons/devicons/mongodb-original.svg', color: '#25ff29bb', description: 'NoSQL Goat' },
+  { name: 'Mongoose', icon: '/assets/icons/devicons/mongoose.svg', color: '#880000', description: 'MongoDB ODM' },
   { name: 'Rust', icon: '/assets/skills/rust.png', color: '#dea584', description: 'C++ doppelganger' },
   { name: 'JavaScript', icon: '/assets/icons/devicons/javascript-original.svg', color: '#b8ac54af', description: 'Web Scripting' },
   { name: 'TypeScript', icon: '/assets/icons/devicons/typescript-original.svg', color: '#3178C6', description: 'JavaScript Plus' },
   { name: 'Node.js', icon: '/assets/icons/devicons/nodejs-original.svg', color: '#37dc31b5', description: 'JavaScript Runtime' },
-  { name: 'Express', icon: '/assets/icons/devicons/express-logo.png', color: '#ffffffa1', description: 'Node.js Framework' },
+  { name: 'Express', icon: '/assets/icons/devicons/express-original.svg', color: '#ffffffa1', description: 'Node.js Framework' },
+  { name: 'Prisma', icon: '/assets/icons/devicons/prisma.svg', color: '#5a67d8', description: 'Database ORM' },
   { name: 'PHP', icon: '/assets/icons/devicons/php-original.svg', color: '#3843debb', description: 'Old but Gold' },
   { name: 'Laravel', icon: '/assets/skills/laravel.svg', color: '#FF2D20', description: 'PHP Framework' },
   { name: 'Docker', icon: '/assets/icons/devicons/docker-original.svg', color: '#0091ff', description: 'Containerization' },
@@ -53,6 +55,18 @@ export const skills: Skill[] = [
 export const skillIconMap = Object.fromEntries(
   skills.map((skill) => [skill.name.toLowerCase(), skill.icon]),
 ) as Record<string, string>;
+
+Object.assign(skillIconMap, {
+  react: '/assets/icons/devicons/react.svg',
+  vite: '/assets/icons/devicons/vite.svg',
+  postgresql: '/assets/icons/devicons/postgresql.svg',
+  prisma: '/assets/icons/devicons/prisma.svg',
+  clerk: '/assets/icons/devicons/clerk.png',
+  solidity: '/assets/icons/devicons/solidity.svg',
+  ethereum: '/assets/icons/devicons/ethereum.svg',
+  ganache: '/assets/icons/devicons/ganache.svg',
+  'ethereum / ganache': '/assets/icons/devicons/ethereum.svg',
+});
 
 export const educationItems: EducationItem[] = [
   {
@@ -112,9 +126,9 @@ export const featuredProjects: Project[] = [
     alt: 'Credence Preview',
     role: 'Full Stack Developer',
     description:
-      'A digital academic credentials platform for issuance, verification, and distribution, powered by blockchain.',
+      'A full-stack digital academic credentials platform with Clerk-authenticated React/Vite workflows, PostgreSQL/Prisma-backed services, and Ethereum-compatible credential anchoring.',
     repoUrl: 'https://github.com/Sucrit/SACVS',
-    technologies: ['TypeScript', 'Node.js', 'Prisma', 'Blockchain'],
+    technologies: ['React', 'Vite', 'TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Clerk', 'Solidity', 'Ethereum / Ganache'],
     desktopPreviewMode: 'framed',
     images: [
       '/assets/projects/credence/admin-overview.png',
@@ -135,7 +149,7 @@ export const featuredProjects: Project[] = [
     role: 'Backend Developer',
     description: 'An evacuation center management system designed for CDRRMO in Dagupan, Philippines.',
     repoUrl: 'https://github.com/endevium/EvacuDesk/tree/backend/UpdatedAPI2',
-    technologies: ['Node.js', 'Express', 'MongoDB'],
+    technologies: ['Node.js', 'Express', 'MongoDB', 'Mongoose'],
     images: [
       '/assets/projects/evacudesk/adl.png',
       '/assets/projects/evacudesk/evacudesk.png',
