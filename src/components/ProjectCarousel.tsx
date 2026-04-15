@@ -5,9 +5,14 @@ import type { ProjectImage } from '../data/portfolio';
 interface ProjectCarouselProps {
   images: ProjectImage[];
   alt: string;
+  desktopPreviewMode?: 'fill' | 'framed';
 }
 
-function ProjectCarousel({ images, alt }: ProjectCarouselProps) {
+function ProjectCarousel({
+  images,
+  alt,
+  desktopPreviewMode = 'fill',
+}: ProjectCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextImage = (e: React.MouseEvent) => {
@@ -51,13 +56,64 @@ function ProjectCarousel({ images, alt }: ProjectCarouselProps) {
           />
         </div>
       ) : (
-        <img
-          src={src}
-          alt={`${alt} ${currentIndex + 1}`}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          loading="eager"
-          fetchPriority="high"
-        />
+        desktopPreviewMode === 'framed' ? (
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <img
+              src={src}
+              alt=""
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                filter: 'blur(22px)',
+                transform: 'scale(1.08)',
+                opacity: 0.7,
+              }}
+            />
+            <img
+              src={src}
+              alt={`${alt} ${currentIndex + 1}`}
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                objectPosition: 'center',
+                display: 'block',
+                transform: 'scaleY(1.06)',
+                zIndex: 1,
+              }}
+              loading="eager"
+              fetchPriority="high"
+            />
+          </div>
+        ) : (
+          <img
+            src={src}
+            alt={`${alt} ${currentIndex + 1}`}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'fill',
+              display: 'block',
+            }}
+            loading="eager"
+            fetchPriority="high"
+          />
+        )
       )}
 
       {images.length > 1 && (

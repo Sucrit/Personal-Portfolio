@@ -16,6 +16,7 @@ export type Project = {
   repoUrl: string;
   technologies: string[];
   images: ProjectImage[];
+  desktopPreviewMode?: 'fill' | 'framed';
 };
 
 export type EducationItem = {
@@ -94,26 +95,27 @@ export const aboutSections = [
 ] as const;
 
 export const featuredProjects: Project[] = [
-  {
-    name: 'SignSight',
-    logo: '/assets/icons/brand/github-white.svg',
-    alt: 'SignSight Preview',
-    role: 'Mobile, ML, and Backend Developer',
-    description:
-      'A mobile-first sign recognition platform for real-time camera-based translation, dataset capture, and iterative model improvement.',
-    repoUrl: 'https://github.com/Sucrit/SignSight',
-    technologies: ['React Native', 'Expo', 'FastAPI', 'Python'],
-    images: ['/assets/projects/shared/preview-placeholder.svg'],
-  },
+  // {
+  //   name: 'SignSight',
+  //   logo: '/assets/icons/brand/github-white.svg',
+  //   alt: 'SignSight Preview',
+  //   role: 'Mobile, ML, and Backend Developer',
+  //   description:
+  //     'A mobile-first sign recognition platform for real-time camera-based translation, dataset capture, and iterative model improvement.',
+  //   repoUrl: 'https://github.com/Sucrit/SignSight',
+  //   technologies: ['React Native', 'Expo', 'FastAPI', 'Python'],
+  //   images: ['/assets/projects/shared/preview-placeholder.svg'],
+  // },
   {
     name: 'Credence',
     logo: '/assets/projects/credence/c-version_logo.png',
     alt: 'Credence Preview',
-    role: 'Backend and Systems Developer',
+    role: 'Full Stack Developer',
     description:
       'A digital academic credentials platform for issuance, verification, and distribution, powered by blockchain.',
     repoUrl: 'https://github.com/Sucrit/SACVS',
     technologies: ['TypeScript', 'Node.js', 'Prisma', 'Blockchain'],
+    desktopPreviewMode: 'framed',
     images: [
       '/assets/projects/credence/admin-overview.png',
       '/assets/projects/credence/inst-analytics.png',
@@ -124,22 +126,6 @@ export const featuredProjects: Project[] = [
       '/assets/projects/credence/inst-student-cred-details.png',
       '/assets/projects/credence/inst-student-management.png',
       '/assets/projects/credence/student-credentials.png',
-    ],
-  },
-  {
-    name: 'RoomFinder',
-    logo: '/assets/projects/roomfinder/roomfinder_logo.png',
-    alt: 'RoomFinder Screenshot',
-    role: 'Backend Developer',
-    description: 'A mobile and web platform for room booking and management system for University of Pangasinan.',
-    repoUrl: 'https://github.com/Sucrit/RoomFinder_API',
-    technologies: ['JavaScript', 'PHP', 'MySQL'],
-    images: [
-      { src: '/assets/projects/roomfinder/mobile1.png', type: 'mobile' },
-      { src: '/assets/projects/roomfinder/mobile2.png', type: 'mobile' },
-      '/assets/projects/roomfinder/ss1.png',
-      '/assets/projects/roomfinder/ss2.png',
-      '/assets/projects/roomfinder/ss3.png',
     ],
   },
   {
@@ -158,6 +144,22 @@ export const featuredProjects: Project[] = [
       '/assets/projects/evacudesk/ss3.png',
     ],
   },
+  {
+    name: 'RoomFinder',
+    logo: '/assets/projects/roomfinder/roomfinder_logo.png',
+    alt: 'RoomFinder Screenshot',
+    role: 'Backend Developer',
+    description: 'A mobile and web platform for room booking and management system for University of Pangasinan.',
+    repoUrl: 'https://github.com/Sucrit/RoomFinder_API',
+    technologies: ['JavaScript', 'PHP', 'MySQL'],
+    images: [
+      { src: '/assets/projects/roomfinder/mobile1.png', type: 'mobile' },
+      { src: '/assets/projects/roomfinder/mobile2.png', type: 'mobile' },
+      '/assets/projects/roomfinder/ss1.png',
+      '/assets/projects/roomfinder/ss2.png',
+      '/assets/projects/roomfinder/ss3.png',
+    ],
+  }
 ];
 
 export const contactLinks: ContactLink[] = [

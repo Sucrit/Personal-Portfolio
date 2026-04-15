@@ -12,7 +12,11 @@ function ProjectsSection() {
           {featuredProjects.map((project) => (
             <div key={project.name} className={styles.card}>
               <div className={styles.imageContainer}>
-                <ProjectCarousel images={project.images} alt={project.alt} />
+                <ProjectCarousel
+                  images={project.images}
+                  alt={project.alt}
+                  desktopPreviewMode={project.desktopPreviewMode}
+                />
               </div>
 
               <div className={styles.content}>
