@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-
-export type ImageItem = string | { src: string; type: 'web' | 'mobile' };
+import type { ProjectImage } from '../data/portfolio';
 
 interface ProjectCarouselProps {
-  images: ImageItem[];
+  images: ProjectImage[];
   alt: string;
 }
 
-const ProjectCarousel: React.FC<ProjectCarouselProps> = ({ images, alt }) => {
+function ProjectCarousel({ images, alt }: ProjectCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextImage = (e: React.MouseEvent) => {
@@ -28,18 +27,28 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({ images, alt }) => {
   const isMobile = typeof currentItem !== 'string' && currentItem.type === 'mobile';
 
   return (
-    <div className="project-image-carousel" style={{ position: 'relative', width: '100%', height: '100%', background: isMobile ? 'rgba(0,0,0,0.2)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      
+    <div
+      className="project-image-carousel"
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        background: isMobile ? 'rgba(0,0,0,0.2)' : 'transparent',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       {isMobile ? (
         <div className="phone-mockup">
-           <div className="phone-notch"></div>
-           <img
-             src={src}
-             alt={`${alt} ${currentIndex + 1}`}
-             className="phone-screen"
-             loading="eager"
-             fetchPriority="high"
-           />
+          <div className="phone-notch"></div>
+          <img
+            src={src}
+            alt={`${alt} ${currentIndex + 1}`}
+            className="phone-screen"
+            loading="eager"
+            fetchPriority="high"
+          />
         </div>
       ) : (
         <img
@@ -59,19 +68,16 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({ images, alt }) => {
           <button className="carousel-btn next" onClick={nextImage} aria-label="Next Image">
             <FaChevronRight />
           </button>
-          
+
           <div className="carousel-dots">
             {images.map((_, idx) => (
-              <span 
-                key={idx} 
-                className={`dot ${idx === currentIndex ? 'active' : ''}`} 
-              />
+              <span key={idx} className={`dot ${idx === currentIndex ? 'active' : ''}`} />
             ))}
           </div>
         </>
       )}
     </div>
   );
-};
+}
 
 export default ProjectCarousel;

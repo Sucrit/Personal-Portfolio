@@ -1,0 +1,430 @@
+.section {
+  position: relative;
+  overflow: hidden;
+  padding: 100px 0;
+}
+
+.glow {
+  position: absolute;
+  top: 20%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.headingWrap {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.heading {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px rgba(255, 222, 33, 0.2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.card {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: #e2e8f0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.label {
+  color: var(--accent-color);
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.value {
+  color: #fff;
+}
+
+.educationHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.educationHeading {
+  font-size: 1.8rem;
+  color: #fff;
+  margin: 0;
+}
+
+.timeline {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.centerBar {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: rgba(255, 255, 255, 0.27);
+  transform: translateX(-50%);
+  border-radius: 4px;
+}
+
+.light {
+  position: absolute;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle, #fff 0%, var(--accent-color) 50%, transparent 100%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 12px 4px var(--accent-color),
+    0 0 30px 10px rgba(255, 222, 33, 0.5),
+    0 0 60px 20px rgba(255, 222, 33, 0.2);
+  z-index: 10;
+}
+
+.lightTrail {
+  position: absolute;
+  left: 50%;
+  width: 6px;
+  height: 40px;
+  background: linear-gradient(to top, var(--accent-color) 0%, transparent 100%);
+  border-radius: 4px;
+  z-index: 9;
+}
+
+.item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  position: relative;
+}
+
+.left {
+  justify-content: flex-start;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.cardMotion {
+  width: calc(50% - 40px);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid;
+  backdrop-filter: blur(4px);
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.schoolWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.schoolLogo {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.school {
+  font-size: 1.25rem;
+  color: #e2e8f0;
+  margin: 0;
+  font-weight: 700;
+}
+
+.status {
+  font-size: 0.7rem;
+  border-radius: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusComplete {
+  padding: 4px 12px;
+  background: rgba(71, 85, 105, 0.5);
+  color: #94a3b8;
+}
+
+.statusCurrent {
+  padding: 5px 14px;
+  background: var(--accent-color);
+  color: #0f172a;
+  box-shadow: 0 0 15px rgba(255, 222, 33, 0.4);
+}
+
+.degree {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.years {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.highlights {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.48);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.highlight {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.highlightDot {
+  color: var(--accent-color);
+  font-size: 1rem;
+}
+
+.connector {
+  width: 40px;
+  height: 2px;
+  position: relative;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.12);
+}
+
+.connectorLeft {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.95) 100%);
+}
+
+.connectorRight {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, transparent 100%);
+}
+
+.node {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: #0f172a;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15), inset 0 0 4px rgba(255, 255, 255, 0.08);
+}
+
+.nodeRight {
+  right: -6px;
+  transform: translateY(-50%);
+}
+
+.nodeLeft {
+  left: -6px;
+  transform: translateY(-50%);
+}
+
+.spacer {
+  width: calc(50% - 40px);
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 80px 0;
+  }
+
+  .timeline {
+    min-height: auto;
+    gap: 2.5rem;
+  }
+
+  .centerBar {
+    left: 24px;
+    transform: none;
+  }
+
+  .light,
+  .lightTrail {
+    left: 24px;
+  }
+
+  .item {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-left: 52px;
+    width: 100%;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .connector {
+    display: none;
+  }
+
+  .cardMotion {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .node {
+    left: -34px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 60px 0;
+  }
+
+  .grid {
+    gap: 1.5rem;
+  }
+
+  .card {
+    padding: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .text {
+    font-size: 0.92rem;
+    gap: 1rem;
+  }
+
+  .label {
+    font-size: 1rem;
+  }
+
+  .educationHeading {
+    font-size: 1.4rem;
+  }
+
+  .timeline {
+    gap: 2rem;
+    padding: 1rem 0;
+  }
+
+  .centerBar {
+    left: 20px;
+    width: 4px;
+    transform: translateX(-50%);
+  }
+
+  .light {
+    left: 20px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .lightTrail {
+    left: 20px;
+    width: 4px;
+    height: 30px;
+  }
+
+  .item {
+    padding-left: 50px;
+    margin-bottom: 3rem;
+  }
+
+  .cardMotion {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(13, 17, 26, 0.7);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .school {
+    font-size: 1.1rem;
+  }
+
+  .degree,
+  .years,
+  .highlight {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .item {
+    padding-left: 42px;
+    margin-bottom: 2rem;
+  }
+
+  .centerBar {
+    left: 20px;
+  }
+
+  .light {
+    left: 20px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .lightTrail {
+    left: 20px;
+    width: 4px;
+  }
+
+  .cardMotion {
+    padding: 1rem;
+  }
+
+  .school {
+    font-size: 0.9rem;
+  }
+
+  .text {
+    font-size: 0.85rem;
+  }
+}

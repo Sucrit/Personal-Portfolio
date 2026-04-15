@@ -1,8 +1,82 @@
-import React, { useMemo, useRef, useEffect } from 'react';
-import { motion, useScroll, useMotionValue, useAnimationFrame, useTransform } from 'framer-motion';
+import { useEffect, useMemo, useRef } from 'react';
+import { motion, useAnimationFrame, useMotionValue, useScroll, useTransform } from 'framer-motion';
 import './FantasyBackground.css';
 
-const FantasyBackground: React.FC = () => {
+type Star = {
+  id: number;
+  cx: number;
+  cy: number;
+  r: number;
+  delay: string;
+  opacity: number;
+};
+
+type Building = {
+  d: string;
+};
+
+type WindowAnimation = 'none' | 'toggle' | 'flicker' | 'slowBlink';
+
+type WindowLight = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  delay: number;
+  duration: number;
+  animationType: WindowAnimation;
+  isOn: boolean;
+  color?: string;
+  isCabin?: boolean;
+};
+
+type LighthouseGlow = {
+  cx: number;
+  cy: number;
+  rx: number;
+  ry: number;
+};
+
+type GeneratedLayer = {
+  d: string;
+  windows: WindowLight[];
+  buildings: Building[];
+  lighthouseGlow: LighthouseGlow | null;
+};
+
+type MountainLayer = {
+  key: string;
+  d: string;
+  fill: string;
+  windows: WindowLight[];
+  buildings: Building[];
+  lighthouseGlow?: LighthouseGlow | null;
+};
+
+type BeamValues = {
+  inner: string;
+  core: string;
+};
+
+function createSeededRandom(seedValue: number) {
+  let seed = seedValue;
+  return () => {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  };
+}
+
+const starRandom = createSeededRandom(98765);
+const stars: Star[] = Array.from({ length: 80 }, (_, index) => ({
+  id: index,
+  cx: starRandom() * 1920,
+  cy: starRandom() * 800,
+  r: starRandom() * 1.5 + 0.5,
+  delay: `${starRandom() * 5}s`,
+  opacity: starRandom() * 0.5 + 0.5,
+}));
+
+function FantasyBackground() {
   const idleRef = useRef(0);
   const { scrollY } = useScroll();
   const starX = useMotionValue(0);
@@ -14,342 +88,326 @@ const FantasyBackground: React.FC = () => {
       const { innerWidth: w, innerHeight: h } = window;
       const svgW = 1920;
       const svgH = 1080;
-      
+
       const scale = Math.max(w / svgW, h / svgH);
       const scaledSvgW = svgW * scale;
       const scaledSvgH = svgH * scale;
-      
       const offsetX = (w - scaledSvgW) / 2;
       const offsetY = (h - scaledSvgH) / 2;
 
-      const svgX = (e.clientX - offsetX) / scale;
-      const svgY = (e.clientY - offsetY) / scale;
-
-      mouseX.set(svgX);
-      mouseY.set(svgY);
+      mouseX.set((e.clientX - offsetX) / scale);
+      mouseY.set((e.clientY - offsetY) / scale);
     };
+
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [mouseX, mouseY]);
 
   useAnimationFrame((_t, delta) => {
-    idleRef.current += delta * 0.003; 
-    
-    const scrollOffset = scrollY.get() * 0.08; 
-    const x = (idleRef.current + scrollOffset) % 1920;
-    starX.set(x);
+    idleRef.current += delta * 0.003;
+    const scrollOffset = scrollY.get() * 0.08;
+    starX.set((idleRef.current + scrollOffset) % 1920);
   });
 
-  const stars = useMemo(() => {
-    return Array.from({ length: 80 }).map((_, i) => ({
-      id: i,
-      cx: Math.random() * 1920,
-      cy: Math.random() * 800,
-      r: Math.random() * 1.5 + 0.5,
-      delay: Math.random() * 5 + 's',
-      opacity: Math.random() * 0.5 + 0.5
-    }));
-  }, []);
-
-  // Mountain generation
-  const mountainLayers = useMemo(() => {
-    const layers = [];
-    let seed = 12345;
-    
-    const random = () => {
-      seed = (seed * 9301 + 49297) % 233280;
-      return seed / 233280;
-    };
+  const mountainLayers = useMemo<MountainLayer[]>(() => {
+    const random = createSeededRandom(12345);
+    const layers: MountainLayer[] = [];
 
     const createPath = (
-      baseY: number, 
-      amplitude: number, 
-      roughness: number, 
+      baseY: number,
+      amplitude: number,
+      roughness: number,
       treeHeight: number,
       frequency: number,
-      density: number = 1.0,
-      flattenStart: boolean = false,
-      hasCity: boolean = false
-    ) => {
+      density = 1.0,
+      flattenStart = false,
+      hasCity = false,
+    ): GeneratedLayer => {
       let d = `M0,${baseY}`;
       let x = 0;
-      const buildings: { d: string }[] = [];
-      const windows: {x: number, y: number, w: number, h: number, delay: number, duration: number, animationType: 'none' | 'toggle' | 'flicker' | 'slowBlink', isOn: boolean, color?: string, isCabin?: boolean}[] = [];
-      
+      const buildings: Building[] = [];
+      const windows: WindowLight[] = [];
+
       let lighthouseBuilt = false;
-      let lighthouseGlow: { cx: number, cy: number, rx: number, ry: number } | null = null;
-      let cabinAnimCount = 0; 
-      
+      let lighthouseGlow: LighthouseGlow | null = null;
+      let cabinAnimCount = 0;
+
       while (x <= 1930) {
         let currentAmp = amplitude;
         if (flattenStart && x < 600) {
-           currentAmp = amplitude * (x / 600);
+          currentAmp = amplitude * (x / 600);
         }
 
-        const globalShape = Math.sin(x * frequency) * currentAmp 
-                          + Math.cos(x * frequency * 2.3) * (currentAmp * 0.4)
-                          + Math.sin(x * frequency * 5.7) * (currentAmp * 0.15);
-        
+        const globalShape =
+          Math.sin(x * frequency) * currentAmp +
+          Math.cos(x * frequency * 2.3) * (currentAmp * 0.4) +
+          Math.sin(x * frequency * 5.7) * (currentAmp * 0.15);
+
         const noise = (random() - 0.5) * roughness;
-        
         const y = baseY + globalShape + noise;
-        
+
         if (hasCity) {
-           if (!lighthouseBuilt && x >= 1660) {
-                lighthouseBuilt = true;
-                
-                const lhW = 18; 
-                const lhH = 70;
-                const lhY = y + 5;
+          if (!lighthouseBuilt && x >= 1660) {
+            lighthouseBuilt = true;
 
-                let lhPath = `M${x},${lhY} V${lhY-10} H${x+lhW} V${lhY} Z`;
+            const lhW = 18;
+            const lhH = 70;
+            const lhY = y + 5;
 
-                const towerBaseY = lhY - 10;
-                const towerTopY = lhY - lhH;
-                const insetBot = 2;
-                const insetTop = 5;
-                lhPath += ` M${x+insetBot},${towerBaseY} L${x+insetTop},${towerTopY} H${x+lhW-insetTop} L${x+lhW-insetBot},${towerBaseY} Z`;
+            let lhPath = `M${x},${lhY} V${lhY - 10} H${x + lhW} V${lhY} Z`;
 
-                const galleryY = towerTopY;
-                const galleryH = 3.5;
-                lhPath += ` M${x+insetTop-1.5},${galleryY} V${galleryY-galleryH} H${x+lhW-insetTop+1.5} V${galleryY} Z`;
+            const towerBaseY = lhY - 10;
+            const towerTopY = lhY - lhH;
+            const insetBot = 2;
+            const insetTop = 5;
+            lhPath += ` M${x + insetBot},${towerBaseY} L${x + insetTop},${towerTopY} H${x + lhW - insetTop} L${x + lhW - insetBot},${towerBaseY} Z`;
 
-                const lanternW = 8.5;
-                const lanternH = 9.5;
-                const lanternX = x + (lhW - lanternW) / 2;
-                const lanternY = galleryY - galleryH;
-                lhPath += ` M${lanternX},${lanternY} V${lanternY-lanternH} H${lanternX+lanternW} V${lanternY} Z`;
+            const galleryY = towerTopY;
+            const galleryH = 3.5;
+            lhPath += ` M${x + insetTop - 1.5},${galleryY} V${galleryY - galleryH} H${x + lhW - insetTop + 1.5} V${galleryY} Z`;
 
-                const roofY = lanternY - lanternH;
-                lhPath += ` M${lanternX-0.7},${roofY} L${x+lhW/2},${roofY-7} L${lanternX+lanternW+0.7},${roofY} Z`;
-                lhPath += ` M${x+lhW/2},${roofY-7} V${roofY-10} H${x+lhW/2+0.7} V${roofY-7} Z`;
+            const lanternW = 8.5;
+            const lanternH = 9.5;
+            const lanternX = x + (lhW - lanternW) / 2;
+            const lanternY = galleryY - galleryH;
+            lhPath += ` M${lanternX},${lanternY} V${lanternY - lanternH} H${lanternX + lanternW} V${lanternY} Z`;
 
-                buildings.push({ d: lhPath });
+            const roofY = lanternY - lanternH;
+            lhPath += ` M${lanternX - 0.7},${roofY} L${x + lhW / 2},${roofY - 7} L${lanternX + lanternW + 0.7},${roofY} Z`;
+            lhPath += ` M${x + lhW / 2},${roofY - 7} V${roofY - 10} H${x + lhW / 2 + 0.7} V${roofY - 7} Z`;
 
-                const doorW = 4.2;
-                const doorH = 7;
-                windows.push({
-                   x: x + (lhW-doorW)/2, y: towerBaseY - doorH, w: doorW, h: doorH,
-                   animationType: 'none', isOn: true, delay: 0, duration: 0
-                });
+            buildings.push({ d: lhPath });
 
-                const winW = 2.8;
-                const winH = 3.5;
-                const winX = x + (lhW - winW) / 2;
-                const lhColor = "#ffaa00";
-                const positions = [17, 34, 51];
-                positions.forEach(offset => {
-                  windows.push({
-                    x: winX, y: towerBaseY - offset, w: winW, h: winH,
-                    animationType: 'none', isOn: true, delay: 0, duration: 0, color: lhColor
-                  });
-                });
+            const doorW = 4.2;
+            const doorH = 7;
+            windows.push({
+              x: x + (lhW - doorW) / 2,
+              y: towerBaseY - doorH,
+              w: doorW,
+              h: doorH,
+              animationType: 'none',
+              isOn: true,
+              delay: 0,
+              duration: 0,
+            });
 
-                windows.push({
-                   x: lanternX + 0.7, y: lanternY - lanternH + 0.7, w: lanternW - 1.4, h: lanternH - 1.4,
-                   animationType: 'none', isOn: true, delay: 0, duration: 0, color: "#fffeb0"
-                });
-                lighthouseGlow = { cx: x + lhW/2, cy: lanternY - lanternH/2, rx: 40, ry: 40 };
-           }
+            const winW = 2.8;
+            const winH = 3.5;
+            const winX = x + (lhW - winW) / 2;
+            [17, 34, 51].forEach((offset) => {
+              windows.push({
+                x: winX,
+                y: towerBaseY - offset,
+                w: winW,
+                h: winH,
+                animationType: 'none',
+                isOn: true,
+                delay: 0,
+                duration: 0,
+                color: '#ffaa00',
+              });
+            });
 
-           if (x > 1500 && x < 1850 && Math.abs(x - 1670) > 40) {
-               if (random() > 0.4) {
-                   const yOffset = 15 + random() * 50; 
-                   
-                   const count = Math.floor(1 + random() * 2.5);
-                   for(let k=0; k<count; k++) {
-                       const spacing = k * (3 + random() * 3);
-                       const wSize = 1.8 + random() * 1.5;  
-                       
-                       let animType: 'none' | 'slowBlink' = 'none';
-                       if (cabinAnimCount < 2 && random() > 0.85) {
-                           animType = 'slowBlink';
-                           cabinAnimCount++;
-                       }
+            windows.push({
+              x: lanternX + 0.7,
+              y: lanternY - lanternH + 0.7,
+              w: lanternW - 1.4,
+              h: lanternH - 1.4,
+              animationType: 'none',
+              isOn: true,
+              delay: 0,
+              duration: 0,
+              color: '#fffeb0',
+            });
 
-                       windows.push({
-                           x: x + spacing,
-                           y: y + yOffset + (random() * 3), 
-                           w: wSize,
-                           h: wSize, // Square-ish
-                           animationType: animType,
-                           isOn: true,
-                           delay: 0,
-                           duration: animType === 'slowBlink' ? 10 : 0,   
-                           color: random() > 0.5 ? "#ffaa55" : "#ffcc77",   
-                           isCabin: true
-                       });
-                   }
-               }
-           }
+            lighthouseGlow = { cx: x + lhW / 2, cy: lanternY - lanternH / 2, rx: 40, ry: 40 };
+          }
 
-           if (x < 850) {
-           if (random() > 0.05) {
-               const buildingW = 12 + random() * 18; 
-               const buildingH = 20 + random() * 45;
-               const groundY = y + 3;   
-               
-               let buildingPath = "";
-               const buildType = random();  
+          if (x > 1500 && x < 1850 && Math.abs(x - 1670) > 40 && random() > 0.4) {
+            const yOffset = 15 + random() * 50;
+            const count = Math.floor(1 + random() * 2.5);
 
-               const pushWindow = (wx: number, wy: number, ww: number, wh: number) => {
-                  const rand = random();
-                  const isOn = rand > 0.5;
-                  
-                  let animationType: 'none' | 'toggle' | 'flicker' = 'none';
-                  if (isOn) {
-                      const animRand = random();
-                          if (animRand > 0.7) animationType = 'flicker';
-                          else if (animRand > 0.4) animationType = 'toggle';
-                  }
+            for (let i = 0; i < count; i += 1) {
+              const spacing = i * (3 + random() * 3);
+              const size = 1.8 + random() * 1.5;
+              let animationType: WindowAnimation = 'none';
 
-                        windows.push({
-                          x: wx, y: wy, w: ww, h: wh,
-                          animationType,
-                          isOn,
-                          delay: animationType !== 'none' ? random() * 18 : 0,
-                          duration: animationType === 'flicker' ? 20 + random() * 12 : 32 + random() * 24
-                        });
-               };
+              if (cabinAnimCount < 2 && random() > 0.85) {
+                animationType = 'slowBlink';
+                cabinAnimCount += 1;
+              }
 
-               if (buildType < 0.3 && buildingH > 30) {
-                   const stepH = buildingH * 0.4;
-                   const topW = buildingW * 0.6;
-                   const margin = (buildingW - topW) / 2;
-                   
-                   buildingPath += `M${x},${groundY} V${groundY - (buildingH - stepH)} H${x + margin} V${groundY - buildingH} H${x + buildingW - margin} V${groundY - (buildingH - stepH)} H${x + buildingW} V${groundY} Z`;
-                   
-                   const rows = Math.floor((buildingH - stepH)/5);
-                   const cols = Math.floor(buildingW/4);
-                   for(let r=0; r<rows; r++) {
-                       for(let c=0; c<cols; c++) {
-                           pushWindow(x+2+c*4, groundY - (buildingH - stepH) + 4 + r*4, 1.5, 2);
-                       }
-                   }
-               }
-               else if (buildType < 0.5) {
-                   const antennaH = 10 + random() * 10;
-                   buildingPath += `M${x},${groundY} V${groundY - buildingH} H${x + buildingW/2 - 1} V${groundY - buildingH - antennaH} H${x + buildingW/2 + 1} V${groundY - buildingH} H${x+buildingW} V${groundY} Z`;
-                   
-                   const rows = Math.floor(buildingH/5);
-                   const cols = Math.floor(buildingW/4);
-                   for(let r=0; r<rows; r++) {
-                       for(let c=0; c<cols; c++) {
-                           pushWindow(x+2+c*4, groundY - buildingH + 4 + r*5, 1.5, 2);
-                       }
-                   }
-               }
-               else if (buildType < 0.7) {
-                   const shortH = buildingH * 0.8;
-                   if (random() > 0.5) {
-                       buildingPath += `M${x},${groundY} V${groundY - buildingH} L${x + buildingW},${groundY - shortH} V${groundY} Z`;
-                   } else {
-                       buildingPath += `M${x},${groundY} V${groundY - shortH} L${x + buildingW},${groundY - buildingH} V${groundY} Z`;
-                   }
-                   
-                   const rows = Math.floor(shortH/5);
-                   const cols = Math.floor(buildingW/4);
-                   for(let r=0; r<rows; r++) {
-                       for(let c=0; c<cols; c++) {
-                           pushWindow(x+2+c*4, groundY - shortH + 4 + r*5, 1.5, 1.5);
-                       }
-                   }
-               }
-               else {
-                   buildingPath += `M${x},${groundY} V${groundY - buildingH} H${x + buildingW} V${groundY} Z`;
-                   
-                   const rows = Math.floor(buildingH/6);
-                   const cols = Math.floor(buildingW/5);
-                   for(let r=0; r<rows; r++) {
-                       for(let c=0; c<cols; c++) {
-                           pushWindow(x+3+c*5, groundY - buildingH + 5 + r*6, 2, 2);
-                       }
-                   }
-               }
-               
-               buildings.push({ d: buildingPath });
-           }
+              windows.push({
+                x: x + spacing,
+                y: y + yOffset + random() * 3,
+                w: size,
+                h: size,
+                animationType,
+                isOn: true,
+                delay: 0,
+                duration: animationType === 'slowBlink' ? 10 : 0,
+                color: random() > 0.5 ? '#ffaa55' : '#ffcc77',
+                isCabin: true,
+              });
+            }
+          }
+
+          if (x < 850 && random() > 0.05) {
+            const buildingW = 12 + random() * 18;
+            const buildingH = 20 + random() * 45;
+            const groundY = y + 3;
+            let buildingPath = '';
+            const buildType = random();
+
+            const pushWindow = (wx: number, wy: number, ww: number, wh: number) => {
+              const rand = random();
+              const isOn = rand > 0.5;
+              let animationType: WindowAnimation = 'none';
+
+              if (isOn) {
+                const animRand = random();
+                if (animRand > 0.7) animationType = 'flicker';
+                else if (animRand > 0.4) animationType = 'toggle';
+              }
+
+              windows.push({
+                x: wx,
+                y: wy,
+                w: ww,
+                h: wh,
+                animationType,
+                isOn,
+                delay: animationType !== 'none' ? random() * 18 : 0,
+                duration:
+                  animationType === 'flicker'
+                    ? 20 + random() * 12
+                    : 32 + random() * 24,
+              });
+            };
+
+            if (buildType < 0.3 && buildingH > 30) {
+              const stepH = buildingH * 0.4;
+              const topW = buildingW * 0.6;
+              const margin = (buildingW - topW) / 2;
+
+              buildingPath += `M${x},${groundY} V${groundY - (buildingH - stepH)} H${x + margin} V${groundY - buildingH} H${x + buildingW - margin} V${groundY - (buildingH - stepH)} H${x + buildingW} V${groundY} Z`;
+
+              const rows = Math.floor((buildingH - stepH) / 5);
+              const cols = Math.floor(buildingW / 4);
+              for (let row = 0; row < rows; row += 1) {
+                for (let col = 0; col < cols; col += 1) {
+                  pushWindow(x + 2 + col * 4, groundY - (buildingH - stepH) + 4 + row * 4, 1.5, 2);
+                }
+              }
+            } else if (buildType < 0.5) {
+              const antennaH = 10 + random() * 10;
+              buildingPath += `M${x},${groundY} V${groundY - buildingH} H${x + buildingW / 2 - 1} V${groundY - buildingH - antennaH} H${x + buildingW / 2 + 1} V${groundY - buildingH} H${x + buildingW} V${groundY} Z`;
+
+              const rows = Math.floor(buildingH / 5);
+              const cols = Math.floor(buildingW / 4);
+              for (let row = 0; row < rows; row += 1) {
+                for (let col = 0; col < cols; col += 1) {
+                  pushWindow(x + 2 + col * 4, groundY - buildingH + 4 + row * 5, 1.5, 2);
+                }
+              }
+            } else if (buildType < 0.7) {
+              const shortH = buildingH * 0.8;
+              if (random() > 0.5) {
+                buildingPath += `M${x},${groundY} V${groundY - buildingH} L${x + buildingW},${groundY - shortH} V${groundY} Z`;
+              } else {
+                buildingPath += `M${x},${groundY} V${groundY - shortH} L${x + buildingW},${groundY - buildingH} V${groundY} Z`;
+              }
+
+              const rows = Math.floor(shortH / 5);
+              const cols = Math.floor(buildingW / 4);
+              for (let row = 0; row < rows; row += 1) {
+                for (let col = 0; col < cols; col += 1) {
+                  pushWindow(x + 2 + col * 4, groundY - shortH + 4 + row * 5, 1.5, 1.5);
+                }
+              }
+            } else {
+              buildingPath += `M${x},${groundY} V${groundY - buildingH} H${x + buildingW} V${groundY} Z`;
+
+              const rows = Math.floor(buildingH / 6);
+              const cols = Math.floor(buildingW / 5);
+              for (let row = 0; row < rows; row += 1) {
+                for (let col = 0; col < cols; col += 1) {
+                  pushWindow(x + 3 + col * 5, groundY - buildingH + 5 + row * 6, 2, 2);
+                }
+              }
+            }
+
+            buildings.push({ d: buildingPath });
+          }
         }
-      }
 
-      let effectiveTreeH = treeHeight;
+        let effectiveTreeH = treeHeight;
         if (hasCity && x > 850) {
-           effectiveTreeH = 6; 
+          effectiveTreeH = 6;
         }
 
         if (effectiveTreeH > 0) {
           const baseW = effectiveTreeH * (0.6 + random() * 0.5);
           const treeW = Math.max(3, baseW);
-
-          const treeH = effectiveTreeH * (0.8 + random() * 0.5); 
+          const treeH = effectiveTreeH * (0.8 + random() * 0.5);
           const centerX = x + treeW / 2;
-          
           const segments = Math.floor(treeH / 2.5) + 3;
-          
-          d += ` L${x},${y}`; 
-          
-          for (let i = 0; i < segments; i++) {
+
+          d += ` L${x},${y}`;
+
+          for (let i = 0; i < segments; i += 1) {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
-            
             const currentY = y - treeH * ratio;
             const nextY = y - treeH * nextRatio;
-            
             const currentHalfW = (treeW / 2) * Math.pow(1 - ratio, 1.15);
             const nextHalfW = (treeW / 2) * Math.pow(1 - nextRatio, 1.15);
-
-            const jitter = (random() - 0.5) * 1.5; 
-            
+            const jitter = (random() - 0.5) * 1.5;
             const nextTipX = centerX - (nextHalfW + jitter);
 
             if (i === 0) {
               d += ` L${nextTipX},${nextY}`;
             } else {
               const notchY = currentY - (currentY - nextY) * (0.35 + random() * 0.2);
-              const indentFactor = 0.5 + random() * 0.25; 
-              const notchX = centerX - (currentHalfW * indentFactor + jitter); 
-              
+              const indentFactor = 0.5 + random() * 0.25;
+              const notchX = centerX - (currentHalfW * indentFactor + jitter);
+
               d += ` L${notchX},${notchY}`;
               d += ` L${nextTipX},${nextY}`;
             }
           }
-          
+
           d += ` L${centerX},${y - treeH}`;
 
-          for (let i = segments - 1; i >= 0; i--) {
+          for (let i = segments - 1; i >= 0; i -= 1) {
             const ratio = i / segments;
             const nextRatio = (i + 1) / segments;
-            
-            const currentY = y - treeH * ratio;   
-            const nextY = y - treeH * nextRatio;  
-            
+            const currentY = y - treeH * ratio;
+            const nextY = y - treeH * nextRatio;
             const currentHalfW = (treeW / 2) * Math.pow(1 - ratio, 1.15);
-            
             const jitter = (random() - 0.5) * 1.5;
-            
             const bottomTipX = centerX + (currentHalfW + jitter);
 
             if (i === 0) {
-               d += ` L${bottomTipX},${currentY}`;
+              d += ` L${bottomTipX},${currentY}`;
             } else {
-               const notchY = currentY - (currentY - nextY) * (0.35 + random() * 0.2);
-               const indentFactor = 0.5 + random() * 0.25;
-               const notchX = centerX + (currentHalfW * indentFactor + jitter);
-               
-               d += ` L${notchX},${notchY}`;
-               d += ` L${bottomTipX},${currentY}`;
+              const notchY = currentY - (currentY - nextY) * (0.35 + random() * 0.2);
+              const indentFactor = 0.5 + random() * 0.25;
+              const notchX = centerX + (currentHalfW * indentFactor + jitter);
+
+              d += ` L${notchX},${notchY}`;
+              d += ` L${bottomTipX},${currentY}`;
             }
           }
 
-          x += treeW * density; 
+          x += treeW * density;
         } else {
-          const step = (hasCity && x < 850) ? 8 : 20;
-          x += step;
+          x += hasCity && x < 850 ? 8 : 20;
           d += ` L${x},${y}`;
         }
       }
-      
-      d += ` V1080 H0 Z`;
+
+      d += ' V1080 H0 Z';
       return { d, windows, buildings, lighthouseGlow };
     };
 
@@ -360,123 +418,113 @@ const FantasyBackground: React.FC = () => {
       buildings: l2.buildings,
       fill: '#1b223d',
       key: 'layer2',
-      lighthouseGlow: l2.lighthouseGlow   
+      lighthouseGlow: l2.lighthouseGlow,
     });
 
     layers.push({
-      d: createPath(820, 70, 10, 20, 0.0035, 0.8).d,  
+      d: createPath(820, 70, 10, 20, 0.0035, 0.8).d,
       windows: [],
       buildings: [],
       fill: '#14182e',
-      key: 'layer3'
+      key: 'layer3',
     });
 
     layers.push({
-      d: createPath(920, 50, 5, 45, 0.003, 0.7).d,  
+      d: createPath(920, 50, 5, 45, 0.003, 0.7).d,
       windows: [],
       buildings: [],
       fill: '#0d1021',
-      key: 'layer4'
+      key: 'layer4',
     });
 
     layers.push({
-      d: createPath(1020, 30, 5, 80, 0.004, 0.65).d,  
+      d: createPath(1020, 30, 5, 80, 0.004, 0.65).d,
       windows: [],
       buildings: [],
       fill: '#05060e',
-      key: 'layer5'
+      key: 'layer5',
     });
 
     return layers;
   }, []);
 
-  // Beam math
-  const lhLayer = mountainLayers.find(l => l.lighthouseGlow);
-  const lhCx = lhLayer?.lighthouseGlow?.cx || 0;
-  const lhCy = lhLayer?.lighthouseGlow?.cy || 0;
+  const lighthouseLayer = mountainLayers.find((layer) => layer.lighthouseGlow);
+  const lhCx = lighthouseLayer?.lighthouseGlow?.cx ?? 0;
+  const lhCy = lighthouseLayer?.lighthouseGlow?.cy ?? 0;
 
-    const beamValues = useTransform([mouseX, mouseY], ([mx, my]) => {
-      if (!lhCx || !lhCy) return { inner: "", core: "" };
-     
-     const dx = (mx as number) - lhCx;
-     const dy = (my as number) - lhCy;
-     const dist = Math.sqrt(dx*dx + dy*dy);
-     
-    if (dist < 5) return { inner: "", core: "" };
+  const beamValues = useTransform([mouseX, mouseY], (latest): BeamValues => {
+    const [mx, my] = latest as [number, number];
+    if (!lhCx || !lhCy) return { inner: '', core: '' };
 
-     const angle = Math.atan2(dy, dx);
-     const perpAngle = angle + Math.PI / 2;
-     
-     const geometryDist = dist * 1.05;
-     
-     const endX = lhCx + Math.cos(angle) * geometryDist;
-     const endY = lhCy + Math.sin(angle) * geometryDist;
+    const dx = mx - lhCx;
+    const dy = my - lhCy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 5) return { inner: '', core: '' };
 
-     const getPath = (startW: number, endWBase: number) => { 
-        const oxStart = Math.cos(perpAngle) * (startW / 2);
-        const oyStart = Math.sin(perpAngle) * (startW / 2);
-        
-        const endW = endWBase * 1.4; 
-        
-        const oxEnd = Math.cos(perpAngle) * (endW / 2);
-        const oyEnd = Math.sin(perpAngle) * (endW / 2);
+    const angle = Math.atan2(dy, dx);
+    const perpAngle = angle + Math.PI / 2;
+    const geometryDist = dist * 1.05;
+    const endX = lhCx + Math.cos(angle) * geometryDist;
+    const endY = lhCy + Math.sin(angle) * geometryDist;
 
-        const pStart1x = lhCx + oxStart;
-        const pStart1y = lhCy + oyStart;
-        const pStart2x = lhCx - oxStart;
-        const pStart2y = lhCy - oyStart;
+    const getPath = (startW: number, endWBase: number) => {
+      const oxStart = Math.cos(perpAngle) * (startW / 2);
+      const oyStart = Math.sin(perpAngle) * (startW / 2);
+      const endW = endWBase * 1.4;
+      const oxEnd = Math.cos(perpAngle) * (endW / 2);
+      const oyEnd = Math.sin(perpAngle) * (endW / 2);
 
-        const pEnd1x = endX + oxEnd;
-        const pEnd1y = endY + oyEnd;
-        const pEnd2x = endX - oxEnd;
-        const pEnd2y = endY - oyEnd;
+      const pStart1x = lhCx + oxStart;
+      const pStart1y = lhCy + oyStart;
+      const pStart2x = lhCx - oxStart;
+      const pStart2y = lhCy - oyStart;
+      const pEnd1x = endX + oxEnd;
+      const pEnd1y = endY + oyEnd;
+      const pEnd2x = endX - oxEnd;
+      const pEnd2y = endY - oyEnd;
 
-        return `M${pStart1x},${pStart1y} L${pEnd1x},${pEnd1y} L${pEnd2x},${pEnd2y} L${pStart2x},${pStart2y} Z`;
-     };
+      return `M${pStart1x},${pStart1y} L${pEnd1x},${pEnd1y} L${pEnd2x},${pEnd2y} L${pStart2x},${pStart2y} Z`;
+    };
 
-     const innerPath = getPath(6, 60 + dist * 0.08);
-
-     const corePath = getPath(2, 5 + dist * 0.01);
-
-      return { inner: innerPath, core: corePath };
+    return {
+      inner: getPath(6, 60 + dist * 0.08),
+      core: getPath(2, 5 + dist * 0.01),
+    };
   });
 
-  const innerBeamPath = useTransform(beamValues, v => v.inner);
-  const coreBeamPath = useTransform(beamValues, v => v.core);
+  const innerBeamPath = useTransform(beamValues, (value) => value.inner);
+  const coreBeamPath = useTransform(beamValues, (value) => value.core);
 
-  // Beam length
-  const beamLength = useTransform([mouseX, mouseY], ([mx, my]) => {
-     if (!lhCx || !lhCy) return 0;
-     const dx = (mx as number) - lhCx;
-     const dy = (my as number) - lhCy;
-     const dist = Math.sqrt(dx*dx + dy*dy);
-     
-     return Math.min(dist * 1.05, 1050); 
+  const beamLength = useTransform([mouseX, mouseY], (latest) => {
+    const [mx, my] = latest as [number, number];
+    if (!lhCx || !lhCy) return 0;
+    const dx = mx - lhCx;
+    const dy = my - lhCy;
+    return Math.min(Math.sqrt(dx * dx + dy * dy) * 1.05, 1050);
   });
 
-  // Surface glow
-  const splashOpacity = useTransform([mouseX, mouseY], ([mx, my]) => {
-     if (!lhCx || !lhCy) return 0;
-     const dx = (mx as number) - lhCx;
-     const dy = (my as number) - lhCy;
-     const dist = Math.sqrt(dx*dx + dy*dy);
+  const splashOpacity = useTransform([mouseX, mouseY], (latest) => {
+    const [mx, my] = latest as [number, number];
+    if (!lhCx || !lhCy) return 0;
 
-    const maxRange = 1100; 
+    const dx = mx - lhCx;
+    const dy = my - lhCy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const maxRange = 1100;
     const fadeRange = 300;
-     
-     if (dist > maxRange) return 0;
-     
-     if (dist > maxRange - fadeRange) {
-        return 0.9 * (1 - (dist - (maxRange - fadeRange)) / fadeRange);
-     }
-     return 0.9;
+
+    if (dist > maxRange) return 0;
+    if (dist > maxRange - fadeRange) {
+      return 0.9 * (1 - (dist - (maxRange - fadeRange)) / fadeRange);
+    }
+    return 0.9;
   });
 
   return (
     <div className="fantasyContainer">
       <div className="glow" />
       <svg
-        key={'beam-on'}
+        key="beam-on"
         width="100%"
         height="100%"
         viewBox="0 0 1920 1080"
@@ -485,18 +533,19 @@ const FantasyBackground: React.FC = () => {
         style={{ display: 'block' }}
       >
         <defs>
-          <radialGradient 
-              id="lighthouse-glow" cx="50%" cy="50%" r="50%">
+          <radialGradient id="lighthouse-glow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
             <stop offset="20%" stopColor="#fff4cc" stopOpacity="0.9" />
             <stop offset="50%" stopColor="#ffdd44" stopOpacity="0.4" />
             <stop offset="100%" stopColor="#ffaa00" stopOpacity="0" />
           </radialGradient>
 
-          <motion.radialGradient 
-              id="volumetric-beam-gradient" 
-              cx={lhCx} cy={lhCy} r={beamLength} 
-              gradientUnits="userSpaceOnUse"
+          <motion.radialGradient
+            id="volumetric-beam-gradient"
+            cx={lhCx}
+            cy={lhCy}
+            r={beamLength}
+            gradientUnits="userSpaceOnUse"
           >
             <stop offset="0%" stopColor="#fff" stopOpacity="0.8" />
             <stop offset="20%" stopColor="#fff8db" stopOpacity="0.5" />
@@ -504,16 +553,17 @@ const FantasyBackground: React.FC = () => {
             <stop offset="100%" stopColor="#000" stopOpacity="0" />
           </motion.radialGradient>
 
-          <motion.radialGradient 
-              id="core-beam-gradient" 
-              cx={lhCx} cy={lhCy} r={beamLength} 
-              gradientUnits="userSpaceOnUse"
+          <motion.radialGradient
+            id="core-beam-gradient"
+            cx={lhCx}
+            cy={lhCy}
+            r={beamLength}
+            gradientUnits="userSpaceOnUse"
           >
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
             <stop offset="80%" stopColor="#ffffff" stopOpacity="0.7" />
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </motion.radialGradient>
-
         </defs>
 
         <motion.g style={{ x: starX }}>
@@ -571,38 +621,19 @@ const FantasyBackground: React.FC = () => {
             opacity="0.4"
             style={{ filter: 'blur(3px)' }}
           />
-
           <path
             d="M60,0 Q120,-0.8 180,-0.5 L200,0 Q180,0.5 120,0.8 Q60,0 60,0 Z"
             fill="url(#shooting-star-core)"
             opacity="0.9"
             style={{ filter: 'blur(1.5px)' }}
           />
-
           <circle className="shootingDebris debris1" cx="40" cy="-2" r="0.6" fill="#ffffff" opacity="0.5" />
           <circle className="shootingDebris debris2" cx="70" cy="3" r="0.4" fill="#cfe8ff" opacity="0.4" />
           <circle className="shootingDebris debris3" cx="95" cy="-3.5" r="0.5" fill="#ffffff" opacity="0.35" />
           <circle className="shootingDebris debris4" cx="130" cy="2.5" r="0.35" fill="#a5d8ff" opacity="0.45" />
           <circle className="shootingDebris debris5" cx="155" cy="-1.5" r="0.3" fill="#ffffff" opacity="0.3" />
-
-          <circle
-            className="shootingStarHead"
-            cx="200"
-            cy="0"
-            r="6"
-            fill="url(#shooting-star-head-glow)"
-            style={{ filter: 'blur(3px)' }}
-            opacity="0.6"
-          />
-
-          <circle
-            cx="200"
-            cy="0"
-            r="2"
-            fill="#ffffff"
-            style={{ filter: 'blur(1.5px)' }}
-            opacity="1"
-          />
+          <circle className="shootingStarHead" cx="200" cy="0" r="6" fill="url(#shooting-star-head-glow)" style={{ filter: 'blur(3px)' }} opacity="0.6" />
+          <circle cx="200" cy="0" r="2" fill="#ffffff" style={{ filter: 'blur(1.5px)' }} opacity="1" />
         </g>
 
         <g className="moon" transform="translate(1500, 350)">
@@ -611,73 +642,76 @@ const FantasyBackground: React.FC = () => {
         </g>
 
         {mountainLayers.map((layer) => (
-          <React.Fragment key={layer.key}>
-            <path
-              d={layer.d}
-              fill={layer.fill}
-              className="landscapeLayer"
-            />
-            {(layer as any).buildings?.map((b: any, i: number) => (
-               <path
-                 key={`build-${layer.key}-${i}`}
-                 d={b.d}
-                 fill={layer.fill} 
-                 className="landscapeLayer"
-               />
+          <g key={layer.key}>
+            <path d={layer.d} fill={layer.fill} className="landscapeLayer" />
+            {layer.buildings.map((building, i) => (
+              <path
+                key={`build-${layer.key}-${i}`}
+                d={building.d}
+                fill={layer.fill}
+                className="landscapeLayer"
+              />
             ))}
-            {(layer as any).windows?.map((w: any, i: number) => (
-               <rect
-                 key={`win-${layer.key}-${i}`}
-                 x={w.x}
-                 y={w.y}
-                 width={w.w}
-                 height={w.h}
-                 rx={w.isCabin ? 0.5 : 0}
-                 fill={w.isOn ? (w.color || "#fff6a9") : layer.fill} 
-                 opacity={w.isOn ? (w.animationType !== 'none' ? undefined : 0.8) : 1}
-                 className="cityWindow"
-                 style={w.isOn && w.animationType !== 'none' ? {
-                     animationName: w.animationType === 'flicker' ? 'flickerWindow' : 
-                                  w.animationType === 'slowBlink' ? 'slowBlink' : 'toggleWindow',
-                     animationDuration: `${w.duration}s`,
-                     animationDelay: `${w.delay}s`,
-                     animationIterationCount: 'infinite',
-                     animationFillMode: 'both',
-                     willChange: 'opacity',
-                     filter: w.isCabin ? 'blur(0.4px)' : 'none'
-                 } : {}}
-               />
+            {layer.windows.map((windowLight, i) => (
+              <rect
+                key={`win-${layer.key}-${i}`}
+                x={windowLight.x}
+                y={windowLight.y}
+                width={windowLight.w}
+                height={windowLight.h}
+                rx={windowLight.isCabin ? 0.5 : 0}
+                fill={windowLight.isOn ? windowLight.color || '#fff6a9' : layer.fill}
+                opacity={windowLight.isOn ? (windowLight.animationType !== 'none' ? undefined : 0.8) : 1}
+                className="cityWindow"
+                style={
+                  windowLight.isOn && windowLight.animationType !== 'none'
+                    ? {
+                        animationName:
+                          windowLight.animationType === 'flicker'
+                            ? 'flickerWindow'
+                            : windowLight.animationType === 'slowBlink'
+                              ? 'slowBlink'
+                              : 'toggleWindow',
+                        animationDuration: `${windowLight.duration}s`,
+                        animationDelay: `${windowLight.delay}s`,
+                        animationIterationCount: 'infinite',
+                        animationFillMode: 'both',
+                        willChange: 'opacity',
+                        filter: windowLight.isCabin ? 'blur(0.4px)' : 'none',
+                      }
+                    : undefined
+                }
+              />
             ))}
+
             {layer.lighthouseGlow && (
               <g className="lighthouseContainer">
                 <defs>
-                   <clipPath id={`clip-${layer.key}`}>
-                       <path d={layer.d} />
-                       {(layer as any).buildings?.map((b: any, i: number) => (
-                           <path key={`clip-build-${i}`} d={b.d} />
-                       ))}
-                   </clipPath>
+                  <clipPath id={`clip-${layer.key}`}>
+                    <path d={layer.d} />
+                    {layer.buildings.map((building, i) => (
+                      <path key={`clip-build-${layer.key}-${i}`} d={building.d} />
+                    ))}
+                  </clipPath>
                 </defs>
-                <motion.g 
-                    style={{ opacity: splashOpacity, mixBlendMode: 'overlay' }} 
-                    clipPath={`url(#clip-${layer.key})`}
-                >
-                   <motion.ellipse
-                      cx={mouseX}
-                      cy={mouseY}
-                      rx={80}
-                      ry={40}
-                      fill="url(#lighthouse-glow)"
-                      style={{ filter: 'blur(10px)', pointerEvents: 'none', willChange: 'cx, cy' }}
-                   />
-                   <motion.ellipse
-                      cx={mouseX}
-                      cy={mouseY}
-                      rx={30}
-                      ry={15}
-                      fill="#fff"
-                      style={{ filter: 'blur(4px)', pointerEvents: 'none', willChange: 'cx, cy' }}
-                   />
+
+                <motion.g style={{ opacity: splashOpacity, mixBlendMode: 'overlay' }} clipPath={`url(#clip-${layer.key})`}>
+                  <motion.ellipse
+                    cx={mouseX}
+                    cy={mouseY}
+                    rx={80}
+                    ry={40}
+                    fill="url(#lighthouse-glow)"
+                    style={{ filter: 'blur(10px)', pointerEvents: 'none', willChange: 'cx, cy' }}
+                  />
+                  <motion.ellipse
+                    cx={mouseX}
+                    cy={mouseY}
+                    rx={30}
+                    ry={15}
+                    fill="#fff"
+                    style={{ filter: 'blur(4px)', pointerEvents: 'none', willChange: 'cx, cy' }}
+                  />
                 </motion.g>
 
                 <motion.path
@@ -694,7 +728,6 @@ const FantasyBackground: React.FC = () => {
                   fillOpacity={0.9}
                   style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(3px)', willChange: 'd' }}
                 />
-                
                 <ellipse
                   cx={layer.lighthouseGlow.cx}
                   cy={layer.lighthouseGlow.cy}
@@ -715,11 +748,11 @@ const FantasyBackground: React.FC = () => {
                 />
               </g>
             )}
-          </React.Fragment>
+          </g>
         ))}
       </svg>
     </div>
   );
-};
+}
 
 export default FantasyBackground;
