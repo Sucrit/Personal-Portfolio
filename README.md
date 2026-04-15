@@ -1,5 +1,5 @@
 ## DEVELOPMENT
-Developed using React, Vite, TypeScript, and Framer Motion.
+Developed using React (Vite), TypeScript, and Framer Motion.
 
 ### TODO
 - add light mode theme with dynamic background changes
