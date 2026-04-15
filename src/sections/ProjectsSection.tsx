@@ -10,7 +10,10 @@ function ProjectsSection() {
         <h2>Featured Projects</h2>
         <div className={styles.grid}>
           {featuredProjects.map((project) => (
-            <div key={project.name} className={styles.card}>
+            <div
+              key={project.name}
+              className={`${styles.card} ${project.name === 'Credence' ? styles.cardExpanded : ''}`.trim()}
+            >
               <div className={styles.imageContainer}>
                 <ProjectCarousel
                   images={project.images}

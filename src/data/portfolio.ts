@@ -36,17 +36,18 @@ export type ContactLink = {
 };
 
 export const skills: Skill[] = [
-  { name: 'MySQL', icon: '/assets/skills/mysql.svg', color: '#0051ff', description: 'Relational Database' },
+  { name: 'MySQL', icon: '/assets/icons/devicons/mysql.svg', color: '#0051ff', description: 'Relational Database' },
+  { name: 'PostgreSQL', icon: '/assets/icons/devicons/postgresql.svg', color: '#336791', description: 'Relational Database' },
   { name: 'MongoDB', icon: '/assets/icons/devicons/mongodb-original.svg', color: '#25ff29bb', description: 'NoSQL Goat' },
-  { name: 'Mongoose', icon: '/assets/icons/devicons/mongoose.svg', color: '#880000', description: 'MongoDB ODM' },
-  { name: 'Rust', icon: '/assets/skills/rust.png', color: '#dea584', description: 'C++ doppelganger' },
+  { name: 'Mongoose', icon: '/assets/icons/devicons/mongoose.svg', color: '#e63d3d', description: 'MongoDB ODM' },
+  { name: 'Rust', icon: '/assets/icons/devicons/rust.png', color: '#dea584', description: 'C++ doppelganger' },
   { name: 'JavaScript', icon: '/assets/icons/devicons/javascript-original.svg', color: '#b8ac54af', description: 'Web Scripting' },
   { name: 'TypeScript', icon: '/assets/icons/devicons/typescript-original.svg', color: '#3178C6', description: 'JavaScript Plus' },
   { name: 'Node.js', icon: '/assets/icons/devicons/nodejs-original.svg', color: '#37dc31b5', description: 'JavaScript Runtime' },
-  { name: 'Express', icon: '/assets/icons/devicons/express-original.svg', color: '#ffffffa1', description: 'Node.js Framework' },
+  { name: 'Express', icon: '/assets/icons/devicons/express-logo.png', color: '#ffffffa1', description: 'Node.js Framework' },
   { name: 'Prisma', icon: '/assets/icons/devicons/prisma.svg', color: '#5a67d8', description: 'Database ORM' },
   { name: 'PHP', icon: '/assets/icons/devicons/php-original.svg', color: '#3843debb', description: 'Old but Gold' },
-  { name: 'Laravel', icon: '/assets/skills/laravel.svg', color: '#FF2D20', description: 'PHP Framework' },
+  { name: 'Laravel', icon: '/assets/icons/devicons/laravel.svg', color: '#FF2D20', description: 'PHP Framework' },
   { name: 'Docker', icon: '/assets/icons/devicons/docker-original.svg', color: '#0091ff', description: 'Containerization' },
   { name: 'GitHub', icon: '/assets/icons/brand/github-white.svg', color: '#ffffffa3', description: 'Version Control' },
   { name: 'Linux', icon: '/assets/icons/devicons/linux-original.svg', color: '#968b0d', description: 'Distros & Server' },
@@ -57,6 +58,7 @@ export const skillIconMap = Object.fromEntries(
 ) as Record<string, string>;
 
 Object.assign(skillIconMap, {
+  express: '/assets/icons/devicons/express-original.svg',
   react: '/assets/icons/devicons/react.svg',
   vite: '/assets/icons/devicons/vite.svg',
   postgresql: '/assets/icons/devicons/postgresql.svg',
@@ -65,7 +67,9 @@ Object.assign(skillIconMap, {
   solidity: '/assets/icons/devicons/solidity.svg',
   ethereum: '/assets/icons/devicons/ethereum.svg',
   ganache: '/assets/icons/devicons/ganache.svg',
-  'ethereum / ganache': '/assets/icons/devicons/ethereum.svg',
+  eth: '/assets/icons/devicons/ethereum.svg',
+  'ethers.js': '/assets/icons/devicons/ethers.svg',
+  'tanstack query': '/assets/icons/devicons/tanstack.png',
 });
 
 export const educationItems: EducationItem[] = [
@@ -126,9 +130,9 @@ export const featuredProjects: Project[] = [
     alt: 'Credence Preview',
     role: 'Full Stack Developer',
     description:
-      'A full-stack digital academic credentials platform with Clerk-authenticated React/Vite workflows, PostgreSQL/Prisma-backed services, and Ethereum-compatible credential anchoring.',
+      'Credence aims to digitalized student credential issuance, ownership and verification. ',
     repoUrl: 'https://github.com/Sucrit/SACVS',
-    technologies: ['React', 'Vite', 'TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Clerk', 'Solidity', 'Ethereum / Ganache'],
+    technologies: ['React', 'TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Clerk', 'Solidity', 'ETH', 'Ethers.js', 'Ganache', 'TanStack Query'],
     desktopPreviewMode: 'framed',
     images: [
       '/assets/projects/credence/admin-overview.png',
