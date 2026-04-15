@@ -42,12 +42,12 @@ export const skills: Skill[] = [
   { name: 'JavaScript', icon: '/assets/icons/devicons/javascript-original.svg', color: '#b8ac54af', description: 'Web Scripting' },
   { name: 'TypeScript', icon: '/assets/icons/devicons/typescript-original.svg', color: '#3178C6', description: 'JavaScript Plus' },
   { name: 'Node.js', icon: '/assets/icons/devicons/nodejs-original.svg', color: '#37dc31b5', description: 'JavaScript Runtime' },
-  { name: 'Express', icon: '/assets/icons/devicons/express-original.svg', color: '#ffffff', description: 'Node.js Framework' },
+  { name: 'Express', icon: '/assets/icons/devicons/express-logo.png', color: '#ffffffa1', description: 'Node.js Framework' },
   { name: 'PHP', icon: '/assets/icons/devicons/php-original.svg', color: '#3843debb', description: 'Old but Gold' },
   { name: 'Laravel', icon: '/assets/skills/laravel.svg', color: '#FF2D20', description: 'PHP Framework' },
   { name: 'Docker', icon: '/assets/icons/devicons/docker-original.svg', color: '#0091ff', description: 'Containerization' },
   { name: 'GitHub', icon: '/assets/icons/brand/github-white.svg', color: '#ffffffa3', description: 'Version Control' },
-  { name: 'Linux', icon: '/assets/icons/devicons/linux-original.svg', color: '#968b0d', description: 'Linux Kernel' },
+  { name: 'Linux', icon: '/assets/icons/devicons/linux-original.svg', color: '#968b0d', description: 'Distros & Server' },
 ];
 
 export const skillIconMap = Object.fromEntries(
@@ -108,7 +108,7 @@ export const featuredProjects: Project[] = [
   // },
   {
     name: 'Credence',
-    logo: '/assets/projects/credence/c-version_logo.png',
+    logo: '/assets/projects/credence/credence-logo.svg',
     alt: 'Credence Preview',
     role: 'Full Stack Developer',
     description:
@@ -228,7 +228,7 @@ export const preloadAssets = [
   '/assets/icons/devicons/javascript-original.svg',
   '/assets/icons/devicons/typescript-original.svg',
   '/assets/icons/devicons/nodejs-original.svg',
-  '/assets/icons/devicons/express-original.svg',
+  '/assets/icons/devicons/express-logo.png',
   '/assets/icons/devicons/php-original.svg',
   '/assets/icons/devicons/docker-original.svg',
   '/assets/icons/devicons/linux-original.svg',

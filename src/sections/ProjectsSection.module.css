@@ -68,8 +68,8 @@
 }
 
 .logoLarge {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
 }
 
 .title {
@@ -126,6 +126,11 @@
   font-family: var(--font-mono);
 }
 
+.link:hover,
+.link:focus-visible {
+  transform: translateY(-1px);
+}
+
 @media (max-width: 900px) {
   .card {
     flex-direction: column;
@@ -152,8 +157,8 @@
   }
 
   .logoLarge {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
   }
 
   .title {

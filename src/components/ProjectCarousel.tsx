@@ -80,7 +80,7 @@ function ProjectCarousel({
                 objectFit: 'cover',
                 filter: 'blur(22px)',
                 transform: 'scale(1.08)',
-                opacity: 0.7,
+                opacity: 0.58,
               }}
             />
             <img
@@ -93,7 +93,7 @@ function ProjectCarousel({
                 objectFit: 'contain',
                 objectPosition: 'center',
                 display: 'block',
-                transform: 'scaleY(1.06)',
+                transform: 'scaleY(1.1)',
                 zIndex: 1,
               }}
               loading="eager"
