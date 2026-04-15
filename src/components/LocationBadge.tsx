@@ -9,7 +9,7 @@ const LocationBadge: React.FC = () => {
         <FaMapMarkerAlt className="location-icon" />
       </div>
       <span className="location-text">Based in Pangasinan, Philippines</span>
-      <img src="/Flag_of_the_Philippines.svg" alt="Philippines" className="location-flag" />
+      <img src="/assets/flags/philippines.svg" alt="Philippines" className="location-flag" />
     </div>
   );
 };

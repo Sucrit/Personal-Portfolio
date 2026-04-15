@@ -124,7 +124,7 @@ const Navbar: React.FC = () => {
             }}
             style={{ display: 'inline-block', transformOrigin: 'center' }}
           >
-            <img src="/phonecall.svg" alt="Phone" className="nav-phone-icon" />
+            <img src="/assets/icons/ui/phonecall.svg" alt="Phone" className="nav-phone-icon" />
           </motion.div>
         );
       default: return null;

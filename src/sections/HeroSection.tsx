@@ -57,7 +57,7 @@ function HeroSection({ isLoaded }: HeroSectionProps) {
               whileHover={{ rotate: 18, scale: 1.1 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
-              <img src="/png1.png" alt="Wave" className={styles.wave} />
+              <img src="/assets/profile/wave.png" alt="Wave" className={styles.wave} />
             </motion.span>
           </motion.h1>
 
@@ -94,7 +94,7 @@ function HeroSection({ isLoaded }: HeroSectionProps) {
               );
             })}
             <a
-              href="/Oliver_Ondoy_Resume.pdf"
+              href="/assets/documents/oliver-ondoy-resume.pdf"
               className={styles.resumeButton}
               title="Download Resume"
               download

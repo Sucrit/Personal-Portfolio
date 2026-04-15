@@ -17,7 +17,11 @@ function ProjectsSection() {
 
               <div className={styles.content}>
                 <div className={styles.titleInline}>
-                  <img src={project.logo} alt={`${project.name} logo`} className={styles.logo} />
+                  <img
+                    src={project.logo}
+                    alt={`${project.name} logo`}
+                    className={`${styles.logo} ${project.name === 'Credence' ? styles.logoLarge : ''}`.trim()}
+                  />
                   <h3 className={styles.title}>{project.name}</h3>
                 </div>
                 <div className={styles.role}>Role: {project.role}</div>
