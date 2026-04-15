@@ -1,6 +1,3 @@
-# DEPLOYED
-View it at https://www.sucritdev.me/
-
 ## DEVELOPMENT
 Developed using React, Vite, TypeScript, and Framer Motion.
 
