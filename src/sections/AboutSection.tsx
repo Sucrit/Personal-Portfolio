@@ -39,6 +39,19 @@ function EducationCard({
   const connectorScale = useTransform(connectorProgress, [0, 1], [0, 1]);
   const nodeFillScale = useTransform(connectorProgress, [0, 1], [0, 1]);
   const nodeFillOpacity = useTransform(connectorProgress, [0, 0.1, 1], [0, 1, 1]);
+  const nodeBorderColor = useTransform(
+    connectorProgress,
+    [0, 1],
+    ['rgba(255, 255, 255, 0.95)', 'rgba(255, 222, 33, 0.95)'],
+  );
+  const nodeBorderGlow = useTransform(
+    connectorProgress,
+    [0, 1],
+    [
+      '0 0 10px rgba(255, 255, 255, 0.15), inset 0 0 4px rgba(255, 255, 255, 0.08)',
+      '0 0 10px rgba(255, 222, 33, 0.2), inset 0 0 4px rgba(255, 222, 33, 0.08)',
+    ],
+  );
 
   return (
     <div className={`${styles.item} ${isLeft ? styles.left : styles.right}`}>
@@ -65,7 +78,7 @@ function EducationCard({
             <div className={styles.highlights}>
               {item.highlights.map((highlight) => (
                 <p key={highlight} className={styles.highlight}>
-                  <span className={styles.highlightDot}>◆</span>
+                  <span className={styles.highlightDot}>★</span>
                   {highlight}
                 </p>
               ))}
@@ -77,12 +90,15 @@ function EducationCard({
               className={`${styles.connectorFill} ${styles.connectorFillLeft}`}
               style={{ opacity: connectorOpacity, scaleX: connectorScale }}
             />
-            <div className={`${styles.node} ${styles.nodeRight}`}>
+            <motion.div
+              className={`${styles.node} ${styles.nodeRight}`}
+              style={{ borderColor: nodeBorderColor, boxShadow: nodeBorderGlow }}
+            >
               <motion.div
                 className={styles.nodeFill}
                 style={{ opacity: nodeFillOpacity, scale: nodeFillScale }}
               />
-            </div>
+            </motion.div>
           </div>
 
           <div className={styles.spacer} />
@@ -96,12 +112,15 @@ function EducationCard({
               className={`${styles.connectorFill} ${styles.connectorFillRight}`}
               style={{ opacity: connectorOpacity, scaleX: connectorScale }}
             />
-            <div className={`${styles.node} ${styles.nodeLeft}`}>
+            <motion.div
+              className={`${styles.node} ${styles.nodeLeft}`}
+              style={{ borderColor: nodeBorderColor, boxShadow: nodeBorderGlow }}
+            >
               <motion.div
                 className={styles.nodeFill}
                 style={{ opacity: nodeFillOpacity, scale: nodeFillScale }}
               />
-            </div>
+            </motion.div>
           </div>
 
           <motion.div className={styles.cardMotion} style={{ borderColor, boxShadow }}>
@@ -123,7 +142,7 @@ function EducationCard({
             <div className={styles.highlights}>
               {item.highlights.map((highlight) => (
                 <p key={highlight} className={styles.highlight}>
-                  <span className={styles.highlightDot}>◆</span>
+                  <span className={styles.highlightDot}>★</span>
                   {highlight}
                 </p>
               ))}

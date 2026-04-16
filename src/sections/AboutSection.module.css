@@ -317,13 +317,8 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 248, 196, 0.95) 0%,
-    rgba(255, 222, 33, 0.88) 58%,
-    rgba(255, 199, 0, 0.65) 100%
-  );
-  box-shadow: 0 0 8px rgba(255, 222, 33, 0.2);
+  background: rgba(255, 222, 33, 0.92);
+  box-shadow: 0 0 8px rgba(255, 222, 33, 0.16);
   transform-origin: center;
 }
 
@@ -362,6 +357,12 @@
     left: 24px;
   }
 
+  .progressBar {
+    box-shadow:
+      0 0 6px rgba(255, 222, 33, 0.08),
+      0 0 10px rgba(255, 222, 33, 0.04);
+  }
+
   .item {
     flex-direction: column;
     align-items: flex-start;
@@ -375,7 +376,23 @@
   }
 
   .connector {
-    display: none;
+    display: block;
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    width: 28px;
+    height: 2px;
+    margin: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, transparent 100%);
+    transform: translateY(-50%);
+  }
+
+  .connectorFillLeft,
+  .connectorFillRight {
+    left: 0;
+    right: auto;
+    background: linear-gradient(90deg, rgba(255, 222, 33, 0.62) 0%, transparent 100%);
+    transform-origin: left center;
   }
 
   .cardMotion {
@@ -383,8 +400,12 @@
     max-width: 100%;
   }
 
-  .node {
-    left: -34px;
+  .node,
+  .nodeLeft,
+  .nodeRight {
+    left: -6px;
+    right: auto;
+    transform: translateY(-50%);
   }
 }
 
@@ -429,6 +450,15 @@
   .progressBar,
   .light {
     left: 20px;
+  }
+
+  .progressBar {
+    box-shadow:
+      0 0 4px rgba(255, 222, 33, 0.06),
+      0 0 8px rgba(255, 222, 33, 0.03);
+  }
+
+  .light {
     width: 12px;
     height: 12px;
   }
@@ -442,6 +472,12 @@
   .item {
     padding-left: 50px;
     margin-bottom: 3rem;
+  }
+
+  .connector {
+    left: 20px;
+    top: 50%;
+    width: 30px;
   }
 
   .cardMotion {
@@ -475,6 +511,10 @@
     left: 20px;
     width: 12px;
     height: 12px;
+  }
+
+  .progressBar {
+    left: 20px;
   }
 
   .lightTrail {
