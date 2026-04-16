@@ -534,7 +534,7 @@ h2 {
   pointer-events: auto;
   padding: 0.4rem 0.55rem;
   border-radius: 999px;
-  background: rgba(8, 14, 30, 0.3);
+  background: rgba(8, 14, 30, 0.18);
   backdrop-filter: blur(6px);
 }
 

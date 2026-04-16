@@ -50,7 +50,7 @@ export const skills: Skill[] = [
   { name: 'Laravel', icon: '/assets/icons/devicons/laravel.svg', color: '#FF2D20', description: 'PHP Framework' },
   { name: 'Docker', icon: '/assets/icons/devicons/docker-original.svg', color: '#0091ff', description: 'Containerization' },
   { name: 'GitHub', icon: '/assets/icons/brand/github-white.svg', color: '#ffffffa3', description: 'Version Control' },
-  { name: 'Linux', icon: '/assets/icons/devicons/linux-original.svg', color: '#968b0d', description: 'Distros & Server' },
+  { name: 'Linux', icon: '/assets/icons/devicons/linux-original.svg', color: '#968b0d', description: 'Linux Distros' },
 ];
 
 export const skillIconMap = Object.fromEntries(
