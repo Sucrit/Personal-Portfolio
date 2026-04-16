@@ -286,7 +286,25 @@
     max-width: 100%;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    aspect-ratio: 16/9;
+    height: auto;
+    min-height: 0;
+  }
+
+  .imageContainer :global(.project-image-carousel--web-preview) {
+    height: auto;
+    min-height: 0;
+    background: transparent;
+  }
+
+  .imageContainer :global(.project-image-carousel--web-preview .project-preview-image--fill) {
+    height: auto !important;
+    min-height: 0;
+    object-fit: contain !important;
+    object-position: center top !important;
+  }
+
+  .imageContainer :global(.project-image-carousel--mobile-preview) {
+    min-height: 0;
     height: auto;
   }
 

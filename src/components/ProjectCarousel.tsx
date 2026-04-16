@@ -39,11 +39,9 @@ function ProjectCarousel({
 
   return (
     <div
-      className="project-image-carousel"
+      className={`project-image-carousel ${isMobile ? 'project-image-carousel--mobile-preview' : 'project-image-carousel--web-preview'}`}
       style={{
         position: 'relative',
-        width: '100%',
-        height: '100%',
         background: isMobile ? 'rgba(0,0,0,0.2)' : 'transparent',
         display: 'flex',
         alignItems: 'center',
@@ -109,6 +107,7 @@ function ProjectCarousel({
           <img
             src={src}
             alt={`${alt} ${currentIndex + 1}`}
+            className="project-preview-image project-preview-image--fill"
             style={{
               width: '100%',
               height: '100%',
