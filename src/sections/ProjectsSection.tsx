@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import ProjectCarousel from '../components/ProjectCarousel';
+import ProjectModal from '../components/ProjectModal';
 import TechTag from '../components/ui/TechTag';
+import type { Project } from '../data/portfolio';
 import { featuredProjects, skillIconMap } from '../data/portfolio';
 import styles from './ProjectsSection.module.css';
 
@@ -8,6 +10,7 @@ const TECH_PREVIEW_COUNT = 5;
 
 function ProjectsSection() {
   const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   const toggleProjectTech = (projectName: string) => {
     setExpandedProjects((current) => ({
@@ -31,6 +34,16 @@ function ProjectsSection() {
               <div
                 key={project.name}
                 className={styles.card}
+                onClick={() => setActiveProject(project)}
+                role="button"
+                tabIndex={0}
+                aria-label={`View ${project.name} details`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setActiveProject(project);
+                  }
+                }}
               >
                 <div className={styles.imageContainer}>
                   <ProjectCarousel
@@ -115,15 +128,26 @@ function ProjectsSection() {
                       className={styles.link}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       View Code &rarr;
                     </a>
                   </div>
                 </div>
+
+                {/* Hover overlay */}
+                <div className={styles.viewOverlay}>
+                  <span className={styles.viewLabel}>View Details</span>
+                </div>
               </div>
             );
           })}
         </div>
+
+        <ProjectModal
+          project={activeProject}
+          onClose={() => setActiveProject(null)}
+        />
       </div>
     </section>
   );

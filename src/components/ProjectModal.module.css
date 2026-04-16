@@ -1,0 +1,337 @@
+/* ── Backdrop ── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 3vh 1rem;
+}
+
+/* ── Panel ── */
+.panel {
+  position: relative;
+  width: 100%;
+  max-width: 920px;
+  background: rgba(13, 17, 23, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 32px 80px -20px rgba(0, 0, 0, 0.7),
+    0 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+/* ── Close button ── */
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(13, 17, 23, 0.8);
+  backdrop-filter: blur(6px);
+  color: #e2e8f0;
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.close:hover,
+.close:focus-visible {
+  background: rgba(255, 222, 33, 0.92);
+  border-color: rgba(255, 244, 168, 0.7);
+  color: #0b1026;
+  transform: scale(1.08);
+}
+
+.close:active {
+  transform: scale(0.95);
+}
+
+/* ── Gallery ── */
+.gallery {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ── Body content ── */
+.body {
+  padding: 2.5rem 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.logoLarge {
+  width: 40px;
+  height: 40px;
+}
+
+.name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.roleBadge {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  white-space: nowrap;
+}
+
+.repoLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #0b1026;
+  background: var(--accent-color);
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.repoLink:hover,
+.repoLink:focus-visible {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+/* ── Section shared ── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-color);
+  margin: 0;
+}
+
+.sectionStar {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.sectionText {
+  color: #cbd5e1;
+  font-size: 1.05rem;
+  line-height: 1.72;
+  margin: 0;
+}
+
+/* ── Features list ── */
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  color: #cbd5e1;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.featureStar {
+  color: var(--accent-color);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  text-shadow: 0 0 8px rgba(255, 222, 33, 0.35);
+}
+
+/* ── Challenges ── */
+.challengeList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.challengeCard {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.challengeLabel {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.challengeProblemLabel {
+  composes: challengeLabel;
+  color: #f87171;
+}
+
+.challengeSolutionLabel {
+  composes: challengeLabel;
+  color: #34d399;
+}
+
+.challengeText {
+  color: #cbd5e1;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Tech stack ── */
+.techGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ── Divider ── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.08) 80%,
+    transparent
+  );
+  border: none;
+  margin: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .backdrop {
+    padding: 0;
+  }
+
+  .panel {
+    max-width: 100%;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .body {
+    padding: 1.5rem 1.25rem 2rem;
+    gap: 2rem;
+  }
+
+  .name {
+    font-size: 1.5rem;
+  }
+
+  .logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .logoLarge {
+    width: 30px;
+    height: 30px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sectionText {
+    font-size: 0.98rem;
+  }
+
+  .featureItem {
+    font-size: 0.95rem;
+  }
+
+  .challengeCard {
+    padding: 1rem 1.15rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .body {
+    padding: 1rem 0.85rem 1.5rem;
+  }
+
+  .name {
+    font-size: 1.25rem;
+  }
+}

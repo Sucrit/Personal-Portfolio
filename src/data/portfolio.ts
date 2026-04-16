@@ -7,6 +7,19 @@ export type Skill = {
 
 export type ProjectImage = string | { src: string; type: 'web' | 'mobile' };
 
+export type ProjectChallenge = {
+  problem: string;
+  solution: string;
+};
+
+export type ProjectDetail = {
+  overview: string;
+  features: string[];
+  architecture: string;
+  security: string;
+  challenges: ProjectChallenge[];
+};
+
 export type Project = {
   name: string;
   logo: string;
@@ -17,6 +30,7 @@ export type Project = {
   technologies: string[];
   images: ProjectImage[];
   desktopPreviewMode?: 'fill' | 'framed';
+  detail?: ProjectDetail;
 };
 
 export type EducationItem = {
@@ -152,6 +166,35 @@ export const featuredProjects: Project[] = [
       '/assets/projects/credence/Screenshot_20260416_084157.png',
       '/assets/projects/credence/Screenshot_20260416_084207.png',
     ],
+    detail: {
+      overview:
+        'Credence is a full-stack platform that digitalizes the entire lifecycle of student academic credentials — from issuance by institutions to ownership by students and verification by third parties. Each credential is anchored on a local Ethereum blockchain via Solidity smart contracts, making them tamper-proof and independently verifiable without contacting the issuing institution.',
+      features: [
+        'Blockchain-anchored credential issuance with Solidity smart contracts',
+        'Role-based dashboards for Admin, Institution, and Student users',
+        'On-chain verification portal for third-party credential checks',
+        'Institutional analytics with report generation',
+        'Student credential management with ownership transfer',
+      ],
+      architecture:
+        'The frontend is a React SPA built with Vite and styled using Tailwind CSS. It communicates with a Node.js/Express REST API that handles business logic and persists data through Prisma ORM to a PostgreSQL database. Credential hashes are written to a local Ethereum blockchain (Ganache) via Truffle-compiled Solidity contracts, and the frontend interacts with the chain through Ethers.js. Authentication and session management are handled externally by Clerk.',
+      security:
+        'Authentication is delegated to Clerk, which provides secure session tokens, MFA support, and OAuth flows without storing raw credentials in the application. All API endpoints enforce role-based access control — admin, institution, and student roles each have distinct permission boundaries. Credential integrity is guaranteed by the blockchain layer: once a credential hash is committed on-chain, it becomes immutable and independently verifiable. The API further validates all inputs server-side to prevent injection attacks.',
+      challenges: [
+        {
+          problem: 'Synchronizing on-chain transaction confirmations with the database so the UI reflects real credential status without stale data.',
+          solution: 'Implemented a polling mechanism with TanStack Query that watches transaction receipts and invalidates relevant query caches once the block is mined, ensuring the dashboard updates in near real-time.',
+        },
+        {
+          problem: 'Managing complex role-based access across three distinct user types with overlapping data views.',
+          solution: 'Designed a middleware layer in the Express API that derives permissions from Clerk session claims, enforcing access at the route level before any controller logic executes.',
+        },
+        {
+          problem: 'Handling smart contract deployment and migration across development environments consistently.',
+          solution: 'Used Truffle migration scripts with environment-specific configs and a CI-friendly seed step that deploys contracts to a fresh Ganache instance before running Vitest integration tests.',
+        },
+      ],
+    },
   },
   {
     name: 'EvacuDesk',
@@ -168,6 +211,30 @@ export const featuredProjects: Project[] = [
       '/assets/projects/evacudesk/ss2.png',
       '/assets/projects/evacudesk/ss3.png',
     ],
+    detail: {
+      overview:
+        'EvacuDesk is a management system built for the City Disaster Risk Reduction and Management Office (CDRRMO) of Dagupan, Philippines. It digitalizes the tracking of evacuation centers, evacuee registration, resource allocation, and incident reporting during disaster response operations.',
+      features: [
+        'Real-time evacuee registration and headcount tracking',
+        'Evacuation center capacity monitoring and status dashboards',
+        'Resource inventory management and allocation logging',
+        'Incident report generation for CDRRMO operations',
+      ],
+      architecture:
+        'The backend is a RESTful API built with Node.js and Express, using Mongoose as the ODM layer over a MongoDB database. The API is structured around resource-based routes for evacuation centers, evacuees, and inventory items. The frontend (built by a separate team member) consumes these endpoints to render dashboards and management forms.',
+      security:
+        'API routes are protected by token-based authentication, ensuring only authorized CDRRMO personnel can access and modify records. Input validation is enforced at the Mongoose schema level with additional Express middleware for request sanitization. MongoDB connection strings and secrets are managed through environment variables, never committed to source control.',
+      challenges: [
+        {
+          problem: 'Designing a data model flexible enough to handle varying evacuation center layouts and capacities across different barangays.',
+          solution: 'Created a schema with dynamic capacity fields and nested sub-documents for each zone within a center, allowing per-zone headcounts while maintaining a single center record.',
+        },
+        {
+          problem: 'Ensuring data consistency when multiple operators register evacuees simultaneously during peak disaster response.',
+          solution: 'Leveraged MongoDB atomic update operators ($inc, $push) at the database level to prevent race conditions on headcount and capacity fields.',
+        },
+      ],
+    },
   },
   {
     name: 'RoomFinder',
@@ -184,6 +251,30 @@ export const featuredProjects: Project[] = [
       '/assets/projects/roomfinder/ss2.png',
       '/assets/projects/roomfinder/ss3.png',
     ],
+    detail: {
+      overview:
+        'RoomFinder is a cross-platform room booking and management system built for the University of Pangasinan. It enables students and staff to discover available rooms, submit booking requests, and manage reservations through both a web dashboard and a mobile application.',
+      features: [
+        'Room availability search with filtering by building, floor, and time slot',
+        'Booking request submission and approval workflow',
+        'Admin dashboard for room management and schedule oversight',
+        'Mobile companion app for on-the-go booking',
+      ],
+      architecture:
+        'The backend is a PHP REST API serving JSON responses to both the web frontend and the mobile app. Data is persisted in a MySQL relational database with normalized tables for rooms, schedules, bookings, and users. The mobile app is built with JavaScript and consumes the same API endpoints as the web client.',
+      security:
+        'User authentication is handled through PHP sessions with hashed passwords stored in MySQL. The API validates session tokens on every request and enforces role-based permissions — students can only create and view their own bookings, while admins have full CRUD access. All SQL queries use prepared statements to prevent SQL injection, and input is sanitized before processing.',
+      challenges: [
+        {
+          problem: 'Preventing double-bookings when two users request the same room and time slot simultaneously.',
+          solution: 'Implemented database-level unique constraints on the room-timeslot combination and wrapped the booking creation in a MySQL transaction with a SELECT ... FOR UPDATE lock.',
+        },
+        {
+          problem: 'Keeping the mobile app and web dashboard in sync with the same API without duplicating business logic.',
+          solution: 'Designed the PHP API as a strictly stateless JSON service so both clients consume identical endpoints, with all validation and business rules centralized server-side.',
+        },
+      ],
+    },
   }
 ];
 
