@@ -170,7 +170,7 @@ export const featuredProjects: Project[] = [
     ],
     detail: {
       overview:
-        'Credence is a full-stack platform that digitalizes the entire lifecycle of student academic credentials — from issuance by institutions to ownership by students and verification by third parties. Each credential is anchored on a local Ethereum blockchain via Solidity smart contracts, making them tamper-proof and independently verifiable without contacting the issuing institution.',
+        'Credence is a full-stack platform that digitalizes the entire lifecycle of student academic credentials — from issuance by institutions to ownership by students and verification by third parties. Each credential is anchored on an Ethereum blockchain via Solidity smart contracts, making them tamper-proof and independently verifiable without contacting the issuing institution.',
       features: [
         'Blockchain-anchored credential issuance with Solidity smart contracts',
         'Role-based dashboards for Admin, Institution, and Student users',
@@ -179,7 +179,7 @@ export const featuredProjects: Project[] = [
         'Student credential management with ownership transfer',
       ],
       architecture:
-        'The frontend is a React SPA built with Vite and styled using Tailwind CSS. It communicates with a Node.js/Express REST API that handles business logic and persists data through Prisma ORM to a PostgreSQL database. Credential hashes are written to a local Ethereum blockchain (Ganache) via Truffle-compiled Solidity contracts, and the frontend interacts with the chain through Ethers.js. Authentication and session management are handled externally by Clerk.',
+        'The frontend is a React SPA built with Vite and styled using Tailwind CSS. It communicates with a Node.js/Express REST API that handles business logic and persists data through Prisma ORM to a PostgreSQL database. Credential hashes are written to an Ethereum blockchain (Ganache) via Truffle-compiled Solidity contracts, and the frontend interacts with the chain through Ethers.js. Authentication and session management are handled externally by Clerk.',
       security:
         'Authentication is delegated to Clerk, which provides secure session tokens, MFA support, and OAuth flows without storing raw credentials in the application. All API endpoints enforce role-based access control — admin, institution, and student roles each have distinct permission boundaries. Credential integrity is guaranteed by the blockchain layer: once a credential hash is committed on-chain, it becomes immutable and independently verifiable. The API further validates all inputs server-side to prevent injection attacks.',
       challenges: [

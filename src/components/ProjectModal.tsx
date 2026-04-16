@@ -1,4 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { 
+  FaInfoCircle, 
+  FaListUl, 
+  FaProjectDiagram, 
+  FaShieldAlt, 
+  FaLayerGroup,
+  FaCheckCircle
+} from 'react-icons/fa';
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import type { Project } from '../data/portfolio';
@@ -139,7 +147,7 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
               {detail?.overview && (
                 <div className={styles.section}>
                   <h3 className={styles.sectionTitle}>
-                    <span className={styles.sectionStar}>✦</span> Overview
+                    <span className={styles.sectionStar}><FaInfoCircle /></span> Overview
                   </h3>
                   <p className={styles.sectionText}>{detail.overview}</p>
                 </div>
@@ -151,12 +159,12 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
               {detail?.features && detail.features.length > 0 && (
                 <div className={styles.section}>
                   <h3 className={styles.sectionTitle}>
-                    <span className={styles.sectionStar}>✦</span> Key Features
+                    <span className={styles.sectionStar}><FaListUl /></span> Key Features
                   </h3>
                   <ul className={styles.featureList}>
                     {detail.features.map((feature) => (
                       <li key={feature} className={styles.featureItem}>
-                        <span className={styles.featureStar}>✦</span>
+                        <span className={styles.featureStar}><FaCheckCircle size={12} /></span>
                         {feature}
                       </li>
                     ))}
@@ -170,7 +178,7 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
               {detail?.architecture && (
                 <div className={styles.section}>
                   <h3 className={styles.sectionTitle}>
-                    <span className={styles.sectionStar}>✦</span> System Architecture
+                    <span className={styles.sectionStar}><FaProjectDiagram /></span> System Architecture
                   </h3>
                   <p className={styles.sectionText}>{detail.architecture}</p>
                 </div>
@@ -182,7 +190,7 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
               {detail?.security && (
                 <div className={styles.section}>
                   <h3 className={styles.sectionTitle}>
-                    <span className={styles.sectionStar}>✦</span> Security
+                    <span className={styles.sectionStar}><FaShieldAlt /></span> Security
                   </h3>
                   <p className={styles.sectionText}>{detail.security}</p>
                 </div>
@@ -193,7 +201,7 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
               {/* Full Tech Stack */}
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
-                  <span className={styles.sectionStar}>✦</span> Tech Stack
+                  <span className={styles.sectionStar}><FaLayerGroup /></span> Tech Stack
                 </h3>
                 <div className={styles.techGrid}>
                   {project.technologies.map((technology) => (
