@@ -166,25 +166,37 @@ const Navbar: React.FC = () => {
         {/* Mobile menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
-              className="mobile-menu"
-              initial={{ x: '-100%', opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: '-100%', opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {links.map((link) => (
-                <a 
-                  key={link.name} 
-                  href={link.href} 
-                  className="nav-link-mobile"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {getIcon(link.id, activeSection === link.id)}
-                  <span style={{marginLeft: '10px'}}>{link.name}</span>
-                </a>
-              ))}
-            </motion.div>
+            <>
+              <motion.div
+                className="mobile-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+              <motion.div
+                className="mobile-menu"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+              >
+                {links.map((link) => (
+                  <a 
+                    key={link.name} 
+                    href={link.href} 
+                    className={`nav-link-mobile ${activeSection === link.id ? 'active' : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <span className="mobile-link-icon">
+                      {getIcon(link.id, activeSection === link.id)}
+                    </span>
+                    <span className="mobile-link-label">{link.name}</span>
+                  </a>
+                ))}
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>

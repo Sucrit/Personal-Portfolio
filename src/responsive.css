@@ -194,13 +194,7 @@
     gap: 1.25rem;
   }
 
-  .navbar-container {
-    display: none !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-    transform: translateY(-10px) !important;
-    visibility: hidden !important;
-  }
+
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
