@@ -63,7 +63,7 @@ Object.assign(skillIconMap, {
   vite: '/assets/icons/devicons/vite.svg',
   postgresql: '/assets/icons/devicons/postgresql.svg',
   prisma: '/assets/icons/devicons/prisma.svg',
-  clerk: '/assets/icons/devicons/clerk.png',
+  clerk: '/assets/icons/devicons/clerk.svg',
   solidity: '/assets/icons/devicons/solidity.svg',
   ethereum: '/assets/icons/devicons/ethereum.svg',
   ganache: '/assets/icons/devicons/ganache.svg',
