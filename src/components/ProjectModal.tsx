@@ -181,6 +181,15 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
                     <span className={styles.sectionStar}><FaProjectDiagram /></span> System Architecture
                   </h3>
                   <p className={styles.sectionText}>{detail.architecture}</p>
+                  {detail.architectureImg && (
+                    <div className={styles.architectureImageWrapper}>
+                      <img
+                        src={detail.architectureImg}
+                        alt="System Architecture Diagram"
+                        className={styles.architectureImage}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
 

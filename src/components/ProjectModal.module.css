@@ -202,6 +202,22 @@
   margin: 0;
 }
 
+.architectureImageWrapper {
+  margin-top: 1rem;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.architectureImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 /* ── Features list ── */
 .featureList {
   list-style: none;
