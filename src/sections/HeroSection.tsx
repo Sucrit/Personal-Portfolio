@@ -69,9 +69,8 @@ function HeroSection({ isLoaded }: HeroSectionProps) {
             I'm a 3rd-year BSIT student specialized in{' '}
             <strong className={styles.accent}>cybersecurity</strong> and{' '}
             <strong className={styles.accent}>backend</strong> development using{' '}
-            <strong className={styles.accent}>Node.js</strong>,{' '}
-            <strong className={styles.accent}>Express</strong> and{' '}
-            <strong className={styles.accent}>MongoDB</strong> and also have experience with{' '}
+            <strong className={styles.accent}>MERN</strong> and{' '}
+            <strong className={styles.accent}>PERN</strong> stack, aswell as experience with{' '}
             <strong className={styles.accent}>PHP</strong> and{' '}
             <strong className={styles.accent}>MySQL</strong>.
           </motion.p>

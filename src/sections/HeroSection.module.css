@@ -55,7 +55,7 @@
   background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(4px);
   padding: 1rem;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -92,6 +92,32 @@
   gap: 0.8rem;
   font-size: 0.95rem;
   font-family: var(--font-mono);
+}
+
+.actionButton {
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.actionButton:hover,
+.actionButton:focus-visible,
+.actionButton:active {
+  color: var(--accent-color);
+  border-color: rgba(255, 222, 33, 0.35);
+  background: rgba(255, 222, 33, 0.08);
+  transform: translateY(-1px);
+}
+
+.resumeButton {
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.resumeButton:hover,
+.resumeButton:focus-visible,
+.resumeButton:active {
+  color: var(--accent-color);
+  border-color: rgba(255, 222, 33, 0.35);
+  background: rgba(255, 222, 33, 0.08);
+  transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {

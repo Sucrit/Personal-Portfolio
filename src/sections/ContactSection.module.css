@@ -30,6 +30,14 @@
 
 .iconLink {
   color: var(--text-primary);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.iconLink:hover,
+.iconLink:focus-visible,
+.iconLink:active {
+  color: var(--accent-color);
+  transform: translateY(-1px);
 }
 
 .location {

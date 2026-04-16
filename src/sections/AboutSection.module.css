@@ -42,7 +42,7 @@
 .card {
   background: rgba(0, 0, 0, 0.2);
   padding: 1rem;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(4px);
 }
@@ -144,7 +144,7 @@
   width: calc(50% - 40px);
   background: rgba(0, 0, 0, 0.2);
   padding: 1rem;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid;
   backdrop-filter: blur(4px);
 }

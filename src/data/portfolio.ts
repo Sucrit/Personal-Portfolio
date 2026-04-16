@@ -44,7 +44,7 @@ export const skills: Skill[] = [
   { name: 'JavaScript', icon: '/assets/icons/devicons/javascript-original.svg', color: '#b8ac54af', description: 'Web Scripting' },
   { name: 'TypeScript', icon: '/assets/icons/devicons/typescript-original.svg', color: '#3178C6', description: 'JavaScript Plus' },
   { name: 'Node.js', icon: '/assets/icons/devicons/nodejs-original.svg', color: '#37dc31b5', description: 'JavaScript Runtime' },
-  { name: 'Express', icon: '/assets/icons/devicons/express-logo.png', color: '#ffffffa1', description: 'Node.js Framework' },
+  { name: 'Express', icon: '/assets/icons/devicons/express-original.svg', color: '#ffffffa1', description: 'Node.js Framework' },
   { name: 'Prisma', icon: '/assets/icons/devicons/prisma.svg', color: '#5a67d8', description: 'Database ORM' },
   { name: 'PHP', icon: '/assets/icons/devicons/php-original.svg', color: '#3843debb', description: 'Old but Gold' },
   { name: 'Laravel', icon: '/assets/icons/devicons/laravel.svg', color: '#FF2D20', description: 'PHP Framework' },
