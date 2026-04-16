@@ -23,16 +23,14 @@ function ProjectsSection() {
         <div className={styles.grid}>
           {featuredProjects.map((project) => {
             const isExpanded = !!expandedProjects[project.name];
-            const visibleTech = isExpanded
-              ? project.technologies
-              : project.technologies.slice(0, TECH_PREVIEW_COUNT);
+            const visibleTech = project.technologies.slice(0, TECH_PREVIEW_COUNT);
             const hiddenTech = project.technologies.slice(TECH_PREVIEW_COUNT);
             const hasOverflow = hiddenTech.length > 0;
 
             return (
               <div
                 key={project.name}
-                className={`${styles.card} ${isExpanded ? styles.cardOpen : ''}`.trim()}
+                className={styles.card}
               >
                 <div className={styles.imageContainer}>
                   <ProjectCarousel
@@ -54,47 +52,61 @@ function ProjectsSection() {
                   <div className={styles.role}>Role: {project.role}</div>
                   <p className={styles.description}>{project.description}</p>
 
-                  <div className={styles.tech}>
-                    {visibleTech.map((technology) => (
-                      <TechTag
-                        key={technology}
-                        name={technology}
-                        icon={skillIconMap[technology.toLowerCase()]}
-                      />
-                    ))}
-                    {hasOverflow && (
-                      <button
-                        type="button"
-                        className={styles.techOverflow}
-                        onClick={() => toggleProjectTech(project.name)}
-                        aria-expanded={isExpanded}
-                        aria-label={
-                          isExpanded
-                            ? `Collapse ${project.name} tech stack`
-                            : `Show ${hiddenTech.length} more ${project.name} technologies`
-                        }
-                    >
-                      {!isExpanded && (
-                        <span className={styles.techOverflowIcons} aria-hidden="true">
-                          {hiddenTech.slice(0, 3).map((technology) => {
-                            const icon = skillIconMap[technology.toLowerCase()];
-                            return (
-                              <span key={technology} className={styles.techOverflowIcon}>
-                                {icon ? (
-                                  <img src={icon} alt="" className={styles.techOverflowIconImage} />
-                                ) : (
-                                  <span className={styles.techOverflowFallback}>•</span>
-                                )}
-                              </span>
-                            );
-                          })}
-                        </span>
+                  <div className={styles.techSection}>
+                    <div className={styles.tech}>
+                      {visibleTech.map((technology) => (
+                        <TechTag
+                          key={technology}
+                          name={technology}
+                          icon={skillIconMap[technology.toLowerCase()]}
+                        />
+                      ))}
+                      {isExpanded &&
+                        hiddenTech.map((technology) => (
+                          <span
+                            key={technology}
+                            className={styles.extraTechItem}
+                          >
+                            <TechTag
+                              name={technology}
+                              icon={skillIconMap[technology.toLowerCase()]}
+                            />
+                          </span>
+                        ))}
+                      {hasOverflow && (
+                        <button
+                          type="button"
+                          className={styles.techOverflow}
+                          onClick={() => toggleProjectTech(project.name)}
+                          aria-expanded={isExpanded}
+                          aria-label={
+                            isExpanded
+                              ? `Collapse ${project.name} tech stack`
+                              : `Show ${hiddenTech.length} more ${project.name} technologies`
+                          }
+                        >
+                          {!isExpanded && (
+                            <span className={styles.techOverflowIcons} aria-hidden="true">
+                              {hiddenTech.slice(0, 3).map((technology) => {
+                                const icon = skillIconMap[technology.toLowerCase()];
+                                return (
+                                  <span key={technology} className={styles.techOverflowIcon}>
+                                    {icon ? (
+                                      <img src={icon} alt="" className={styles.techOverflowIconImage} />
+                                    ) : (
+                                      <span className={styles.techOverflowFallback}>•</span>
+                                    )}
+                                  </span>
+                                );
+                              })}
+                            </span>
+                          )}
+                          <span className={styles.techOverflowLabel}>
+                            {isExpanded ? 'Show less' : `+${hiddenTech.length} more`}
+                          </span>
+                        </button>
                       )}
-                      <span className={styles.techOverflowLabel}>
-                        {isExpanded ? 'Show less' : `+${hiddenTech.length} more`}
-                      </span>
-                    </button>
-                  )}
+                    </div>
                   </div>
 
                   <div className={styles.links}>
