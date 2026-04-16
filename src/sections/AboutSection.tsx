@@ -1,4 +1,5 @@
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import type { MotionValue } from 'framer-motion';
 import { useRef } from 'react';
 import type { EducationItem } from '../data/portfolio';
 import { aboutSections, educationItems } from '../data/portfolio';
@@ -9,13 +10,19 @@ function EducationCard({
   side,
   borderColor,
   boxShadow,
+  connectorProgress,
 }: {
   item: EducationItem;
   side: 'left' | 'right';
   borderColor: string;
   boxShadow: string;
+  connectorProgress: MotionValue<number>;
 }) {
   const isLeft = side === 'left';
+  const connectorOpacity = useTransform(connectorProgress, [0, 0.08, 1], [0, 1, 1]);
+  const connectorScale = useTransform(connectorProgress, [0, 1], [0, 1]);
+  const nodeFillScale = useTransform(connectorProgress, [0, 1], [0, 1]);
+  const nodeFillOpacity = useTransform(connectorProgress, [0, 0.1, 1], [0, 1, 1]);
 
   return (
     <div className={`${styles.item} ${isLeft ? styles.left : styles.right}`}>
@@ -50,7 +57,16 @@ function EducationCard({
           </motion.div>
 
           <div className={`${styles.connector} ${styles.connectorLeft}`}>
-            <div className={`${styles.node} ${styles.nodeRight}`} />
+            <motion.div
+              className={`${styles.connectorFill} ${styles.connectorFillLeft}`}
+              style={{ opacity: connectorOpacity, scaleX: connectorScale }}
+            />
+            <div className={`${styles.node} ${styles.nodeRight}`}>
+              <motion.div
+                className={styles.nodeFill}
+                style={{ opacity: nodeFillOpacity, scale: nodeFillScale }}
+              />
+            </div>
           </div>
 
           <div className={styles.spacer} />
@@ -60,7 +76,16 @@ function EducationCard({
       {!isLeft && (
         <>
           <div className={`${styles.connector} ${styles.connectorRight}`}>
-            <div className={`${styles.node} ${styles.nodeLeft}`} />
+            <motion.div
+              className={`${styles.connectorFill} ${styles.connectorFillRight}`}
+              style={{ opacity: connectorOpacity, scaleX: connectorScale }}
+            />
+            <div className={`${styles.node} ${styles.nodeLeft}`}>
+              <motion.div
+                className={styles.nodeFill}
+                style={{ opacity: nodeFillOpacity, scale: nodeFillScale }}
+              />
+            </div>
           </div>
 
           <motion.div className={styles.cardMotion} style={{ borderColor, boxShadow }}>
@@ -116,7 +141,10 @@ function AboutSection() {
     restDelta: 0.001,
   });
   const lightTopValue = useTransform(smoothProgress, (progress) => `${lerp(0, 100, progress)}%`);
-  const lightOpacity = useTransform(smoothProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
+  const progressHeight = useTransform(smoothProgress, (progress) => `${lerp(0, 100, progress)}%`);
+  const lightOpacity = useTransform(smoothProgress, [0, 0.05], [0, 1]);
+  const firstConnectorProgress = useTransform(smoothProgress, [0.2, 0.3], [0, 1]);
+  const secondConnectorProgress = useTransform(smoothProgress, [0.7, 0.8], [0, 1]);
 
   return (
     <section id="about" className={styles.section}>
@@ -146,6 +174,13 @@ function AboutSection() {
 
               <div ref={timelineRef} className={styles.timeline}>
                 <div className={styles.centerBar} />
+                <motion.div
+                  className={styles.progressBar}
+                  style={{
+                    height: progressHeight,
+                    opacity: lightOpacity,
+                  }}
+                />
 
                 <motion.div
                   className={styles.light}
@@ -163,6 +198,7 @@ function AboutSection() {
                   side="left"
                   borderColor={hsBorderValue}
                   boxShadow={hsGlowValue}
+                  connectorProgress={firstConnectorProgress}
                 />
 
                 <EducationCard
@@ -170,6 +206,7 @@ function AboutSection() {
                   side="right"
                   borderColor={collegeBorderValue}
                   boxShadow={collegeGlowValue}
+                  connectorProgress={secondConnectorProgress}
                 />
               </div>
             </div>
