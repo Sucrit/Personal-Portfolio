@@ -136,7 +136,7 @@ export const featuredProjects: Project[] = [
     description:
       'This platform aims to digitalize student credential issuance, ownership and verification. ',
     repoUrl: 'https://github.com/Sucrit/SACVS',
-    technologies: ['React', 'TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Clerk', 'Solidity', 'ETH', 'Ethers.js', 'Ganache', 'TanStack Query', 'Vitest', 'Tailwind CSS', 'Truffle', 'Framer Motion'],
+    technologies: ['TypeScript', 'Node.js', 'Express','React', 'PostgreSQL', 'Prisma', 'Clerk', 'Solidity', 'ETH', 'Ethers.js', 'Ganache', 'TanStack Query', 'Vitest', 'Tailwind CSS', 'Truffle', 'Framer Motion'],
     desktopPreviewMode: 'framed',
     images: [
       '/assets/projects/credence/Screenshot_20260416_083457.png',
