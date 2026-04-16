@@ -218,6 +218,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 2.2rem;
   gap: 0.5rem;
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.04);
@@ -228,8 +229,10 @@
   border-radius: 6px;
   text-transform: uppercase;
   letter-spacing: 0.4px;
+  line-height: 1;
   font-family: var(--font-mono);
   cursor: pointer;
+  appearance: none;
   transition:
     background-color 0.18s ease,
     border-color 0.18s ease,
@@ -257,6 +260,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 2.2rem;
   gap: 0.5rem;
   color: #0b1026;
   background-color: var(--accent-color);
@@ -264,10 +268,12 @@
   font-weight: 700;
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
-  border: none;
+  border: 1px solid transparent;
   text-transform: uppercase;
   letter-spacing: 0.4px;
+  line-height: 1;
   font-family: var(--font-mono);
+  text-decoration: none;
 }
 
 .link:hover,
