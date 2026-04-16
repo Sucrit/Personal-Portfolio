@@ -312,6 +312,13 @@
   .imageContainer :global(.project-image-carousel--mobile-preview) {
     min-height: 0;
     height: auto;
+    padding: 0.9rem 0;
+  }
+
+  .imageContainer :global(.project-image-carousel--mobile-preview .phone-mockup) {
+    width: 132px;
+    height: 256px;
+    margin-top: 0;
   }
 
   .titleInline {
@@ -342,6 +349,11 @@
 @media (max-width: 480px) {
   .section {
     padding: 60px 0;
+  }
+
+  .imageContainer :global(.project-image-carousel--mobile-preview .phone-mockup) {
+    width: 118px;
+    height: 228px;
   }
 }
 
