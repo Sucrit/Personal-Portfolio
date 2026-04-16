@@ -11,6 +11,19 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.tag:hover,
+.tag:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 222, 33, 0.18);
+  box-shadow: 0 6px 14px -12px rgba(255, 222, 33, 0.45);
 }
 
 .icon {

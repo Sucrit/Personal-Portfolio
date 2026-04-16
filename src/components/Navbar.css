@@ -58,25 +58,44 @@
   width: 40px; /* slightly smaller icons */
   height: 40px;
   border-radius: 10px;
-  transition: none; /* static */
+  transition:
+    color 0.22s ease,
+    background-color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
   text-decoration: none;
   z-index: 1;
 }
 
 .nav-link:hover {
-  color: #94a3b8;
-  background: transparent;
-  transform: none;
-  cursor: default;
+  color: #d8e2f0;
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(2px);
+  cursor: pointer;
 }
 
 .nav-link.active {
   color: #fff;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(90deg, rgba(255, 222, 33, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%);
+  box-shadow: inset 2px 0 0 var(--accent-color, #ffde21);
 }
 
 .nav-link::after {
-  display: none;
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 999px;
+  background: transparent;
+  transition: background-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.nav-link.active::after {
+  background: #ffde21;
+  box-shadow: 0 0 10px rgba(255, 222, 33, 0.4);
 }
 
 .icon-wrapper {

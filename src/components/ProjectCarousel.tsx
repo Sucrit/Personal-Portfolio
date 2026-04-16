@@ -27,6 +27,12 @@ function ProjectCarousel({
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
+  const goToImage = (index: number) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentIndex(index);
+  };
+
   const currentItem = images[currentIndex];
   const src = typeof currentItem === 'string' ? currentItem : currentItem.src;
   const isMobile = typeof currentItem !== 'string' && currentItem.type === 'mobile';
@@ -93,7 +99,6 @@ function ProjectCarousel({
                 objectFit: 'contain',
                 objectPosition: 'center',
                 display: 'block',
-                transform: 'scaleY(1.1)',
                 zIndex: 1,
               }}
               loading="eager"
@@ -107,7 +112,8 @@ function ProjectCarousel({
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'fill',
+              objectFit: 'cover',
+              objectPosition: 'center top',
               display: 'block',
             }}
             loading="eager"
@@ -127,7 +133,14 @@ function ProjectCarousel({
 
           <div className="carousel-dots">
             {images.map((_, idx) => (
-              <span key={idx} className={`dot ${idx === currentIndex ? 'active' : ''}`} />
+              <button
+                key={idx}
+                type="button"
+                className={`dot ${idx === currentIndex ? 'active' : ''}`}
+                onClick={goToImage(idx)}
+                aria-label={`Show image ${idx + 1}`}
+                aria-pressed={idx === currentIndex}
+              />
             ))}
           </div>
         </>
