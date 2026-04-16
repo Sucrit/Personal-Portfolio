@@ -68,8 +68,12 @@ Object.assign(skillIconMap, {
   ethereum: '/assets/icons/devicons/ethereum.svg',
   ganache: '/assets/icons/devicons/ganache.svg',
   eth: '/assets/icons/devicons/ethereum.svg',
-  ethers: '/assets/icons/devicons/ethers.svg',
+  'ethers.js': '/assets/icons/devicons/ethers.svg',
   'tanstack query': '/assets/icons/devicons/tanstack.png',
+  vitest: '/assets/icons/devicons/vitest.svg',
+  'tailwind css': '/assets/icons/devicons/tailwind.svg',
+  truffle: '/assets/icons/devicons/truffle.svg',
+  'framer motion': '/assets/icons/devicons/framer-motion.svg',
 });
 
 export const educationItems: EducationItem[] = [
@@ -132,7 +136,7 @@ export const featuredProjects: Project[] = [
     description:
       'This platform aims to digitalize student credential issuance, ownership and verification. ',
     repoUrl: 'https://github.com/Sucrit/SACVS',
-    technologies: ['React', 'TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Clerk', 'Solidity', 'ETH', 'Ethers', 'Ganache', 'TanStack Query', 'Vitest', 'Tailwind CSS', 'Truffle', 'Framer Motion'],
+    technologies: ['React', 'TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Clerk', 'Solidity', 'ETH', 'Ethers.js', 'Ganache', 'TanStack Query', 'Vitest', 'Tailwind CSS', 'Truffle', 'Framer Motion'],
     desktopPreviewMode: 'framed',
     images: [
       '/assets/projects/credence/Screenshot_20260416_083457.png',

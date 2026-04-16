@@ -73,7 +73,8 @@ function ProjectsSection() {
                             ? `Collapse ${project.name} tech stack`
                             : `Show ${hiddenTech.length} more ${project.name} technologies`
                         }
-                      >
+                    >
+                      {!isExpanded && (
                         <span className={styles.techOverflowIcons} aria-hidden="true">
                           {hiddenTech.slice(0, 3).map((technology) => {
                             const icon = skillIconMap[technology.toLowerCase()];
@@ -88,11 +89,12 @@ function ProjectsSection() {
                             );
                           })}
                         </span>
-                        <span className={styles.techOverflowLabel}>
-                          {isExpanded ? 'Show less' : `+${hiddenTech.length} more`}
-                        </span>
-                      </button>
-                    )}
+                      )}
+                      <span className={styles.techOverflowLabel}>
+                        {isExpanded ? 'Show less' : `+${hiddenTech.length} more`}
+                      </span>
+                    </button>
+                  )}
                   </div>
 
                   <div className={styles.links}>
