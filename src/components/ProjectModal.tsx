@@ -189,27 +189,6 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
 
               <hr className={styles.divider} />
 
-              {/* Challenges & Solutions */}
-              {detail?.challenges && detail.challenges.length > 0 && (
-                <div className={styles.section}>
-                  <h3 className={styles.sectionTitle}>
-                    <span className={styles.sectionStar}>✦</span> Challenges & Solutions
-                  </h3>
-                  <div className={styles.challengeList}>
-                    {detail.challenges.map((challenge) => (
-                      <div key={challenge.problem} className={styles.challengeCard}>
-                        <p className={styles.challengeProblemLabel}>Problem</p>
-                        <p className={styles.challengeText}>{challenge.problem}</p>
-                        <p className={styles.challengeSolutionLabel}>Solution</p>
-                        <p className={styles.challengeText}>{challenge.solution}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <hr className={styles.divider} />
-
               {/* Full Tech Stack */}
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>

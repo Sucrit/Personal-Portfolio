@@ -151,7 +151,6 @@
 .repoLink:hover,
 .repoLink:focus-visible {
   background: var(--accent-hover);
-  transform: translateY(-1px);
 }
 
 /* ── Section shared ── */
@@ -269,8 +268,9 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.08) 20%,
-    rgba(255, 255, 255, 0.08) 80%,
+    rgba(255, 255, 255, 0.15) 15%,
+    rgba(255, 222, 33, 0.12) 50%,
+    rgba(255, 255, 255, 0.15) 85%,
     transparent
   );
   border: none;
@@ -278,6 +278,15 @@
 }
 
 /* ── Responsive ── */
+
+/* Scale up phone mockup inside modal gallery */
+.gallery :global(.phone-mockup) {
+  width: 240px;
+  height: 470px;
+  border-radius: 26px;
+  border-width: 7px;
+}
+
 @media (max-width: 700px) {
   .backdrop {
     padding: 0;
@@ -287,6 +296,15 @@
     max-width: 100%;
     border-radius: 0;
     min-height: 100vh;
+  }
+
+  .gallery {
+    aspect-ratio: 4 / 3;
+  }
+
+  .gallery :global(.phone-mockup) {
+    width: 200px;
+    height: 390px;
   }
 
   .body {
@@ -333,5 +351,10 @@
 
   .name {
     font-size: 1.25rem;
+  }
+
+  .gallery :global(.phone-mockup) {
+    width: 160px;
+    height: 310px;
   }
 }
