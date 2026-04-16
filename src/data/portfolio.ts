@@ -89,7 +89,7 @@ export const educationItems: EducationItem[] = [
     status: 'Current',
     degree: 'Bachelor of Science in Information Technology',
     years: '2024 - 2027',
-    highlights: ['Backend Development', 'Computer Forensics & Data Recovery', 'Ethical Hacking'],
+    highlights: ['Backend Development', 'Computer Forensics', 'Ethical Hacking'],
   },
 ];
 
