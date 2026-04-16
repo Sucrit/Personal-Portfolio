@@ -96,8 +96,6 @@ function FantasyBackground() {
 
       let lighthouseBuilt = false;
       let lighthouseGlow: LighthouseGlow | null = null;
-      let cabinAnimCount = 0;
-
       while (x <= 1930) {
         let currentAmp = amplitude;
         if (flattenStart && x < 600) {
@@ -196,22 +194,16 @@ function FantasyBackground() {
             for (let i = 0; i < count; i += 1) {
               const spacing = i * (3 + random() * 3);
               const size = 1.8 + random() * 1.5;
-              let animationType: WindowAnimation = 'none';
-
-              if (cabinAnimCount < 2 && random() > 0.85) {
-                animationType = 'slowBlink';
-                cabinAnimCount += 1;
-              }
 
               windows.push({
                 x: x + spacing,
                 y: y + yOffset + random() * 3,
                 w: size,
                 h: size,
-                animationType,
+                animationType: 'none',
                 isOn: true,
                 delay: 0,
-                duration: animationType === 'slowBlink' ? 10 : 0,
+                duration: 0,
                 color: random() > 0.5 ? '#ffaa55' : '#ffcc77',
                 isCabin: true,
               });
@@ -228,26 +220,16 @@ function FantasyBackground() {
             const pushWindow = (wx: number, wy: number, ww: number, wh: number) => {
               const rand = random();
               const isOn = rand > 0.5;
-              let animationType: WindowAnimation = 'none';
-
-              if (isOn) {
-                const animRand = random();
-                if (animRand > 0.7) animationType = 'flicker';
-                else if (animRand > 0.4) animationType = 'toggle';
-              }
 
               windows.push({
                 x: wx,
                 y: wy,
                 w: ww,
                 h: wh,
-                animationType,
+                animationType: 'none',
                 isOn,
-                delay: animationType !== 'none' ? random() * 18 : 0,
-                duration:
-                  animationType === 'flicker'
-                    ? 20 + random() * 12
-                    : 32 + random() * 24,
+                delay: 0,
+                duration: 0,
               });
             };
 
@@ -468,49 +450,6 @@ function FantasyBackground() {
             />
           ))}
         </motion.g>
-
-        <g className="shootingStarContainer">
-          <defs>
-            <linearGradient id="shooting-star-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-              <stop offset="30%" stopColor="#cfe8ff" stopOpacity="0.05" />
-              <stop offset="60%" stopColor="#a5d8ff" stopOpacity="0.15" />
-              <stop offset="85%" stopColor="#dbeeff" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.9" />
-            </linearGradient>
-            <linearGradient id="shooting-star-core" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-              <stop offset="70%" stopColor="#ffffff" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
-            </linearGradient>
-            <radialGradient id="shooting-star-head-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-              <stop offset="40%" stopColor="#ffe8b0" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#a5d8ff" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-
-          <path
-            className="shootingStarTail"
-            d="M0,0 Q60,-3 120,-2 Q160,-1 200,0 Q160,1 120,2 Q60,3 0,0 Z"
-            fill="url(#shooting-star-gradient)"
-            opacity="0.4"
-            style={{ filter: 'blur(3px)' }}
-          />
-          <path
-            d="M60,0 Q120,-0.8 180,-0.5 L200,0 Q180,0.5 120,0.8 Q60,0 60,0 Z"
-            fill="url(#shooting-star-core)"
-            opacity="0.9"
-            style={{ filter: 'blur(1.5px)' }}
-          />
-          <circle className="shootingDebris debris1" cx="40" cy="-2" r="0.6" fill="#ffffff" opacity="0.5" />
-          <circle className="shootingDebris debris2" cx="70" cy="3" r="0.4" fill="#cfe8ff" opacity="0.4" />
-          <circle className="shootingDebris debris3" cx="95" cy="-3.5" r="0.5" fill="#ffffff" opacity="0.35" />
-          <circle className="shootingDebris debris4" cx="130" cy="2.5" r="0.35" fill="#a5d8ff" opacity="0.45" />
-          <circle className="shootingDebris debris5" cx="155" cy="-1.5" r="0.3" fill="#ffffff" opacity="0.3" />
-          <circle className="shootingStarHead" cx="200" cy="0" r="6" fill="url(#shooting-star-head-glow)" style={{ filter: 'blur(3px)' }} opacity="0.6" />
-          <circle cx="200" cy="0" r="2" fill="#ffffff" style={{ filter: 'blur(1.5px)' }} opacity="1" />
-        </g>
 
         <g className="moon" transform="translate(1500, 350)">
           <circle cx="0" cy="0" r="80" fill="#feffdf" />
