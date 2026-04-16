@@ -25,6 +25,7 @@ export type Project = {
   logo: string;
   alt: string;
   role: string;
+  duration: string;
   description: string;
   repoUrl: string;
   technologies: string[];
@@ -147,6 +148,7 @@ export const featuredProjects: Project[] = [
     logo: '/assets/projects/credence/credence-logo.svg',
     alt: 'Credence Preview',
     role: 'Full Stack Developer',
+    duration: '~2 months',
     description:
       'This platform aims to digitalize student credential issuance, ownership and verification. ',
     repoUrl: 'https://github.com/Sucrit/SACVS',
@@ -201,6 +203,7 @@ export const featuredProjects: Project[] = [
     logo: '/assets/projects/evacudesk/evacudesk_logo.png',
     alt: 'EvacuDesk Screenshot',
     role: 'Backend Developer',
+    duration: '~1 month',
     description: 'An evacuation center management system designed for CDRRMO in Dagupan, Philippines.',
     repoUrl: 'https://github.com/endevium/EvacuDesk/tree/backend/UpdatedAPI2',
     technologies: ['Node.js', 'Express', 'MongoDB', 'Mongoose'],
@@ -241,6 +244,7 @@ export const featuredProjects: Project[] = [
     logo: '/assets/projects/roomfinder/roomfinder_logo.png',
     alt: 'RoomFinder Screenshot',
     role: 'Backend Developer',
+    duration: '~1+ months',
     description: 'A mobile and web platform for room booking and management system for University of Pangasinan.',
     repoUrl: 'https://github.com/Sucrit/RoomFinder_API',
     technologies: ['JavaScript', 'PHP', 'MySQL'],

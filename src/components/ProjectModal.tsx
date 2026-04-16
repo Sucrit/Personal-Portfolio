@@ -123,6 +123,7 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
                     {project.name}
                   </h2>
                   <span className={styles.roleBadge}>{project.role}</span>
+                  <span className={styles.durationBadge}>{project.duration}</span>
                 </div>
                 <a
                   href={project.repoUrl}

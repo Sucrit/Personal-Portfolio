@@ -129,6 +129,20 @@
   white-space: nowrap;
 }
 
+.durationBadge {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-color);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 222, 33, 0.15);
+  background: rgba(255, 222, 33, 0.05);
+  white-space: nowrap;
+}
+
 .repoLink {
   display: inline-flex;
   align-items: center;
@@ -265,14 +279,12 @@
 .divider {
   width: 100%;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.15) 15%,
-    rgba(255, 222, 33, 0.12) 50%,
-    rgba(255, 255, 255, 0.15) 85%,
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.15) 15%,
+      rgba(255, 222, 33, 0.12) 50%,
+      rgba(255, 255, 255, 0.15) 85%,
+      transparent);
   border: none;
   margin: 0;
 }
