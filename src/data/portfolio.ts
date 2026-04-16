@@ -96,19 +96,19 @@ export const educationItems: EducationItem[] = [
 export const aboutSections = [
   {
     title: 'Who am I:',
-    body: 'A 22 years old 3rd year BSIT student at the University of Pangasinan who likes messing around with technology.',
+    body: 'A [[22 years old]] [[3rd year BSIT student]] at the [[University of Pangasinan]] who likes messing around with technology.',
   },
   {
     title: 'What I do:',
-    body: 'Build secure, scalable backend systems with Node.js, Express, MongoDB, Laravel, MySQL, and RESTful APIs. I also perform Data Recovery and Computer Forensics as well as run my homelab for threat analysis and detection.',
+    body: 'Build [[secure, scalable backend]] systems with [[Node.js]], [[Express]], [[MongoDB]], [[Laravel]], [[MySQL]], and [[RESTful APIs]]. I also perform [[Data Recovery]] and [[Computer Forensics]] as well as run my [[homelab]] for [[threat analysis and detection]].',
   },
   {
     title: "What I'm currently learning:",
-    body: 'CI/CD Pipelines, Postgres, and Redis.',
+    body: '[[CI/CD Pipelines]], and [[Redis]].',
   },
   {
     title: 'My goal:',
-    body: 'Climb my way up as a Cybersecurity expert and Backend Engineer as well as work with law enforcements and security agencies in combating cyber threats.',
+    body: 'Climb my way up as a [[Cybersecurity expert]] and [[Backend Engineer]] as well as work with law enforcements and security agencies in combating cyber threats.',
   },
 ] as const;
 
@@ -246,7 +246,6 @@ export const preloadAssets = [
   '/assets/icons/devicons/javascript-original.svg',
   '/assets/icons/devicons/typescript-original.svg',
   '/assets/icons/devicons/nodejs-original.svg',
-  '/assets/icons/devicons/express-logo.png',
   '/assets/icons/devicons/php-original.svg',
   '/assets/icons/devicons/docker-original.svg',
   '/assets/icons/devicons/linux-original.svg',

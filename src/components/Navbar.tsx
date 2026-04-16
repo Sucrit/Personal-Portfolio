@@ -134,9 +134,8 @@ const Navbar: React.FC = () => {
   return (
     <motion.nav
       className={`navbar-container ${isScrolled ? 'scrolled' : ''}`}
-      initial={{ x: -100, opacity: 0, y: '-50%' }}
-      animate={{ x: 0, opacity: 1, y: '-50%' }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+      initial={false}
+      animate={false}
     >
       <div className="nav-content">
         {/* Desktop links */}

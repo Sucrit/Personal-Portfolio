@@ -63,6 +63,12 @@
   margin-bottom: 0.4rem;
 }
 
+.inlineHighlight {
+  color: #f8fafc;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(255, 222, 33, 0.12);
+}
+
 .value {
   color: #fff;
 }
@@ -347,9 +353,10 @@
 
   .centerBar {
     left: 24px;
-    transform: none;
+    transform: translateX(-50%);
   }
 
+  .progressBar,
   .light,
   .lightTrail {
     left: 24px;
@@ -419,6 +426,7 @@
     transform: translateX(-50%);
   }
 
+  .progressBar,
   .light {
     left: 20px;
     width: 12px;

@@ -13,16 +13,10 @@ function ContactSection() {
   return (
     <>
       <section id="contact" className={styles.section}>
-        <motion.div
-          className={`container ${styles.container}`}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.4 }}
-        >
-          <motion.p className={styles.description} transition={{ delay: 0.05 }}>
+        <div className={`container ${styles.container}`}>
+          <p className={styles.description}>
             If you have any questions or just wanna say hi, reach out below!😄
-          </motion.p>
+          </p>
           <motion.div
             className={styles.icons}
             initial={false}
@@ -46,11 +40,11 @@ function ContactSection() {
               );
             })}
           </motion.div>
-          <motion.div className={styles.location}>
+          <div className={styles.location}>
             <FaMapMarkerAlt className={styles.marker} />
             Pangasinan, Philippines
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </section>
 
       <footer className={styles.footer}>

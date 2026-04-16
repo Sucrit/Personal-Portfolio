@@ -5,6 +5,22 @@ import type { EducationItem } from '../data/portfolio';
 import { aboutSections, educationItems } from '../data/portfolio';
 import styles from './AboutSection.module.css';
 
+function renderHighlightedText(text: string) {
+  const parts = text.split(/(\[\[.*?\]\])/g);
+
+  return parts.map((part, index) => {
+    if (part.startsWith('[[') && part.endsWith(']]')) {
+      return (
+        <span key={`${part}-${index}`} className={styles.inlineHighlight}>
+          {part.slice(2, -2)}
+        </span>
+      );
+    }
+
+    return part;
+  });
+}
+
 function EducationCard({
   item,
   side,
@@ -161,7 +177,7 @@ function AboutSection() {
                 {aboutSections.map((section) => (
                   <div key={section.title}>
                     <strong className={styles.label}>{section.title}</strong>
-                    <span>{section.body}</span>
+                    <span>{renderHighlightedText(section.body)}</span>
                   </div>
                 ))}
               </div>

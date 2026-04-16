@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import ProjectCarousel from '../components/ProjectCarousel';
 import TechTag from '../components/ui/TechTag';
 import { featuredProjects, skillIconMap } from '../data/portfolio';
@@ -10,14 +9,10 @@ function ProjectsSection() {
       <div className="container">
         <h2>Featured Projects</h2>
         <div className={styles.grid}>
-          {featuredProjects.map((project, index) => (
-            <motion.div
+          {featuredProjects.map((project) => (
+            <div
               key={project.name}
               className={`${styles.card} ${project.name === 'Credence' ? styles.cardExpanded : ''}`.trim()}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.18 }}
-              transition={{ duration: 0.42, delay: index * 0.05 }}
             >
               <div className={styles.imageContainer}>
                 <ProjectCarousel
@@ -60,7 +55,7 @@ function ProjectsSection() {
                   </a>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
