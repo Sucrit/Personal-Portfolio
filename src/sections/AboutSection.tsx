@@ -102,7 +102,7 @@ function EducationCard({
                     className={styles.highlightDot}
                     style={{ color: starColor, textShadow: starGlow, scale: starScale }}
                   >
-                    ★
+                    ✦
                   </motion.span>
                   {highlight}
                 </p>
@@ -177,7 +177,7 @@ function EducationCard({
                     className={styles.highlightDot}
                     style={{ color: starColor, textShadow: starGlow, scale: starScale }}
                   >
-                    ★
+                    ✦
                   </motion.span>
                   {highlight}
                 </p>
