@@ -205,6 +205,11 @@
 }
 
 .status {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.7rem;
   border-radius: 12px;
   font-weight: 700;
@@ -215,14 +220,34 @@
 .statusComplete {
   padding: 4px 12px;
   background: rgba(71, 85, 105, 0.5);
-  color: #94a3b8;
 }
 
 .statusCurrent {
   padding: 5px 14px;
-  background: var(--accent-color);
-  color: #0f172a;
-  box-shadow: 0 0 15px rgba(255, 222, 33, 0.4);
+  background: rgba(71, 85, 105, 0.5);
+}
+
+.statusFill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 222, 33, 0.96) 0%,
+    rgba(255, 222, 33, 0.96) 78%,
+    rgba(255, 228, 77, 0.92) 90%,
+    rgba(255, 236, 124, 0.8) 100%
+  );
+  transform-origin: left center;
+  z-index: 0;
+}
+
+.statusFillReverse {
+  transform-origin: right center;
+}
+
+.statusText {
+  position: relative;
+  z-index: 1;
 }
 
 .degree {

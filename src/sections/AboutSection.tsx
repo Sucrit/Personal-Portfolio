@@ -39,6 +39,20 @@ function EducationCard({
   const connectorScale = useTransform(connectorProgress, [0, 1], [0, 1]);
   const nodeFillScale = useTransform(connectorProgress, [0, 1], [0, 1]);
   const nodeFillOpacity = useTransform(connectorProgress, [0, 0.1, 1], [0, 1, 1]);
+  const starColor = useTransform(
+    connectorProgress,
+    [0, 1],
+    ['rgba(255, 222, 33, 0.6)', 'rgba(255, 222, 33, 1)'],
+  );
+  const starGlow = useTransform(
+    connectorProgress,
+    [0, 1],
+    ['0 0 0 rgba(255, 222, 33, 0)', '0 0 10px rgba(255, 222, 33, 0.45)'],
+  );
+  const starScale = useTransform(connectorProgress, [0, 1], [1, 1.08]);
+  const statusFillScale = useTransform(connectorProgress, [0, 1], [0, 1]);
+  const statusFillOpacity = useTransform(connectorProgress, [0, 0.04, 1], [0, 1, 1]);
+  const statusTextColor = useTransform(connectorProgress, [0, 1], ['#94a3b8', '#0f172a']);
   const nodeBorderColor = useTransform(
     connectorProgress,
     [0, 1],
@@ -65,20 +79,31 @@ function EducationCard({
                 <img src={item.logo} alt={item.logoAlt} className={styles.schoolLogo} />
                 <h4 className={styles.school}>{item.school}</h4>
               </div>
-              <span
+              <motion.span
                 className={`${styles.status} ${
                   item.status === 'Current' ? styles.statusCurrent : styles.statusComplete
                 }`}
               >
-                {item.status}
-              </span>
+                <motion.span
+                  className={`${styles.statusFill} ${styles.statusFillReverse}`}
+                  style={{ opacity: statusFillOpacity, scaleX: statusFillScale }}
+                />
+                <motion.span className={styles.statusText} style={{ color: statusTextColor }}>
+                  {item.status}
+                </motion.span>
+              </motion.span>
             </div>
             <p className={styles.degree}>{item.degree}</p>
             <p className={styles.years}>{item.years}</p>
             <div className={styles.highlights}>
               {item.highlights.map((highlight) => (
                 <p key={highlight} className={styles.highlight}>
-                  <span className={styles.highlightDot}>★</span>
+                  <motion.span
+                    className={styles.highlightDot}
+                    style={{ color: starColor, textShadow: starGlow, scale: starScale }}
+                  >
+                    ★
+                  </motion.span>
                   {highlight}
                 </p>
               ))}
@@ -129,20 +154,31 @@ function EducationCard({
                 <img src={item.logo} alt={item.logoAlt} className={styles.schoolLogo} />
                 <h4 className={styles.school}>{item.school}</h4>
               </div>
-              <span
+              <motion.span
                 className={`${styles.status} ${
                   item.status === 'Current' ? styles.statusCurrent : styles.statusComplete
                 }`}
               >
-                {item.status}
-              </span>
+                <motion.span
+                  className={styles.statusFill}
+                  style={{ opacity: statusFillOpacity, scaleX: statusFillScale }}
+                />
+                <motion.span className={styles.statusText} style={{ color: statusTextColor }}>
+                  {item.status}
+                </motion.span>
+              </motion.span>
             </div>
             <p className={styles.degree}>{item.degree}</p>
             <p className={styles.years}>{item.years}</p>
             <div className={styles.highlights}>
               {item.highlights.map((highlight) => (
                 <p key={highlight} className={styles.highlight}>
-                  <span className={styles.highlightDot}>★</span>
+                  <motion.span
+                    className={styles.highlightDot}
+                    style={{ color: starColor, textShadow: starGlow, scale: starScale }}
+                  >
+                    ★
+                  </motion.span>
                   {highlight}
                 </p>
               ))}
