@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FaEllipsisH, FaGithub } from 'react-icons/fa';
 import ProjectCarousel from '../components/ProjectCarousel';
 import ProjectModal from '../components/ProjectModal';
 import TechTag from '../components/ui/TechTag';
@@ -118,7 +119,8 @@ function ProjectsSection() {
                       className={styles.detailsBtn}
                       onClick={() => setActiveProject(project)}
                     >
-                      View Details
+                      <FaEllipsisH aria-hidden="true" />
+                      More
                     </button>
                     <a
                       href={project.repoUrl}
@@ -126,7 +128,8 @@ function ProjectsSection() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      View Code &rarr;
+                      <FaGithub aria-hidden="true" />
+                      View
                     </a>
                   </div>
                 </div>
