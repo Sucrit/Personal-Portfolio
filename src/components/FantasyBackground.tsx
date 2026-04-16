@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { motion, useAnimationFrame, useMotionValue, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useMemo } from 'react';
+import { motion, useMotionValue, useScroll, useTransform } from 'framer-motion';
 import './FantasyBackground.css';
 
 type Star = {
@@ -77,11 +77,10 @@ const stars: Star[] = Array.from({ length: 80 }, (_, index) => ({
 }));
 
 function FantasyBackground() {
-  const idleRef = useRef(0);
   const { scrollY } = useScroll();
-  const starX = useMotionValue(0);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const starX = useTransform(scrollY, (value) => (value * 0.08) % 1920);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -102,12 +101,6 @@ function FantasyBackground() {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseX, mouseY]);
-
-  useAnimationFrame((_t, delta) => {
-    idleRef.current += delta * 0.003;
-    const scrollOffset = scrollY.get() * 0.08;
-    starX.set((idleRef.current + scrollOffset) % 1920);
-  });
 
   const mountainLayers = useMemo<MountainLayer[]>(() => {
     const random = createSeededRandom(12345);
