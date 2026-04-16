@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react';
-import { motion, useMotionValue, useScroll, useTransform } from 'framer-motion';
+import { useMemo } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import './FantasyBackground.css';
 
 type Star = {
@@ -53,11 +53,6 @@ type MountainLayer = {
   lighthouseGlow?: LighthouseGlow | null;
 };
 
-type BeamValues = {
-  inner: string;
-  core: string;
-};
-
 function createSeededRandom(seedValue: number) {
   let seed = seedValue;
   return () => {
@@ -78,29 +73,7 @@ const stars: Star[] = Array.from({ length: 80 }, (_, index) => ({
 
 function FantasyBackground() {
   const { scrollY } = useScroll();
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
   const starX = useTransform(scrollY, (value) => (value * 0.08) % 1920);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const { innerWidth: w, innerHeight: h } = window;
-      const svgW = 1920;
-      const svgH = 1080;
-
-      const scale = Math.max(w / svgW, h / svgH);
-      const scaledSvgW = svgW * scale;
-      const scaledSvgH = svgH * scale;
-      const offsetX = (w - scaledSvgW) / 2;
-      const offsetY = (h - scaledSvgH) / 2;
-
-      mouseX.set((e.clientX - offsetX) / scale);
-      mouseY.set((e.clientY - offsetY) / scale);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
 
   const mountainLayers = useMemo<MountainLayer[]>(() => {
     const random = createSeededRandom(12345);
@@ -444,74 +417,8 @@ function FantasyBackground() {
   const lighthouseLayer = mountainLayers.find((layer) => layer.lighthouseGlow);
   const lhCx = lighthouseLayer?.lighthouseGlow?.cx ?? 0;
   const lhCy = lighthouseLayer?.lighthouseGlow?.cy ?? 0;
-
-  const beamValues = useTransform([mouseX, mouseY], (latest): BeamValues => {
-    const [mx, my] = latest as [number, number];
-    if (!lhCx || !lhCy) return { inner: '', core: '' };
-
-    const dx = mx - lhCx;
-    const dy = my - lhCy;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 5) return { inner: '', core: '' };
-
-    const angle = Math.atan2(dy, dx);
-    const perpAngle = angle + Math.PI / 2;
-    const geometryDist = dist * 1.05;
-    const endX = lhCx + Math.cos(angle) * geometryDist;
-    const endY = lhCy + Math.sin(angle) * geometryDist;
-
-    const getPath = (startW: number, endWBase: number) => {
-      const oxStart = Math.cos(perpAngle) * (startW / 2);
-      const oyStart = Math.sin(perpAngle) * (startW / 2);
-      const endW = endWBase * 1.4;
-      const oxEnd = Math.cos(perpAngle) * (endW / 2);
-      const oyEnd = Math.sin(perpAngle) * (endW / 2);
-
-      const pStart1x = lhCx + oxStart;
-      const pStart1y = lhCy + oyStart;
-      const pStart2x = lhCx - oxStart;
-      const pStart2y = lhCy - oyStart;
-      const pEnd1x = endX + oxEnd;
-      const pEnd1y = endY + oyEnd;
-      const pEnd2x = endX - oxEnd;
-      const pEnd2y = endY - oyEnd;
-
-      return `M${pStart1x},${pStart1y} L${pEnd1x},${pEnd1y} L${pEnd2x},${pEnd2y} L${pStart2x},${pStart2y} Z`;
-    };
-
-    return {
-      inner: getPath(6, 60 + dist * 0.08),
-      core: getPath(2, 5 + dist * 0.01),
-    };
-  });
-
-  const innerBeamPath = useTransform(beamValues, (value) => value.inner);
-  const coreBeamPath = useTransform(beamValues, (value) => value.core);
-
-  const beamLength = useTransform([mouseX, mouseY], (latest) => {
-    const [mx, my] = latest as [number, number];
-    if (!lhCx || !lhCy) return 0;
-    const dx = mx - lhCx;
-    const dy = my - lhCy;
-    return Math.min(Math.sqrt(dx * dx + dy * dy) * 1.05, 1050);
-  });
-
-  const splashOpacity = useTransform([mouseX, mouseY], (latest) => {
-    const [mx, my] = latest as [number, number];
-    if (!lhCx || !lhCy) return 0;
-
-    const dx = mx - lhCx;
-    const dy = my - lhCy;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const maxRange = 1100;
-    const fadeRange = 300;
-
-    if (dist > maxRange) return 0;
-    if (dist > maxRange - fadeRange) {
-      return 0.9 * (1 - (dist - (maxRange - fadeRange)) / fadeRange);
-    }
-    return 0.9;
-  });
+  const beamEndX = lhCx ? lhCx - 650 : 0;
+  const beamEndY = lhCy ? lhCy - 240 : 0;
 
   return (
     <div className="fantasyContainer">
@@ -533,30 +440,6 @@ function FantasyBackground() {
             <stop offset="100%" stopColor="#ffaa00" stopOpacity="0" />
           </radialGradient>
 
-          <motion.radialGradient
-            id="volumetric-beam-gradient"
-            cx={lhCx}
-            cy={lhCy}
-            r={beamLength}
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset="0%" stopColor="#fff" stopOpacity="0.8" />
-            <stop offset="20%" stopColor="#fff8db" stopOpacity="0.5" />
-            <stop offset="70%" stopColor="#ffde8a" stopOpacity="0.1" />
-            <stop offset="100%" stopColor="#000" stopOpacity="0" />
-          </motion.radialGradient>
-
-          <motion.radialGradient
-            id="core-beam-gradient"
-            cx={lhCx}
-            cy={lhCy}
-            r={beamLength}
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-            <stop offset="80%" stopColor="#ffffff" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-          </motion.radialGradient>
         </defs>
 
         <motion.g style={{ x: starX }}>
@@ -688,39 +571,28 @@ function FantasyBackground() {
                   </clipPath>
                 </defs>
 
-                <motion.g style={{ opacity: splashOpacity, mixBlendMode: 'overlay' }} clipPath={`url(#clip-${layer.key})`}>
-                  <motion.ellipse
-                    cx={mouseX}
-                    cy={mouseY}
-                    rx={80}
-                    ry={40}
-                    fill="url(#lighthouse-glow)"
-                    style={{ filter: 'blur(10px)', pointerEvents: 'none', willChange: 'cx, cy' }}
+                <g clipPath={`url(#clip-${layer.key})`} style={{ pointerEvents: 'none' }}>
+                  <line
+                    x1={layer.lighthouseGlow.cx}
+                    y1={layer.lighthouseGlow.cy}
+                    x2={beamEndX}
+                    y2={beamEndY}
+                    stroke="#ffe4a3"
+                    strokeWidth={18}
+                    strokeLinecap="round"
+                    style={{ opacity: 0.38, filter: 'blur(5px)', mixBlendMode: 'screen' }}
                   />
-                  <motion.ellipse
-                    cx={mouseX}
-                    cy={mouseY}
-                    rx={30}
-                    ry={15}
-                    fill="#fff"
-                    style={{ filter: 'blur(4px)', pointerEvents: 'none', willChange: 'cx, cy' }}
+                  <line
+                    x1={layer.lighthouseGlow.cx}
+                    y1={layer.lighthouseGlow.cy}
+                    x2={beamEndX}
+                    y2={beamEndY}
+                    stroke="#fff8d6"
+                    strokeWidth={5}
+                    strokeLinecap="round"
+                    style={{ opacity: 0.42 }}
                   />
-                </motion.g>
-
-                <motion.path
-                  className="beamLayer"
-                  d={innerBeamPath}
-                  fill="url(#volumetric-beam-gradient)"
-                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(6px)', willChange: 'd' }}
-                  opacity={0.8}
-                />
-                <motion.path
-                  className="beamLayer"
-                  d={coreBeamPath}
-                  fill="url(#core-beam-gradient)"
-                  fillOpacity={0.9}
-                  style={{ mixBlendMode: 'screen', pointerEvents: 'none', filter: 'blur(3px)', willChange: 'd' }}
-                />
+                </g>
                 <ellipse
                   cx={layer.lighthouseGlow.cx}
                   cy={layer.lighthouseGlow.cy}
