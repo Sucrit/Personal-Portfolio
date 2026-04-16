@@ -188,8 +188,11 @@
 }
 
 .sectionStar {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  filter: drop-shadow(0 0 4px rgba(255, 222, 33, 0.3));
 }
 
 .sectionText {
