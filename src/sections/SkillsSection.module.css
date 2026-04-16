@@ -31,10 +31,8 @@
 .item:hover,
 .item:focus-within {
   transform: translateY(-4px);
-  border-color: rgba(255, 222, 33, 0.24);
-  box-shadow:
-    0 16px 32px -16px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 222, 33, 0.08) inset;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.45);
   background: rgba(18, 24, 42, 0.72);
 }
 

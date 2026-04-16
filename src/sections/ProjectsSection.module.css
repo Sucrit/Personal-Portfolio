@@ -38,10 +38,8 @@
 .card:hover,
 .card:focus-within {
   transform: translateY(-4px);
-  border-color: rgba(255, 222, 33, 0.18);
-  box-shadow:
-    0 18px 34px -18px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(255, 222, 33, 0.06) inset;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 34px -18px rgba(0, 0, 0, 0.6);
   background: rgba(13, 17, 23, 0.68);
 }
 
