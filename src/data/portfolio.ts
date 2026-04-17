@@ -120,7 +120,7 @@ export const aboutSections = [
   },
   {
     title: 'What I do:',
-    body: 'Build [[secure, scalable backend]] systems with [[Node.js]], [[Express]], [[MongoDB]], [[Laravel]], [[MySQL]], and [[RESTful APIs]]. I also perform [[Data Recovery]] and [[Computer Forensics]] as well as run my [[homelab]] for [[threat analysis and detection]].',
+    body: 'Build [[secure, scalable backend]] systems with [[RESTful APIs]]. I also perform [[Data Recovery]] and [[Computer Forensics]] as well as run my [[homelab]] for [[threat analysis and detection]].',
   },
   {
     title: "What I'm currently learning:",
