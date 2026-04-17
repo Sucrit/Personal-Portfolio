@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import type { ProjectImage } from '../data/portfolio';
 
@@ -14,6 +14,11 @@ function ProjectCarousel({
   desktopPreviewMode = 'fill',
 }: ProjectCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const normalizedImages = useMemo(
+    () => images.map((item) => (typeof item === 'string' ? item : item.src)),
+    [images],
+  );
 
   const nextImage = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -36,6 +41,19 @@ function ProjectCarousel({
   const currentItem = images[currentIndex];
   const src = typeof currentItem === 'string' ? currentItem : currentItem.src;
   const isMobile = typeof currentItem !== 'string' && currentItem.type === 'mobile';
+
+  useEffect(() => {
+    if (normalizedImages.length < 2) return;
+
+    const nextIndex = (currentIndex + 1) % normalizedImages.length;
+    const prevIndex = (currentIndex - 1 + normalizedImages.length) % normalizedImages.length;
+
+    [normalizedImages[nextIndex], normalizedImages[prevIndex]].forEach((imageSrc) => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = imageSrc;
+    });
+  }, [currentIndex, normalizedImages]);
 
   return (
     <div
@@ -76,20 +94,22 @@ function ProjectCarousel({
               src={src}
               alt=""
               aria-hidden="true"
+              className="project-preview-image project-preview-image--framed-bg"
               style={{
                 position: 'absolute',
                 inset: 0,
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                filter: 'blur(22px)',
-                transform: 'scale(1.08)',
-                opacity: 0.58,
+                filter: 'blur(12px)',
+                transform: 'scale(1.03)',
+                opacity: 0.42,
               }}
             />
             <img
               src={src}
               alt={`${alt} ${currentIndex + 1}`}
+              className="project-preview-image project-preview-image--framed-foreground"
               style={{
                 position: 'relative',
                 width: '100%',
