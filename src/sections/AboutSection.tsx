@@ -50,7 +50,7 @@ function EducationCard({
     ['0 0 0 rgba(255, 222, 33, 0)', '0 0 10px rgba(255, 222, 33, 0.45)'],
   );
   const starScale = useTransform(connectorProgress, [0, 1], [1, 1.08]);
-  const statusFillScale = useTransform(connectorProgress, [0, 1], [0, 1]);
+  const statusFillWidth = useTransform(connectorProgress, (v) => `calc(${v * 100}% + ${v * 16}px)`);
   const statusFillOpacity = useTransform(connectorProgress, [0, 0.04, 1], [0, 1, 1]);
   const statusTextColor = useTransform(connectorProgress, [0, 1], ['#94a3b8', '#0f172a']);
   const nodeBorderColor = useTransform(
@@ -86,7 +86,7 @@ function EducationCard({
               >
                 <motion.span
                   className={`${styles.statusFill} ${styles.statusFillReverse}`}
-                  style={{ opacity: statusFillOpacity, scaleX: statusFillScale }}
+                  style={{ opacity: statusFillOpacity, width: statusFillWidth }}
                 />
                 <motion.span className={styles.statusText} style={{ color: statusTextColor }}>
                   {item.status}
@@ -161,7 +161,7 @@ function EducationCard({
               >
                 <motion.span
                   className={styles.statusFill}
-                  style={{ opacity: statusFillOpacity, scaleX: statusFillScale }}
+                  style={{ opacity: statusFillOpacity, width: statusFillWidth }}
                 />
                 <motion.span className={styles.statusText} style={{ color: statusTextColor }}>
                   {item.status}
