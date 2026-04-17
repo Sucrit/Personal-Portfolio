@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import type { ProjectImage } from '../data/portfolio';
 
@@ -14,9 +14,6 @@ function ProjectCarousel({
   desktopPreviewMode = 'fill',
 }: ProjectCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isStackedMobile, setIsStackedMobile] = useState(false);
-  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const normalizedImages = useMemo(
     () => images.map((item) => (typeof item === 'string' ? item : item.src)),
@@ -26,13 +23,13 @@ function ProjectCarousel({
   const nextImage = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setCurrentIndex((currentIndex + 1) % images.length);
   };
 
   const prevImage = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentIndex((currentIndex - 1 + images.length) % images.length);
   };
 
   const goToImage = (index: number) => (e: React.MouseEvent) => {
@@ -44,18 +41,6 @@ function ProjectCarousel({
   const currentItem = images[currentIndex];
   const src = typeof currentItem === 'string' ? currentItem : currentItem.src;
   const isMobile = typeof currentItem !== 'string' && currentItem.type === 'mobile';
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 900px)');
-    const syncMatch = () => setIsStackedMobile(mediaQuery.matches);
-
-    syncMatch();
-    mediaQuery.addEventListener('change', syncMatch);
-
-    return () => {
-      mediaQuery.removeEventListener('change', syncMatch);
-    };
-  }, []);
 
   useEffect(() => {
     if (normalizedImages.length < 2) return;
@@ -70,27 +55,6 @@ function ProjectCarousel({
     });
   }, [currentIndex, normalizedImages]);
 
-  useLayoutEffect(() => {
-    if (!isStackedMobile || !contentRef.current) return;
-
-    const node = contentRef.current;
-
-    const updateHeight = () => {
-      setMeasuredHeight(node.offsetHeight);
-    };
-
-    updateHeight();
-
-    const resizeObserver = new ResizeObserver(() => {
-      updateHeight();
-    });
-    resizeObserver.observe(node);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [currentIndex, isMobile, isStackedMobile, desktopPreviewMode]);
-
   return (
     <div
       className={`project-image-carousel ${isMobile ? 'project-image-carousel--mobile-preview' : 'project-image-carousel--web-preview'}`}
@@ -100,15 +64,13 @@ function ProjectCarousel({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: isStackedMobile && measuredHeight ? `${measuredHeight}px` : undefined,
       }}
     >
       <div
-        ref={contentRef}
         className="project-image-carousel__content"
         style={{
           width: '100%',
-          height: isStackedMobile ? 'auto' : '100%',
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
