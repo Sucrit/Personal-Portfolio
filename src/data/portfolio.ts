@@ -59,7 +59,7 @@ export const skills: Skill[] = [
   { name: 'Mongoose', icon: '/assets/icons/devicons/mongoose.svg', color: '#e63d3d', description: 'MongoDB ODM' },
   { name: 'JavaScript', icon: '/assets/icons/devicons/javascript-original.svg', color: '#b8ac54af', description: 'Web Scripting' },
   { name: 'TypeScript', icon: '/assets/icons/devicons/typescript-original.svg', color: '#3178C6', description: 'JavaScript Plus' },
-  { name: 'Rust', icon: '/assets/icons/devicons/rust.png', color: '#dea584', description: 'C++ doppelganger' },
+  { name: 'Rust', icon: '/assets/icons/devicons/rust.png', color: '#dea584', description: 'C++ Twin' },
   { name: 'Node.js', icon: '/assets/icons/devicons/nodejs-original.svg', color: '#37dc31b5', description: 'JavaScript Runtime' },
   { name: 'Express', icon: '/assets/icons/devicons/express-original.svg', color: '#ffffffa1', description: 'Node.js Framework' },
   { name: 'PHP', icon: '/assets/icons/devicons/php-original.svg', color: '#3843debb', description: 'Old but Gold' },
