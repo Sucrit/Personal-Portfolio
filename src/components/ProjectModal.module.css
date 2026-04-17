@@ -91,8 +91,23 @@
 
 .titleGroup {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.85rem;
+  min-width: 0;
+}
+
+.titleMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
 }
 
 .logo {
@@ -113,6 +128,7 @@
   color: #fff;
   letter-spacing: -0.5px;
   margin: 0;
+  line-height: 1.1;
 }
 
 .roleBadge {
@@ -302,9 +318,9 @@
   height: 1px;
   background: linear-gradient(90deg,
       transparent,
-      rgba(255, 255, 255, 0.15) 15%,
-      rgba(255, 222, 33, 0.12) 50%,
-      rgba(255, 255, 255, 0.15) 85%,
+      rgba(255, 255, 255, 0.22) 15%,
+      rgba(255, 222, 33, 0.18) 50%,
+      rgba(255, 255, 255, 0.22) 85%,
       transparent);
   border: none;
   margin: 0;

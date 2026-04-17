@@ -127,11 +127,15 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
                     alt={`${project.name} logo`}
                     className={`${styles.logo} ${project.name === 'Credence' ? styles.logoLarge : ''}`.trim()}
                   />
-                  <h2 id="project-modal-title" className={styles.name}>
-                    {project.name}
-                  </h2>
-                  <span className={styles.roleBadge}>{project.role}</span>
-                  <span className={styles.durationBadge}>{project.duration}</span>
+                  <div className={styles.titleMeta}>
+                    <h2 id="project-modal-title" className={styles.name}>
+                      {project.name}
+                    </h2>
+                    <div className={styles.metaRow}>
+                      <span className={styles.roleBadge}>{project.role}</span>
+                      <span className={styles.durationBadge}>{project.duration}</span>
+                    </div>
+                  </div>
                 </div>
                 <a
                   href={project.repoUrl}
