@@ -127,21 +127,48 @@
   margin-bottom: 1.5rem;
 }
 
-.extraTechItem {
-  display: inline-flex;
-  animation: techTagReveal 0.22s ease;
+/* ── Collapsible extra-tech wrapper ── */
+.extraTechWrap {
+  overflow: hidden;
+  transition: height 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: height;
 }
 
-@keyframes techTagReveal {
-  from {
-    opacity: 0;
-    transform: translateY(4px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.extraTechInner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
 }
+
+.extraTechItem {
+  display: inline-flex;
+  opacity: 0;
+  transform: translateY(6px) scale(0.95);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+
+.extraTechItemVisible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger each tag */
+.extraTechItemVisible:nth-child(1)  { transition-delay: 0.02s; }
+.extraTechItemVisible:nth-child(2)  { transition-delay: 0.04s; }
+.extraTechItemVisible:nth-child(3)  { transition-delay: 0.06s; }
+.extraTechItemVisible:nth-child(4)  { transition-delay: 0.08s; }
+.extraTechItemVisible:nth-child(5)  { transition-delay: 0.10s; }
+.extraTechItemVisible:nth-child(6)  { transition-delay: 0.12s; }
+.extraTechItemVisible:nth-child(7)  { transition-delay: 0.14s; }
+.extraTechItemVisible:nth-child(8)  { transition-delay: 0.16s; }
+.extraTechItemVisible:nth-child(9)  { transition-delay: 0.18s; }
+.extraTechItemVisible:nth-child(10) { transition-delay: 0.20s; }
+.extraTechItemVisible:nth-child(11) { transition-delay: 0.22s; }
+.extraTechItemVisible:nth-child(12) { transition-delay: 0.24s; }
+.extraTechItemVisible:nth-child(n+13) { transition-delay: 0.26s; }
 
 .techOverflow {
   display: inline-flex;
