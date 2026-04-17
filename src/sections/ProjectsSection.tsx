@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { FaEllipsisH, FaGithub } from 'react-icons/fa';
+import { FaChevronUp, FaEllipsisH, FaGithub } from 'react-icons/fa';
 import ProjectCarousel from '../components/ProjectCarousel';
 import ProjectModal from '../components/ProjectModal';
 import TechTag from '../components/ui/TechTag';
@@ -183,18 +183,25 @@ function ProjectsSection() {
                     )}
 
                     {hasOverflow && (
-                      <button
-                        type="button"
-                        className={styles.techOverflow}
-                        onClick={() => toggleProjectTech(project.name)}
-                        aria-expanded={isExpanded}
-                        aria-label={
-                          isExpanded
-                            ? `Collapse ${project.name} tech stack`
-                            : `Show ${hiddenTech.length} more ${project.name} technologies`
-                        }
-                      >
-                        {!isExpanded && (
+                      isExpanded ? (
+                        <button
+                          type="button"
+                          className={styles.techCollapse}
+                          onClick={() => toggleProjectTech(project.name)}
+                          aria-expanded={true}
+                          aria-label={`Collapse ${project.name} tech stack`}
+                        >
+                          <span className={styles.techCollapseLabel}>Show less</span>
+                          <FaChevronUp />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className={styles.techOverflow}
+                          onClick={() => toggleProjectTech(project.name)}
+                          aria-expanded={false}
+                          aria-label={`Show ${hiddenTech.length} more ${project.name} technologies`}
+                        >
                           <span className={styles.techOverflowIcons} aria-hidden="true">
                             {hiddenTech.slice(0, 3).map((technology) => {
                               const icon = skillIconMap[technology.toLowerCase()];
@@ -209,11 +216,11 @@ function ProjectsSection() {
                               );
                             })}
                           </span>
-                        )}
-                        <span className={styles.techOverflowLabel}>
-                          {isExpanded ? 'Show less' : `+${hiddenTech.length} more`}
-                        </span>
-                      </button>
+                          <span className={styles.techOverflowLabel}>
+                            +{hiddenTech.length} more
+                          </span>
+                        </button>
+                      )
                     )}
                   </div>
 
