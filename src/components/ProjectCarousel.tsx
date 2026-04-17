@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import type { ProjectImage } from '../data/portfolio';
 
@@ -14,6 +14,9 @@ function ProjectCarousel({
   desktopPreviewMode = 'fill',
 }: ProjectCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isStackedMobile, setIsStackedMobile] = useState(false);
+  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const normalizedImages = useMemo(
     () => images.map((item) => (typeof item === 'string' ? item : item.src)),
@@ -43,6 +46,18 @@ function ProjectCarousel({
   const isMobile = typeof currentItem !== 'string' && currentItem.type === 'mobile';
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 900px)');
+    const syncMatch = () => setIsStackedMobile(mediaQuery.matches);
+
+    syncMatch();
+    mediaQuery.addEventListener('change', syncMatch);
+
+    return () => {
+      mediaQuery.removeEventListener('change', syncMatch);
+    };
+  }, []);
+
+  useEffect(() => {
     if (normalizedImages.length < 2) return;
 
     const nextIndex = (currentIndex + 1) % normalizedImages.length;
@@ -55,6 +70,27 @@ function ProjectCarousel({
     });
   }, [currentIndex, normalizedImages]);
 
+  useLayoutEffect(() => {
+    if (!isStackedMobile || !contentRef.current) return;
+
+    const node = contentRef.current;
+
+    const updateHeight = () => {
+      setMeasuredHeight(node.offsetHeight);
+    };
+
+    updateHeight();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateHeight();
+    });
+    resizeObserver.observe(node);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [currentIndex, isMobile, isStackedMobile, desktopPreviewMode]);
+
   return (
     <div
       className={`project-image-carousel ${isMobile ? 'project-image-carousel--mobile-preview' : 'project-image-carousel--web-preview'}`}
@@ -64,82 +100,95 @@ function ProjectCarousel({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        height: isStackedMobile && measuredHeight ? `${measuredHeight}px` : undefined,
       }}
     >
-      {isMobile ? (
-        <div className="phone-mockup">
-          <div className="phone-notch"></div>
-          <img
-            src={src}
-            alt={`${alt} ${currentIndex + 1}`}
-            className="phone-screen"
-            loading="eager"
-            fetchPriority="high"
-          />
-        </div>
-      ) : (
-        desktopPreviewMode === 'framed' ? (
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <img
-              src={src}
-              alt=""
-              aria-hidden="true"
-              className="project-preview-image project-preview-image--framed-bg"
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                filter: 'blur(12px)',
-                transform: 'scale(1.03)',
-                opacity: 0.42,
-              }}
-            />
+      <div
+        ref={contentRef}
+        className="project-image-carousel__content"
+        style={{
+          width: '100%',
+          height: isStackedMobile ? 'auto' : '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {isMobile ? (
+          <div className="phone-mockup">
+            <div className="phone-notch"></div>
             <img
               src={src}
               alt={`${alt} ${currentIndex + 1}`}
-              className="project-preview-image project-preview-image--framed-foreground"
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                objectPosition: 'center',
-                display: 'block',
-                zIndex: 1,
-              }}
+              className="phone-screen"
               loading="eager"
               fetchPriority="high"
             />
           </div>
         ) : (
-          <img
-            src={src}
-            alt={`${alt} ${currentIndex + 1}`}
-            className="project-preview-image project-preview-image--fill"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center top',
-              display: 'block',
-            }}
-            loading="eager"
-            fetchPriority="high"
-          />
-        )
-      )}
+          desktopPreviewMode === 'framed' ? (
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img
+                src={src}
+                alt=""
+                aria-hidden="true"
+                className="project-preview-image project-preview-image--framed-bg"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  filter: 'blur(12px)',
+                  transform: 'scale(1.03)',
+                  opacity: 0.42,
+                }}
+              />
+              <img
+                src={src}
+                alt={`${alt} ${currentIndex + 1}`}
+                className="project-preview-image project-preview-image--framed-foreground"
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                  display: 'block',
+                  zIndex: 1,
+                }}
+                loading="eager"
+                fetchPriority="high"
+              />
+            </div>
+          ) : (
+            <img
+              src={src}
+              alt={`${alt} ${currentIndex + 1}`}
+              className="project-preview-image project-preview-image--fill"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+                display: 'block',
+              }}
+              loading="eager"
+              fetchPriority="high"
+            />
+          )
+        )}
+      </div>
 
       {images.length > 1 && (
         <>

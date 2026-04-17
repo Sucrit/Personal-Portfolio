@@ -54,8 +54,14 @@ function ProjectsSection() {
       }
     }
 
-    setPreviewCounts(counts);
-  });
+    const frame = window.requestAnimationFrame(() => {
+      setPreviewCounts(counts);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [previewCounts]);
 
   // Re-measure when the window resizes (tag wrapping may change)
   useEffect(() => {
@@ -163,15 +169,14 @@ function ProjectsSection() {
                         ref={measureExtraRef(project.name)}
                         className={styles.extraTechWrap}
                         style={{
-                          height: isExpanded ? (heights[project.name] ?? 0) : 0,
+                          maxHeight: isExpanded ? (heights[project.name] ?? 0) : 0,
+                          opacity: isExpanded ? 1 : 0,
                         }}
+                        aria-hidden={!isExpanded}
                       >
                         <div className={styles.extraTechInner}>
                           {hiddenTech.map((technology) => (
-                            <span
-                              key={technology}
-                              className={`${styles.extraTechItem} ${isExpanded ? styles.extraTechItemVisible : ''}`}
-                            >
+                            <span key={technology} className={styles.extraTechItem}>
                               <TechTag
                                 name={technology}
                                 icon={skillIconMap[technology.toLowerCase()]}
@@ -191,8 +196,8 @@ function ProjectsSection() {
                           aria-expanded={true}
                           aria-label={`Collapse ${project.name} tech stack`}
                         >
-                          <span className={styles.techCollapseLabel}>Show less</span>
                           <FaChevronUp />
+                          <span className={styles.techCollapseLabel}>Show less</span>
                         </button>
                       ) : (
                         <button
