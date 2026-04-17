@@ -5,7 +5,9 @@ import {
   FaProjectDiagram, 
   FaShieldAlt, 
   FaLayerGroup,
-  FaCheckCircle
+  FaCheckCircle,
+  FaUserTie,
+  FaClock
 } from 'react-icons/fa';
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
@@ -127,14 +129,18 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
                     alt={`${project.name} logo`}
                     className={`${styles.logo} ${project.name === 'Credence' ? styles.logoLarge : ''}`.trim()}
                   />
-                  <div className={styles.titleMeta}>
-                    <h2 id="project-modal-title" className={styles.name}>
-                      {project.name}
-                    </h2>
-                    <div className={styles.metaRow}>
-                      <span className={styles.roleBadge}>{project.role}</span>
-                      <span className={styles.durationBadge}>{project.duration}</span>
-                    </div>
+                  <h2 id="project-modal-title" className={styles.name}>
+                    {project.name}
+                  </h2>
+                  <div className={styles.metaColumn}>
+                    <span className={styles.metaCard}>
+                      <span className={styles.metaIcon} aria-hidden="true"><FaUserTie /></span>
+                      <span className={styles.metaValue}>{project.role}</span>
+                    </span>
+                    <span className={styles.metaCard}>
+                      <span className={styles.metaIcon} aria-hidden="true"><FaClock /></span>
+                      <span className={styles.metaValue}>{project.duration}</span>
+                    </span>
                   </div>
                 </div>
                 <a
